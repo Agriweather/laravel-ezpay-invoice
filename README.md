@@ -13,7 +13,6 @@
 - [ ] 電子發票 API (境外電商版)
 - [ ] 字軌管理 API
 - [ ] 手機條碼與捐證碼驗證
-- [ ] 電子發票批次開立
 
 ## 版本需求
 
@@ -32,6 +31,10 @@ composer require agriweather/laravel-ezpay-invoice
 ```bash
 php artisan vendor:publish --tag=ezpay-invoice-config
 ```
+
+## 參考
+
+[EZPay 電子發票 API 文件下載專區](https://inv.ezpay.com.tw/Invoice_index/download)
 
 ## License
 
