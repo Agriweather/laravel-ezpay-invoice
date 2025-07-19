@@ -5,3 +5,4 @@
 composer.lock
 phpunit.xml
 *.cache
+.claude/settings.local.json
