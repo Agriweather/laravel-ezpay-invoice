@@ -45,46 +45,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | API 版本設定
-    |--------------------------------------------------------------------------
-    |
-    | 各個 API 的版本設定，請依據 ezPay 官方文件設定。
-    |
-    */
-
-    'version' => [
-        'invoice_issue' => '1.5',
-        'invoice_invalid' => '1.0',
-        'allowance_issue' => '1.3',
-        'invoice_search' => '1.3',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | API 端點 URL 設定
-    |--------------------------------------------------------------------------
-    |
-    | ezPay 測試與正式環境的 API 端點 URL。
-    |
-    */
-
-    'api_urls' => [
-        'test' => [
-            'invoice_issue' => 'https://cinv.ezpay.com.tw/Api/invoice_issue',
-            'invoice_invalid' => 'https://cinv.ezpay.com.tw/Api/invoice_invalid',
-            'allowance_issue' => 'https://cinv.ezpay.com.tw/Api/allowance_issue',
-            'invoice_search' => 'https://cinv.ezpay.com.tw/Api/invoice_search',
-        ],
-        'production' => [
-            'invoice_issue' => 'https://inv.ezpay.com.tw/Api/invoice_issue',
-            'invoice_invalid' => 'https://inv.ezpay.com.tw/Api/invoice_invalid',
-            'allowance_issue' => 'https://inv.ezpay.com.tw/Api/allowance_issue',
-            'invoice_search' => 'https://inv.ezpay.com.tw/Api/invoice_search',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | HTTP 請求設定
     |--------------------------------------------------------------------------
     |

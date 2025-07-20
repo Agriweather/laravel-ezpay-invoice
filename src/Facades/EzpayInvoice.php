@@ -5,12 +5,12 @@ namespace Agriweather\EzpayInvoice\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * ezPay 電子發票 Facade
+ * ezPay 電子發票
  */
 class EzpayInvoice extends Facade
 {
     /**
-     * 取得 Facade 對應的服務名稱
+     * Get the registered name of the component.
      *
      * @return string
      */

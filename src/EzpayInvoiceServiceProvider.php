@@ -8,7 +8,9 @@ use Illuminate\Support\ServiceProvider;
 class EzpayInvoiceServiceProvider extends ServiceProvider
 {
     /**
-     * 註冊套件服務
+     * Register the service provider.
+     *
+     * @return void
      */
     public function register()
     {
@@ -16,12 +18,25 @@ class EzpayInvoiceServiceProvider extends ServiceProvider
             __DIR__.'/../config/ezpay_invoice.php', 'ezpay_invoice'
         );
 
-        $this->app->singleton(EzpayCrypto::class);
-        $this->app->singleton(EzpayInvoice::class);
+        $this->app->singleton(EzpayCrypto::class, function ($app) {
+            return new EzpayCrypto(
+                $app['config']['ezpay_invoice']['hash_key'],
+                $app['config']['ezpay_invoice']['hash_iv']
+            );
+        });
+
+        $this->app->singleton(EzpayInvoice::class, function ($app) {
+            return new EzpayInvoice(
+                $app->make(EzpayCrypto::class),
+                $app->make('http.client')
+            );
+        });
     }
 
     /**
-     * 啟動套件服務
+     * Boot the application services.
+     *
+     * @return void
      */
     public function boot()
     {
