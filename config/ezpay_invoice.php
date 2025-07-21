@@ -1,7 +1,5 @@
 <?php
 
-use Agriweather\EzpayInvoice\Enums\RespondType;
-
 return [
 
     /*
@@ -41,7 +39,7 @@ return [
     |
     */
 
-    'respond_type' => RespondType::JSON,
+    'respond_type' => 'JSON',
 
     /*
     |--------------------------------------------------------------------------
