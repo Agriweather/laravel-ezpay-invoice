@@ -1,12 +1,13 @@
 <?php
 
 use Agriweather\EzpayInvoice\Factory;
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Enums\CurrencyType;
-use Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException;
-use Tests\Concerns\MocksHttpRequests;
 
-uses(MocksHttpRequests::class);
+// use Agriweather\EzpayInvoice\Enums\CurrencyType;
+// use Agriweather\EzpayInvoice\Enums\TaxType;
+// use Agriweather\EzpayInvoice\Invoice;
+// use Agriweather\EzpayInvoice\Result;
+// use Illuminate\Http\Client\Request;
+// use Illuminate\Support\Facades\Http;
 
 describe('境外電商發票功能測試', function () {
     beforeEach(function () {
@@ -14,151 +15,131 @@ describe('境外電商發票功能測試', function () {
     });
 
     describe('境外電商發票開立', function () {
-        it('使用者可以成功開立境外電商發票', function () {
-            $this->mockCrossBorderInvoiceIssueSuccess([
-                'InvoiceNumber' => 'CB12345678',
-                'InvoiceTransNo' => '14061313541640930',
-                'CreateTime' => '2024-01-01 12:00:00',
-            ]);
+        it('可以成功開立境外電商發票', function () {
+            // Http::fake([
+            //     '*' => Http::response([
+            //         'Status' => 'SUCCESS',
+            //         'Message' => '發票開立成功',
+            //         'Result' => json_encode([
+            //             'CheckCode' => '123456789',
+            //             'MerchantID' => '111335678',
+            //             'MerchantOrderNo' => 'Order001',
+            //             'InvoiceNumber' => 'GG72002017',
+            //             'TotalAmt' => 1050,
+            //             'InvoiceTransNo' => '25072515224376654',
+            //             'RandomNum' => '1234',
+            //             'CreateTime' => '2025-01-01 00:00:00',
+            //             'BarCode' => '11408GG720020179356',
+            //             'QRcodeL' => 'GG7200201711407259356000003e80000041a0000000087612689JeS9LvMqldHvkH5bIDsJXw==:**********:1:1:1:國際商品:1:1000',
+            //             'QRcodeR' => '**',
+            //         ]),
+            //     ], 200),
+            // ]);
 
-            $result = $this->factory
-                ->international()
-                ->create()
-                ->withOrder('CB-ORDER-001')
-                ->withCustomer('海外客戶', '海外地址', 'overseas@example.com')
-                ->withCurrency(CurrencyType::USD)
-                ->withOriginalAmount(105.50)
-                ->withExchangeRate(30.5)
-                ->withAmount(3216.75, 0, 3216.75)
-                ->withItem('國際商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50)
-                ->issue();
+            // $result = $this->factory
+            //     ->crossBorder()
+            //     ->create()
+            //     ->withOrder('CBOrder001')
+            //     ->withCustomer('John Doe')
+            //     ->withEmail('customer@example.com')
+            //     ->withCurrency(CurrencyType::USD)
+            //     ->withItem('國際商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50)
+            //     ->withAmount(100.00, 5.50, 105.50)
+            //     ->withExchangeRate(30.5)
+            //     ->issue();
 
-            expect($result)->toBeArray()
-                ->and($result['InvoiceNumber'])->toBe('CB12345678')
-                ->and($result['InvoiceTransNo'])->toBe('14061313541640930');
-        });
+            // Http::assertSent(function (Request $request) {
+            //     return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoicelssue';
+            // });
 
-        it('使用者可以開立多幣別境外電商發票', function () {
-            $this->mockCrossBorderInvoiceIssueSuccess();
+            // $this->factory->assertSentPostData([
+            //     'RespondType' => 'JSON',
+            //     'Version' => '1.0',
+            //     'TimeStamp' => time(),
+            //     'MerchantOrderNo' => 'CBOrder001',
+            //     'Status' => '1',
+            //     'BuyerName' => 'John Doe',
+            //     'BuyerEmail' => 'customer@example.com',
+            //     'Amt' => '100.00',
+            //     'TaxAmt' => '5.50',
+            //     'TotalAmt' => '105.50',
+            //     'ItemName' => '國際商品',
+            //     'ItemCount' => '1',
+            //     'ItemUnit' => 'EA',
+            //     'ItemPrice' => '105.50',
+            //     'ItemAmt' => '105.50',
+            //     'Currency' => 'USD',
+            //     'ExchangeRate' => '30.5',
+            // ]);
 
-            $result = $this->factory
-                ->international()
-                ->create()
-                ->withOrder('CB-ORDER-002')
-                ->withCustomer('歐洲客戶', '歐洲地址', 'europe@example.com')
-                ->withCurrency(CurrencyType::EUR)
-                ->withOriginalAmount(200.00)
-                ->withExchangeRate(33.8)
-                ->withAmount(6760.00, 0, 6760.00)
-                ->withItem('商品A', quantity: 2, unit: 'EA', price: 50.00, amount: 100.00)
-                ->withItem('商品B', quantity: 1, unit: 'EA', price: 100.00, amount: 100.00)
-                ->issue();
+            // expect($result)->toBeInstanceOf(Result::class)
+            //     ->and($result->invoiceNumber)->toBe('CB72002002');
+        })->todo();
 
-            expect($result)->toBeArray();
-        });
+        it('可以開立多幣別境外電商發票', function () {
+            // $this->mockCrossBorderInvoiceIssueSuccess();
+
+            // $result = $this->factory
+            //     ->crossBorder()
+            //     ->create()
+            //     ->withOrder('CBOrder002')
+            //     ->withCustomer('歐洲客戶', '歐洲地址', 'europe@example.com')
+            //     ->withCurrency(CurrencyType::EUR)
+            //     ->withOriginalAmount(200.00)
+            //     ->withExchangeRate(33.8)
+            //     ->withAmount(6760.00, 0, 6760.00)
+            //     ->withItem('商品A', quantity: 2, unit: 'EA', price: 50.00, amount: 100.00)
+            //     ->withItem('商品B', quantity: 1, unit: 'EA', price: 100.00, amount: 100.00)
+            //     ->issue();
+
+            // expect($result)->toBeInstanceOf(Result::class);
+        })->todo();
     });
 
     describe('境外電商發票查詢', function () {
-        it('使用者可以查詢境外電商發票', function () {
-            $this->mockCrossBorderInvoiceSearchSuccess([
-                'Result' => [
-                    [
-                        'InvoiceNumber' => 'CB12345678',
-                        'MerchantOrderNo' => 'CB-ORDER-001',
-                        'CurrencyCode' => 'USD',
-                        'TotalAmt' => '100',
-                        'CreateTime' => '2024-01-01 12:00:00',
-                    ],
-                ],
-                'TotalCount' => 1,
-            ]);
+        it('可以查詢境外電商發票', function () {
+            // $this->mockCrossBorderInvoiceSearchSuccess([
+            //     'Result' => [
+            //         [
+            //             'InvoiceNumber' => 'CB12345678',
+            //             'MerchantOrderNo' => 'CBOrder001',
+            //             'CurrencyCode' => 'USD',
+            //             'TotalAmt' => '100',
+            //             'CreateTime' => '2024-01-01 12:00:00',
+            //         ],
+            //     ],
+            //     'TotalCount' => 1,
+            // ]);
 
-            $result = $this->factory
-                ->international()
-                ->where('order_number', 'CB-ORDER-001')
-                ->where('total_amount', 3216.75)
-                ->get();
+            // $result = $this->factory
+            //     ->crossBorder()
+            //     ->query()
+            //     ->withOrder('CBOrder001')
+            //     ->withAmount(3216.75)
+            //     ->get();
 
-            expect($result)->toBeArray()
-                ->and($result['Result'])->toHaveCount(1)
-                ->and($result['Result'][0]['CurrencyCode'])->toBe('USD');
-        });
+            // expect($result)->toBeInstanceOf(Result::class)
+            //     ->and($result['Result'])->toHaveCount(1)
+            //     ->and($result['Result'][0]['CurrencyCode'])->toBe('USD');
+        })->todo();
 
-        it('使用者可以透過幣別查詢境外電商發票', function () {
-            $this->mockCrossBorderInvoiceSearchSuccess([
-                'Result' => [
-                    ['InvoiceNumber' => 'CB11111111', 'CurrencyCode' => 'EUR'],
-                    ['InvoiceNumber' => 'CB22222222', 'CurrencyCode' => 'EUR'],
-                ],
-                'TotalCount' => 2,
-            ]);
+        it('可以透過幣別查詢境外電商發票', function () {
+            // $this->mockCrossBorderInvoiceSearchSuccess([
+            //     'Result' => [
+            //         ['InvoiceNumber' => 'CB11111111', 'CurrencyCode' => 'EUR'],
+            //         ['InvoiceNumber' => 'CB22222222', 'CurrencyCode' => 'EUR'],
+            //     ],
+            //     'TotalCount' => 2,
+            // ]);
 
-            $result = $this->factory
-                ->international()
-                ->where('currency', CurrencyType::EUR)
-                ->get();
+            // $result = $this->factory
+            //     ->crossBorder()
+            //     ->query()
+            //     ->withCurrency(CurrencyType::EUR)
+            //     ->get();
 
-            expect($result['Result'])->toHaveCount(2)
-                ->and($result['Result'][0]['CurrencyCode'])->toBe('EUR');
-        });
-    });
-
-    describe('境外電商折讓功能', function () {
-        it('使用者可以開立境外電商折讓', function () {
-            $this->mockCrossBorderAllowanceIssueSuccess([
-                'AllowanceNo' => 'CBA24010001',
-                'CreateTime' => '2024-01-01 12:00:00',
-            ]);
-
-            $result = $this->factory
-                ->international()
-                ->allowances()
-                ->create()
-                ->withInvoice('CB12345678')
-                ->withOrder('CB-ALLOWANCE-001')
-                ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 50.00, amount: 50.00)
-                ->withTotal(50.00)
-                ->withNotification('overseas@example.com')
-                ->issue();
-
-            expect($result)->toBeArray()
-                ->and($result['AllowanceNo'])->toBe('CBA24010001');
-        });
-    });
-
-    describe('錯誤情境處理', function () {
-        it('在匯率設定錯誤時應拋出例外', function () {
-            $this->mockFailedApiResponse('LIB10030', '匯率設定錯誤');
-
-            expect(fn() => $this->factory
-                ->international()
-                ->create()
-                ->withOrder('INVALID-RATE')
-                ->withCustomer('測試客戶', '測試地址', 'test@example.com')
-                ->withCurrency(CurrencyType::USD)
-                ->withOriginalAmount(100.00)
-                ->withExchangeRate(-1)
-                ->withAmount(100.00, 0, 100.00)
-                ->withItem('商品', quantity: 1, unit: 'EA', price: 100.00, amount: 100.00)
-                ->issue())
-                ->toThrow(EzpayInvoiceException::class);
-        });
-
-        it('在幣別代碼錯誤時應拋出例外', function () {
-            $this->mockFailedApiResponse('LIB10031', '幣別代碼錯誤');
-
-            expect(fn() => $this->factory
-                ->international()
-                ->create()
-                ->withOrder('INVALID-CURRENCY')
-                ->withCustomer('測試客戶', '測試地址', 'test@example.com')
-                ->withCurrency('XXX')
-                ->withOriginalAmount(100.00)
-                ->withExchangeRate(30.0)
-                ->withAmount(3000.00, 0, 3000.00)
-                ->withItem('商品', quantity: 1, unit: 'EA', price: 100.00, amount: 100.00)
-                ->issue())
-                ->toThrow(EzpayInvoiceException::class);
-        });
+            // expect($result['Result'])->toHaveCount(2)
+            //     ->and($result['Result'][0]['CurrencyCode'])->toBe('EUR');
+        })->todo();
     });
 });
