@@ -14,9 +14,15 @@ return [
 
     'merchant_id' => env('EZPAY_INVOICE_MERCHANT_ID', ''),
 
-    'hash_key' => env('EZPAY_INVOICE_HASH_KEY', ''),
+    'merchant_hash_key' => env('EZPAY_INVOICE_MERCHANT_HASH_KEY', ''),
 
-    'hash_iv' => env('EZPAY_INVOICE_HASH_IV', ''),
+    'merchant_hash_iv' => env('EZPAY_INVOICE_MERCHANT_HASH_IV', ''),
+
+    'company_id' => env('EZPAY_INVOICE_COMPANY_ID', ''),
+
+    'company_hash_key' => env('EZPAY_INVOICE_COMPANY_HASH_KEY', ''),
+
+    'company_hash_iv' => env('EZPAY_INVOICE_COMPANY_HASH_IV', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,17 +35,6 @@ return [
     */
 
     'env' => env('EZPAY_INVOICE_ENV', 'test'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | API 回傳格式設定
-    |--------------------------------------------------------------------------
-    |
-    | 設定 API 回傳的資料格式，建議使用 JSON 格式。
-    |
-    */
-
-    'respond_type' => 'JSON',
 
     /*
     |--------------------------------------------------------------------------
