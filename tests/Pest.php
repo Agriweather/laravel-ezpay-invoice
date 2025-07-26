@@ -15,13 +15,7 @@ use Illuminate\Http\Client\Response as HttpResponse;
 |
 */
 
-uses(
-    Tests\TestCase::class,
-)->in('Feature');
-
-uses(
-    Tests\TestCase::class,
-)->in('Unit');
+pest()->extend(Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -49,39 +43,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function mockSuccessfulApiResponse(array $result = []): array
+function something()
 {
-    return [
-        'Status' => 'SUCCESS',
-        'Message' => '',
-        'Result' => array_merge([
-            'InvoiceTransNo' => '14061313541640927',
-            'MerchantID' => 'TEST_MERCHANT_ID',
-            'MerchantOrderNo' => 'TEST-001',
-            'RandomNum' => '1234',
-            'TotalAmt' => '105',
-            'CheckCode' => 'ABCDEF1234567890',
-        ], $result),
-    ];
-}
-
-function mockFailedApiResponse(string $status = 'LIB10003', string $message = '編號重複'): array
-{
-    return [
-        'Status' => $status,
-        'Message' => $message,
-        'Result' => [],
-    ];
-}
-
-function getMockEzpayCrypto(): EzpayCrypto
-{
-    return Mockery::mock(EzpayCrypto::class);
-}
-
-function getMockHttpResponse(array $body): HttpResponse
-{
-    return new HttpResponse(
-        new GuzzleResponse(200, [], json_encode($body))
-    );
+    // ..
 }
