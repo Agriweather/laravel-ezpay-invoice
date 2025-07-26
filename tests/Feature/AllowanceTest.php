@@ -1,7 +1,7 @@
 <?php
 
 use Agriweather\EzpayInvoice\Factory;
-use Agriweather\EzpayInvoice\Result;
+use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -28,7 +28,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -85,7 +85,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -137,7 +137,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -190,7 +190,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->query()
@@ -235,7 +235,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->query()

@@ -5,7 +5,7 @@ use Agriweather\EzpayInvoice\Factory;
 // use Agriweather\EzpayInvoice\Enums\CurrencyType;
 // use Agriweather\EzpayInvoice\Enums\TaxType;
 // use Agriweather\EzpayInvoice\Invoice;
-// use Agriweather\EzpayInvoice\Result;
+// use Agriweather\EzpayInvoice\Results\Result;
 // use Illuminate\Http\Client\Request;
 // use Illuminate\Support\Facades\Http;
 

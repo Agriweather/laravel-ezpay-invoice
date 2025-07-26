@@ -4,7 +4,7 @@ use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Factory;
 use Agriweather\EzpayInvoice\Invoice;
-use Agriweather\EzpayInvoice\Result;
+use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -35,7 +35,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->invoice()
                 ->create()
@@ -390,8 +390,8 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Invoice */
-            $invoice = $this->factory
+            /** @var \Agriweather\EzpayInvoice\Results\InvoiceResult */
+            $invoiceResult = $this->factory
                 ->invoice()
                 ->query()
                 ->withInvoice('GG72002017')
@@ -413,12 +413,12 @@ describe('發票功能測試', function () {
                 'RandomNum' => '1234',
             ]);
 
-            expect($invoice)->toBeInstanceOf(Invoice::class)
-                ->and($invoice->invoiceNumber)->toBe('GG72002017')
-                ->and($invoice->merchantOrderNo)->toBe('Order001')
-                ->and($invoice->totalAmount)->toBe(1050)
-                ->and($invoice->buyerName)->toBe('John Doe')
-                ->and($invoice->buyerEmail)->toBe('customer@example.com');
+            expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
+                ->and($invoiceResult->invoiceNumber)->toBe('GG72002017')
+                ->and($invoiceResult->merchantOrderNo)->toBe('Order001')
+                ->and($invoiceResult->totalAmount)->toBe(1050)
+                ->and($invoiceResult->buyerName)->toBe('John Doe')
+                ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
         });
 
         it('可以透過訂單編號及發票金額查詢發票', function () {
@@ -474,8 +474,8 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Invoice */
-            $invoice = $this->factory
+            /** @var \Agriweather\EzpayInvoice\Results\InvoiceResult */
+            $invoiceResult = $this->factory
                 ->invoice()
                 ->query()
                 ->withOrder('Order001')
@@ -497,12 +497,12 @@ describe('發票功能測試', function () {
                 'RandomNum' => '',
             ]);
 
-            expect($invoice)->toBeInstanceOf(Invoice::class)
-                ->and($invoice->invoiceNumber)->toBe('GG72002017')
-                ->and($invoice->merchantOrderNo)->toBe('Order001')
-                ->and($invoice->totalAmount)->toBe(1050)
-                ->and($invoice->buyerName)->toBe('John Doe')
-                ->and($invoice->buyerEmail)->toBe('customer@example.com');
+            expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
+                ->and($invoiceResult->invoiceNumber)->toBe('GG72002017')
+                ->and($invoiceResult->merchantOrderNo)->toBe('Order001')
+                ->and($invoiceResult->totalAmount)->toBe(1050)
+                ->and($invoiceResult->buyerName)->toBe('John Doe')
+                ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
         });
 
         it('可以跳轉到 ezPay 平台查詢發票', function () {
@@ -525,7 +525,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Result */
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->invoice()
                 ->query()

@@ -1,9 +1,13 @@
 <?php
 
+use Agriweather\EzpayInvoice\Enums\AlphanumericCodeFlag;
+use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzpayInvoice\Enums\InvoiceType;
 use Agriweather\EzpayInvoice\Factory;
-
-// use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-// use Agriweather\EzpayInvoice\Enums\InvoiceType;
+use Agriweather\EzpayInvoice\Results\AlphanumericCodeResult;
+use Agriweather\EzpayInvoice\Results\Result;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 
 describe('字軌管理功能測試', function () {
     beforeEach(function () {
@@ -12,151 +16,267 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌申請功能', function () {
         it('可以成功申請新字軌', function () {
-            // $this->mockAlphanumericCodeCreateSuccess([
-            //     'TrackCode' => '00455ujp8',
-            //     'Year' => 113,
-            //     'Prefix' => 'AA',
-            //     'StartNumber' => '00000001',
-            //     'EndNumber' => '99999999',
-            //     'Status' => 1,
-            // ]);
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '新增字軌成功',
+                    'Result' => [
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Term' => '4',
+                        'AphabeticLetter' => 'AA',
+                        'StartNumber' => '24000100',
+                        'EndNumber' => '24000199',
+                        'Type' => '07',
+                        'CreateDatetime' => '2025-01-01 00:00:00',
+                        'LastNumber' => '100',
+                        'Flag' => '1',
+                        'CheckCode' => '123456789',
+                    ],
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->create()
-            //     ->withYear(113)
-            //     ->withTerm(InvoiceTerm::FIRST)
-            //     ->withCode('AA')
-            //     ->withRange('00000001', '99999999')
-            //     ->withType(InvoiceType::GENERAL)
-            //     ->save();
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
+            $result = $this->factory
+                ->alphanumericCode()
+                ->create()
+                ->withYear(113)
+                ->withTerm(InvoiceTerm::FOURTH)
+                ->withCode('AA')
+                ->withRange('24000100', '24000199')
+                ->withType(InvoiceType::GENERAL)
+                ->save();
 
-            // expect($result)->toBeArray()
-            //     ->and($result['TrackCode'])->toBe('00455ujp8')
-            //     ->and($result['Year'])->toBe(113)
-            //     ->and($result['Prefix'])->toBe('AA');
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
+            });
+
+            $this->factory->assertSentPostData([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => time(),
+                'Year' => '113',
+                'Term' => '4',
+                'AphabeticLetter' => 'AA',
+                'StartNumber' => '24000100',
+                'EndNumber' => '24000199',
+                'Type' => '07',
+            ]);
+
+            expect($result)->toBeInstanceOf(Result::class)
+                ->and($result->managementNo)->toBe('0t0ghr0fyv')
+                ->and($result->year)->toBe(113)
+                ->and($result->term)->toBe(InvoiceTerm::FOURTH)
+                ->and($result->alphabeticLetter)->toBe('AA')
+                ->and($result->startNumber)->toBe('24000100')
+                ->and($result->endNumber)->toBe('24000199')
+                ->and($result->type)->toBe(InvoiceType::GENERAL)
+                ->and($result->lastNumber)->toBe(100)
+                ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
+        });
     });
 
     describe('字軌查詢功能', function () {
-        it('可以透過字軌代碼查詢字軌資訊', function () {
-            // $this->mockAlphanumericCodeSearchSuccess([
-            //     'Result' => [
-            //         [
-            //             'TrackCode' => '00455ujp8',
-            //             'Year' => 113,
-            //             'Prefix' => 'AA',
-            //             'StartNumber' => '00000001',
-            //             'EndNumber' => '99999999',
-            //             'UsedQuantity' => '1500',
-            //             'Status' => '1',
-            //         ],
-            //     ],
-            //     'TotalCount' => 1,
-            // ]);
+        it('可以查詢字軌資訊', function () {
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '查詢字軌成功',
+                    'Result' => [
+                        [
+                            'ManagementNo' => '0t0ghr0fyv',
+                            'Year' => '113',
+                            'Term' => '4',
+                            'AphabeticLetter' => 'AA',
+                            'StartNumber' => '24000100',
+                            'EndNumber' => '24000199',
+                            'Type' => '07',
+                            'CreateDatetime' => '2025-01-01 00:00:00',
+                            'LastNumber' => '100',
+                            'Flag' => '0',
+                            'CheckCode' => '123456789',
+                        ],
+                    ],
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->find('00455ujp8');
+            /** @var \Agriweather\EzpayInvoice\Results\AlphanumericCodeResult */
+            $alphanumericCodeResult = $this->factory
+                ->alphanumericCode()
+                ->query()
+                // ->withNo('00455ujp8')
+                ->withYear(113)
+                ->withTerm(InvoiceTerm::FOURTH)
+                // ->withStatus(1)
+                // ->withPaused()
+                // ->withEnabled()
+                // ->withDisabled()
+                ->get();
 
-            // expect($result)->toBeArray()
-            //     ->and($result['Result'])->toHaveCount(1)
-            //     ->and($result['Result'][0]['TrackCode'])->toBe('00455ujp8')
-            //     ->and($result['Result'][0]['UsedQuantity'])->toBe('1500');
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
+            });
 
-        it('可以透過年度查詢字軌列表', function () {
-            // $this->mockAlphanumericCodeSearchSuccess([
-            //     'Result' => [
-            //         ['TrackCode' => '00455ujp8', 'Prefix' => 'AA', 'Year' => 113],
-            //         ['TrackCode' => '00455ujp9', 'Prefix' => 'BB', 'Year' => 113],
-            //         ['TrackCode' => '00455ujq0', 'Prefix' => 'CC', 'Year' => 113],
-            //     ],
-            //     'TotalCount' => 3,
-            // ]);
+            $this->factory->assertSentPostData([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => time(),
+                'Year' => '114',
+                'Term' => '4',
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->where('year', 113)
-            //     ->get();
-
-            // expect($result['Result'])->toHaveCount(3)
-            //     ->and($result['TotalCount'])->toBe(3);
-
-            // foreach ($result['Result'] as $track) {
-            //     expect($track['Year'])->toBe(113);
-            // }
-        })->todo();
-
-        it('可以透過字軌前置碼查詢', function () {
-            // $this->mockAlphanumericCodeSearchSuccess([
-            //     'Result' => [
-            //         ['TrackCode' => '00455ujp8', 'Prefix' => 'AA', 'Status' => '1'],
-            //     ],
-            // ]);
-
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->where('code', 'AA')
-            //     ->get();
-
-            // expect($result['Result'][0]['Prefix'])->toBe('AA');
-        })->todo();
+            expect($alphanumericCodeResult)->toBeInstanceOf(AlphanumericCodeResult::class)
+                ->and($alphanumericCodeResult->managementNo)->toBe('0t0ghr0fyv')
+                ->and($alphanumericCodeResult->year)->toBe(113)
+                ->and($alphanumericCodeResult->term)->toBe(InvoiceTerm::FOURTH)
+                ->and($alphanumericCodeResult->alphabeticLetter)->toBe('AA')
+                ->and($alphanumericCodeResult->startNumber)->toBe('24000100')
+                ->and($alphanumericCodeResult->endNumber)->toBe('24000199')
+                ->and($alphanumericCodeResult->type)->toBe(InvoiceType::GENERAL)
+                ->and($alphanumericCodeResult->lastNumber)->toBe(100);
+        });
     });
 
     describe('字軌管理功能', function () {
-        it('可以停用字軌', function () {
-            // $this->mockAlphanumericCodeManageSuccess([
-            //     'TrackCode' => '00455ujp8',
-            //     'Status' => 0,
-            //     'Message' => '字軌已停用',
-            // ]);
+        it('可以暫停字軌', function () {
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '修改字軌狀態成功',
+                    'Result' => [
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Term' => '4',
+                        'AphabeticLetter' => 'AA',
+                        'StartNumber' => '24000100',
+                        'EndNumber' => '24000199',
+                        'Type' => '07',
+                        'CreateDatetime' => '2025-01-01 00:00:00',
+                        'LastNumber' => '100',
+                        'Flag' => '0',
+                        'CheckCode' => '123456789',
+                    ],
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->withNo('00455ujp8')
-            //     ->withYear(113)
-            //     ->disable();
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
+            $result = $this->factory
+                ->alphanumericCode()
+                ->query()
+                ->withNo('00455ujp8')
+                ->withYear(113)
+                ->pause();
 
-            // expect($result)->toBeArray()
-            //     ->and($result['TrackCode'])->toBe('00455ujp8')
-            //     ->and($result['Status'])->toBe(0);
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
+            });
+
+            $this->factory->assertSentPostData([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => time(),
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::PAUSED,
+            ]);
+
+            expect($result)->toBeInstanceOf(Result::class)
+                ->and($result->managementNo)->toBe('0t0ghr0fyv')
+                ->and($result->flag)->toBe(AlphanumericCodeFlag::PAUSED);
+        });
 
         it('可以啟用字軌', function () {
-            // $this->mockAlphanumericCodeManageSuccess([
-            //     'TrackCode' => '00455ujp8',
-            //     'Status' => 1,
-            //     'Message' => '字軌已啟用',
-            // ]);
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '修改字軌狀態成功',
+                    'Result' => [
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Term' => '4',
+                        'AphabeticLetter' => 'AA',
+                        'StartNumber' => '24000100',
+                        'EndNumber' => '24000199',
+                        'Type' => '07',
+                        'CreateDatetime' => '2025-01-01 00:00:00',
+                        'LastNumber' => '100',
+                        'Flag' => '1',
+                        'CheckCode' => '123456789',
+                    ],
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->withNo('00455ujp8')
-            //     ->withYear(113)
-            //     ->enable();
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
+            $result = $this->factory
+                ->alphanumericCode()
+                ->query()
+                ->withNo('00455ujp8')
+                ->withYear(113)
+                ->active();
 
-            // expect($result)->toBeArray()
-            //     ->and($result['TrackCode'])->toBe('00455ujp8')
-            //     ->and($result['Status'])->toBe(1);
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
+            });
 
-        it('可以查詢字軌使用狀況', function () {
-            // $this->mockAlphanumericCodeManageSuccess([
-            //     'TrackCode' => '00455ujp8',
-            //     'TotalQuantity' => '99999999',
-            //     'UsedQuantity' => '15000',
-            //     'RemainingQuantity' => '99984999',
-            // ]);
+            $this->factory->assertSentPostData([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => time(),
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::ACTIVE,
+            ]);
 
-            // $result = $this->factory
-            //     ->alphanumericCode()
-            //     ->find('00455ujp8');
+            expect($result)->toBeInstanceOf(Result::class)
+                ->and($result->managementNo)->toBe('0t0ghr0fyv')
+                ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
+        });
 
-            // expect($result)->toBeArray()
-            //     ->and($result['TotalQuantity'])->toBe('99999999')
-            //     ->and($result['UsedQuantity'])->toBe('15000')
-            //     ->and($result['RemainingQuantity'])->toBe('99984999');
-        })->todo();
+        it('可以停用字軌', function () {
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '修改字軌狀態成功',
+                    'Result' => [
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Term' => '4',
+                        'AphabeticLetter' => 'AA',
+                        'StartNumber' => '24000100',
+                        'EndNumber' => '24000199',
+                        'Type' => '07',
+                        'CreateDatetime' => '2025-01-01 00:00:00',
+                        'LastNumber' => '100',
+                        'Flag' => '2',
+                        'CheckCode' => '123456789',
+                    ],
+                ], 200),
+            ]);
+
+            /** @var \Agriweather\EzpayInvoice\Results\Result */
+            $result = $this->factory
+                ->alphanumericCode()
+                ->query()
+                ->withNo('00455ujp8')
+                ->withYear(113)
+                ->disable();
+
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
+            });
+
+            $this->factory->assertSentPostData([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => time(),
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::DISABLED,
+            ]);
+
+            expect($result)->toBeInstanceOf(Result::class)
+                ->and($result->managementNo)->toBe('0t0ghr0fyv')
+                ->and($result->flag)->toBe(AlphanumericCodeFlag::DISABLED);
+        });
     });
 });
