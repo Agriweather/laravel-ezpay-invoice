@@ -49,7 +49,7 @@ describe('境外電商發票功能測試', function () {
             //     ->issue();
 
             // Http::assertSent(function (Request $request) {
-            //     return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoicelssue';
+            //     return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceIssue';
             // });
 
             // $this->factory->assertSentPostData([
