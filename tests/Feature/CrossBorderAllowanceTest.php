@@ -30,7 +30,6 @@ describe('境外電商折讓管理功能測試', function () {
             //     ], 200),
             // ]);
 
-            // /** @var \Agriweather\EzpayInvoice\Results\Result */
             // $result = $this->factory
             //     ->allowance()
             //     ->create()
@@ -87,7 +86,6 @@ describe('境外電商折讓管理功能測試', function () {
             //     ], 200),
             // ]);
 
-            // /** @var \Agriweather\EzpayInvoice\Results\Result */
             // $result = $this->factory
             //     ->allowance()
             //     ->create()
@@ -139,7 +137,6 @@ describe('境外電商折讓管理功能測試', function () {
             //     ], 200),
             // ]);
 
-            // /** @var \Agriweather\EzpayInvoice\Results\Result */
             // $result = $this->factory
             //     ->allowance()
             //     ->create()
@@ -192,7 +189,6 @@ describe('境外電商折讓管理功能測試', function () {
             //     ], 200),
             // ]);
 
-            // /** @var \Agriweather\EzpayInvoice\Results\Result */
             // $result = $this->factory
             //     ->allowance()
             //     ->query()
@@ -237,7 +233,6 @@ describe('境外電商折讓管理功能測試', function () {
             //     ], 200),
             // ]);
 
-            // /** @var \Agriweather\EzpayInvoice\Results\Result */
             // $result = $this->factory
             //     ->allowance()
             //     ->query()

@@ -28,7 +28,6 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -85,7 +84,6 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -137,7 +135,6 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->create()
@@ -190,7 +187,6 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->query()
@@ -235,7 +231,6 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->allowance()
                 ->query()

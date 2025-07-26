@@ -35,7 +35,6 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->invoice()
                 ->create()
@@ -390,7 +389,6 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\InvoiceResult */
             $invoiceResult = $this->factory
                 ->invoice()
                 ->query()
@@ -474,7 +472,6 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\InvoiceResult */
             $invoiceResult = $this->factory
                 ->invoice()
                 ->query()
@@ -525,7 +522,6 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->invoice()
                 ->query()

@@ -36,7 +36,6 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->alphanumericCode()
                 ->create()
@@ -100,7 +99,6 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\AlphanumericCodeResult */
             $alphanumericCodeResult = $this->factory
                 ->alphanumericCode()
                 ->query()
@@ -159,7 +157,6 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->alphanumericCode()
                 ->query()
@@ -206,7 +203,6 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->alphanumericCode()
                 ->query()
@@ -253,7 +249,6 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            /** @var \Agriweather\EzpayInvoice\Results\Result */
             $result = $this->factory
                 ->alphanumericCode()
                 ->query()
