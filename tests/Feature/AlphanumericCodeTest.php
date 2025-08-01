@@ -3,17 +3,13 @@
 use Agriweather\EzpayInvoice\Enums\AlphanumericCodeFlag;
 use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzpayInvoice\Enums\InvoiceType;
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\AlphanumericCodeResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 describe('字軌管理功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('字軌申請功能', function () {
         it('可以成功申請新字軌', function () {
             Http::fake([
@@ -36,8 +32,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->alphanumericCode()
+            $result = EzpayInvoice::alphanumericCode()
                 ->create()
                 ->withYear(113)
                 ->withTerm(InvoiceTerm::FOURTH)
@@ -50,7 +45,7 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -63,15 +58,15 @@ describe('字軌管理功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->managementNo)->toBe('0t0ghr0fyv')
-                ->and($result->year)->toBe(113)
-                ->and($result->term)->toBe(InvoiceTerm::FOURTH)
-                ->and($result->alphabeticLetter)->toBe('AA')
-                ->and($result->startNumber)->toBe('24000100')
-                ->and($result->endNumber)->toBe('24000199')
-                ->and($result->type)->toBe(InvoiceType::GENERAL)
-                ->and($result->lastNumber)->toBe(100)
-                ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
+                ->and($result->managementNo())->toBe('0t0ghr0fyv')
+                ->and($result->year())->toBe(113)
+                ->and($result->term())->toBe(InvoiceTerm::FOURTH)
+                ->and($result->alphabeticLetter())->toBe('AA')
+                ->and($result->startNumber())->toBe('24000100')
+                ->and($result->endNumber())->toBe('24000199')
+                ->and($result->type())->toBe(InvoiceType::GENERAL)
+                ->and($result->lastNumber())->toBe(100)
+                ->and($result->flag())->toBe(AlphanumericCodeFlag::ACTIVE);
         });
     });
 
@@ -99,8 +94,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $alphanumericCodeResult = $this->factory
-                ->alphanumericCode()
+            $alphanumericCodeResult = EzpayInvoice::alphanumericCode()
                 ->query()
                 // ->withNo('00455ujp8')
                 ->withYear(113)
@@ -115,7 +109,7 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -157,8 +151,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->alphanumericCode()
+            $result = EzpayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('00455ujp8')
                 ->withYear(113)
@@ -168,7 +161,7 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -203,8 +196,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->alphanumericCode()
+            $result = EzpayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('00455ujp8')
                 ->withYear(113)
@@ -214,7 +206,7 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -249,8 +241,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->alphanumericCode()
+            $result = EzpayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('00455ujp8')
                 ->withYear(113)
@@ -260,7 +251,7 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),

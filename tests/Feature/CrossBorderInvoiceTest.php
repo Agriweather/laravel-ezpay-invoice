@@ -1,16 +1,12 @@
 <?php
 
-use Agriweather\EzpayInvoice\Factory;
 use Agriweather\EzpayInvoice\Enums\CurrencyType;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 describe('境外電商發票功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('境外電商發票開立', function () {
         it('可以成功開立境外電商發票', function () {
             Http::fake([
@@ -30,8 +26,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->crossBorder()
+            $result = EzpayInvoice::crossBorder()
                 ->invoice()
                 ->create()
                 ->withOrder('CBOrder001')
@@ -48,7 +43,7 @@ describe('境外電商發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceIssue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -70,7 +65,7 @@ describe('境外電商發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->invoiceNumber)->toBe('CB00000016');
+                ->and($result->invoiceNumber())->toBe('CB00000016');
         });
     });
 
@@ -117,8 +112,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = $this->factory
-                ->crossBorder()
+            $invoiceResult = EzpayInvoice::crossBorder()
                 ->invoice()
                 ->query()
                 ->withInvoice('CBOrder001')
@@ -129,7 +123,7 @@ describe('境外電商發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),

@@ -1,16 +1,11 @@
 <?php
 
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 describe('境外電商折讓管理功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('境外電商折讓開立流程', function () {
         it('可以開立境外電商折讓', function () {
             Http::fake([
@@ -29,8 +24,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->crossBorder()
+            $result = EzpayInvoice::crossBorder()
                 ->allowance()
                 ->create()
                 ->withInvoice('CB00000016')
@@ -44,7 +38,7 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderAllowanceIssue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -62,12 +56,12 @@ describe('境外電商折讓管理功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->checkCode)->toBe('123456789')
-                ->and($result->allowanceNo)->toBe('A250802013300379')
-                ->and($result->merchantOrderNo)->toBe('CBOrder001')
-                ->and($result->invoiceNumber)->toBe('CB00000022')
-                ->and($result->allowanceAmount)->toBe(630)
-                ->and($result->remainingAmount)->toBe(1050 - 630);
+                ->and($result->checkCode())->toBe('123456789')
+                ->and($result->allowanceNo())->toBe('A250802013300379')
+                ->and($result->orderNo())->toBe('CBOrder001')
+                ->and($result->invoiceNumber())->toBe('CB00000022')
+                ->and($result->allowanceAmount())->toBe(630)
+                ->and($result->remainingAmount())->toBe(1050 - 630);
         });
     });
 
@@ -89,8 +83,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->crossBorder()
+            $result = EzpayInvoice::crossBorder()
                 ->allowance()
                 ->query()
                 ->withAllowance('A250802013300379')
@@ -102,7 +95,7 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -134,8 +127,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->crossBorder()
+            $result = EzpayInvoice::crossBorder()
                 ->allowance()
                 ->query()
                 ->withAllowance('A250802013300379')
@@ -147,7 +139,7 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -178,8 +170,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->crossBorder()
+            $result = EzpayInvoice::crossBorder()
                 ->allowance()
                 ->query()
                 ->withAllowance('A250802013300379')
@@ -190,7 +181,7 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),

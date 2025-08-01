@@ -1,9 +1,5 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Illuminate\Http\Client\Response as HttpResponse;
-
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -15,7 +11,7 @@ use Illuminate\Http\Client\Response as HttpResponse;
 |
 */
 
-pest()->extend(Tests\TestCase::class)->in('Feature');
+pest()->extend(Agriweather\EzpayInvoice\Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------

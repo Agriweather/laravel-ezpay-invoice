@@ -2,7 +2,7 @@
 
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\InvoiceResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
@@ -10,10 +10,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 describe('發票功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('發票開立流程', function () {
         it('可以成功開立 B2C 發票', function () {
             Http::fake([
@@ -36,8 +32,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->create()
                 ->withOrder('Order001')
                 ->forConsumer('John Doe')
@@ -52,7 +47,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => time(),
@@ -76,11 +71,11 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->checkCode)->toBe('123456789')
-                ->and($result->merchantOrderNo)->toBe('Order001')
-                ->and($result->invoiceNumber)->toBe('GG72002017')
-                ->and($result->totalAmount)->toBe(1050)
-                ->and($result->randomNumber)->toBe('1234');
+                ->and($result->checkCode())->toBe('123456789')
+                ->and($result->orderNo())->toBe('Order001')
+                ->and($result->invoiceNumber())->toBe('GG72002017')
+                ->and($result->totalAmount())->toBe(1050)
+                ->and($result->randomNumber())->toBe('1234');
         });
 
         it('可以成功開立 B2B 發票', function () {
@@ -104,8 +99,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->create()
                 ->withOrder('ORDER-002')
                 ->forBusiness('測試公司有限公司', '12345678')
@@ -121,7 +115,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => time(),
@@ -146,11 +140,11 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->checkCode)->toBe('123456789')
-                ->and($result->merchantOrderNo)->toBe('Order002')
-                ->and($result->invoiceNumber)->toBe('GG72002018')
-                ->and($result->totalAmount)->toBe(1050)
-                ->and($result->randomNumber)->toBe('1234');
+                ->and($result->checkCode())->toBe('123456789')
+                ->and($result->orderNo())->toBe('Order002')
+                ->and($result->invoiceNumber())->toBe('GG72002018')
+                ->and($result->totalAmount())->toBe(1050)
+                ->and($result->randomNumber())->toBe('1234');
         });
 
         it('可以開立載具發票', function () {
@@ -171,8 +165,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->create()
                 ->withOrder('Order003')
                 ->forConsumer('載具客戶')
@@ -186,7 +179,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => time(),
@@ -212,7 +205,7 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->merchantOrderNo)->toBe('Order003');
+                ->and($result->orderNo())->toBe('Order003');
         });
 
         it('可以開立發票並等待觸發', function () {
@@ -233,8 +226,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->create()
                 ->withOrder('Order004')
                 ->forConsumer('等待觸發客戶')
@@ -248,7 +240,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => time(),
@@ -270,9 +262,9 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->merchantOrderNo)->toBe('Order004')
-                ->and($result->invoiceNumber)->toBe('')
-                ->and($result->createTime)->toBe('');
+                ->and($result->orderNo())->toBe('Order004')
+                ->and($result->invoiceNumber())->toBe('')
+                ->and($result->createTime())->toBe('');
         });
 
         it('可以預約開立發票', function () {
@@ -293,8 +285,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->create()
                 ->withOrder('Order005')
                 ->forConsumer('預約客戶')
@@ -307,7 +298,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => time(),
@@ -330,9 +321,9 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->merchantOrderNo)->toBe('Order005')
-                ->and($result->invoiceNumber)->toBe('')
-                ->and($result->CreateTime)->toBe('');
+                ->and($result->orderNo())->toBe('Order005')
+                ->and($result->invoiceNumber())->toBe('')
+                ->and($result->CreateTime())->toBe('');
         });
     });
 
@@ -390,8 +381,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = $this->factory
-                ->invoice()
+            $invoiceResult = EzpayInvoice::invoice()
                 ->query()
                 ->withInvoice('GG72002017')
                 ->withRandomNumber('1234')
@@ -401,7 +391,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -473,8 +463,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = $this->factory
-                ->invoice()
+            $invoiceResult = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withAmount(1050)
@@ -484,7 +473,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -505,14 +494,13 @@ describe('發票功能測試', function () {
 
         it('可以跳轉到 ezPay 平台查詢發票', function () {
             /** @var \Illuminate\Http\Response */
-            $response = $this->factory
-                ->invoice()
+            $response = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withAmount(1050)
                 ->redirectToEZPay();
 
-            $this->factory->assertPostDataHas('DisplayFlag', '1');
+            EzpayInvoice::assertPostDataHas('DisplayFlag', '1');
 
             expect($response)->toBeInstanceOf(Response::class)
                 ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
@@ -522,8 +510,7 @@ describe('發票功能測試', function () {
 
         it('可以取得請求查詢發票的 formData 資料', function () {
             /** @var array */
-            $formData = $this->factory
-                ->invoice()
+            $formData = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withAmount(1050)
@@ -550,8 +537,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->query()
                 ->find('GG72002017')
                 ->because('客戶取消訂單')
@@ -561,7 +547,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -570,7 +556,7 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->invoiceNumber)->toBe('GG72002017');
+                ->and($result->invoiceNumber())->toBe('GG72002017');
         });
     });
 
@@ -593,8 +579,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->invoice()
+            $result = EzpayInvoice::invoice()
                 ->query()
                 ->withInvoiceTransNo('25072516392250538')
                 ->withOrder('Order004')
@@ -605,7 +590,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_touch_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -615,7 +600,7 @@ describe('發票功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->InvoiceNumber)->toBe('GG72002017');
+                ->and($result->InvoiceNumber())->toBe('GG72002017');
         });
     });
 });

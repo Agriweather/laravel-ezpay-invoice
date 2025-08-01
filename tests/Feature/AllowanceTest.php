@@ -1,15 +1,11 @@
 <?php
 
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 describe('折讓管理功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('折讓開立流程', function () {
         it('可以成功開立一般折讓', function () {
             Http::fake([
@@ -28,8 +24,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -42,7 +37,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -59,12 +54,12 @@ describe('折讓管理功能測試', function () {
             ]);
 
             expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->checkCode)->toBe('123456789')
-                ->and($result->allowanceNo)->toBe('A250725235346456')
-                ->and($result->merchantOrderNo)->toBe('Order001')
-                ->and($result->invoiceNumber)->toBe('GG72002018')
-                ->and($result->allowanceAmount)->toBe(630)
-                ->and($result->remainingAmount)->toBe(1050 - 630);
+                ->and($result->checkCode())->toBe('123456789')
+                ->and($result->allowanceNo())->toBe('A250725235346456')
+                ->and($result->orderNo())->toBe('Order001')
+                ->and($result->invoiceNumber())->toBe('GG72002018')
+                ->and($result->allowanceAmount())->toBe(630)
+                ->and($result->remainingAmount())->toBe(1050 - 630);
         });
 
         it('可以開立多品項折讓', function () {
@@ -84,8 +79,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -99,7 +93,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -136,8 +130,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -150,7 +143,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => time(),
@@ -188,8 +181,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->query()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
@@ -200,7 +192,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -232,8 +224,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->query()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
@@ -244,7 +235,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),
@@ -275,8 +266,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->allowance()
+            $result = EzpayInvoice::allowance()
                 ->query()
                 ->withAllowance('A250726001830959')
                 ->because('作廢原因')
@@ -286,7 +276,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => time(),

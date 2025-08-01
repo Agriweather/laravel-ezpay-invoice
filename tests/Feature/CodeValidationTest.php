@@ -1,15 +1,11 @@
 <?php
 
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\CodeValidationResult;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 describe('驗證功能測試', function () {
-    beforeEach(function () {
-        $this->factory = app(Factory::class);
-    });
-
     describe('手機條碼驗證功能', function () {
         it('可以驗證有效的手機條碼', function () {
             Http::fake([
@@ -27,15 +23,14 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->codeValidation()
+            $result = EzpayInvoice::codeValidation()
                 ->checkBarcode('/ABC.122');
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'TimeStamp' => time(),
                 'CellphoneBarcode' => '/AAA.CCC',
             ]);
@@ -60,15 +55,14 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->codeValidation()
+            $result = EzpayInvoice::codeValidation()
                 ->checkBarcode('/ABC.122');
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'TimeStamp' => time(),
                 'CellphoneBarcode' => '/AAA.CCC',
             ]);
@@ -95,15 +89,14 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->codeValidation()
+            $result = EzpayInvoice::codeValidation()
                 ->checkLoveCode(123);
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'TimeStamp' => time(),
                 'Lovecode' => 123,
             ]);
@@ -128,15 +121,14 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = $this->factory
-                ->codeValidation()
+            $result = EzpayInvoice::codeValidation()
                 ->checkLoveCode(123);
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
 
-            $this->factory->assertSentPostData([
+            EzpayInvoice::assertSentPostData([
                 'TimeStamp' => time(),
                 'Lovecode' => 123,
             ]);
