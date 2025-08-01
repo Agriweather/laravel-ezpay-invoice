@@ -92,7 +92,7 @@ describe('折讓管理功能測試', function () {
                 ->withItem('商品A', quantity: 1, unit: '個', price: 100, amount: 100, tax: 5)
                 ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, tax: 2)
                 ->withAmount(157)
-                ->withNotification('company@example.com')
+                ->withNotification('customer@example.com')
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -112,6 +112,7 @@ describe('折讓管理功能測試', function () {
                 'ItemAmt' => '100|50',
                 'ItemTaxAmt' => '5|2',
                 'TotalAmt' => '157',
+                'BuyerEmail' => 'customer@example.com',
                 'Status' => '1',
             ]);
 
@@ -277,7 +278,7 @@ describe('折讓管理功能測試', function () {
             $result = $this->factory
                 ->allowance()
                 ->query()
-                ->withAllowance('AL24010001')
+                ->withAllowance('A250726001830959')
                 ->because('作廢原因')
                 ->void();
 

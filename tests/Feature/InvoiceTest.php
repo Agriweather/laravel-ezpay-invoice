@@ -3,9 +3,10 @@
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Factory;
-use Agriweather\EzpayInvoice\Invoice;
+use Agriweather\EzpayInvoice\Results\InvoiceResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Illuminate\Http\Client\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 describe('發票功能測試', function () {
@@ -503,8 +504,35 @@ describe('發票功能測試', function () {
         });
 
         it('可以跳轉到 ezPay 平台查詢發票', function () {
-            //
-        })->todo();
+            /** @var \Illuminate\Http\Response */
+            $response = $this->factory
+                ->invoice()
+                ->query()
+                ->withOrder('Order001')
+                ->withAmount(1050)
+                ->redirectToEZPay();
+
+            $this->factory->assertPostDataHas('DisplayFlag', '1');
+
+            expect($response)->toBeInstanceOf(Response::class)
+                ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
+                ->content()->toContain('name="MerchantID_" value="Order001"')
+                ->content()->toContain('name="PostData_"');
+        });
+
+        it('可以取得請求查詢發票的 formData 資料', function () {
+            /** @var array */
+            $formData = $this->factory
+                ->invoice()
+                ->query()
+                ->withOrder('Order001')
+                ->withAmount(1050)
+                ->toFormData();
+
+            expect($formData)->toBeArray()
+                ->and($formData['MerchantID_'])->toBe('Order001')
+                ->and($formData['PostData_'])->toBeString();
+        });
     });
 
     describe('發票作廢功能', function () {

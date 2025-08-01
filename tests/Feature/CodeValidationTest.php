@@ -80,41 +80,69 @@ describe('驗證功能測試', function () {
 
     describe('捐贈碼驗證功能', function () {
         it('可以驗證有效的捐贈碼', function () {
-            // $this->mockLoveCodeVerificationSuccess([
-            //     'IsValid' => true,
-            //     'LoveCode' => 123,
-            //     'OrganizationName' => '財團法人創世社會福利基金會',
-            //     'BAN' => '04259011',
-            //     'Status' => 1,
-            // ]);
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '查詢成功',
+                    'APIID' => 'LoveCodeCheck',
+                    'Version' => '1.0',
+                    'MerchantID' => '111335678',
+                    'Result' => [
+                        'Lovecode' => '123',
+                        'IsExist' => 'Y',
+                    ],
+                    'CheckCode' => '123456789',
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->validation()
-            //     ->withLoveCode(123)
-            //     ->check();
+            $result = $this->factory
+                ->codeValidation()
+                ->checkLoveCode(123);
 
-            // expect($result)->toBeArray()
-            //     ->and($result['IsValid'])->toBeTrue()
-            //     ->and($result['LoveCode'])->toBe(123)
-            //     ->and($result['OrganizationName'])->toBe('財團法人創世社會福利基金會');
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
+            });
+
+            $this->factory->assertSentPostData([
+                'TimeStamp' => time(),
+                'Lovecode' => 123,
+            ]);
+
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->isValid())->toBeTrue();
+        });
 
         it('可以驗證無效的捐贈碼', function () {
-            // $this->mockLoveCodeVerificationSuccess([
-            //     'IsValid' => false,
-            //     'LoveCode' => 999,
-            //     'ErrorMessage' => '捐贈碼不存在',
-            //     'Status' => 0,
-            // ]);
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '查詢成功',
+                    'APIID' => 'LoveCodeCheck',
+                    'Version' => '1.0',
+                    'MerchantID' => '111335678',
+                    'Result' => [
+                        'Lovecode' => '123',
+                        'IsExist' => 'N',
+                    ],
+                    'CheckCode' => '123456789',
+                ], 200),
+            ]);
 
-            // $result = $this->factory
-            //     ->validation()
-            //     ->withLoveCode(999)
-            //     ->check();
+            $result = $this->factory
+                ->codeValidation()
+                ->checkLoveCode(123);
 
-            // expect($result)->toBeArray()
-            //     ->and($result['IsValid'])->toBeFalse()
-            //     ->and($result['ErrorMessage'])->toBe('捐贈碼不存在');
-        })->todo();
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
+            });
+
+            $this->factory->assertSentPostData([
+                'TimeStamp' => time(),
+                'Lovecode' => 123,
+            ]);
+
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->isValid())->toBeFalse();
+        });
     });
 });
