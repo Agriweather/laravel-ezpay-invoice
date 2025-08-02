@@ -6,9 +6,14 @@ use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Factory;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Tappable;
 
 abstract class Builder
 {
+    use Conditionable;
+    use Tappable;
+
     protected string $endpoint = '';
 
     protected array $postData = [];
