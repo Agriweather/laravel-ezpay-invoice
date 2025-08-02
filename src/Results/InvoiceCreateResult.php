@@ -2,10 +2,9 @@
 
 namespace Agriweather\EzpayInvoice\Results;
 
-use DateTime;
 use Carbon\Carbon;
 
-class InvoiceCreateResult extends Result
+final class InvoiceCreateResult extends Result
 {
     public function merchantID(): string
     {
@@ -37,7 +36,7 @@ class InvoiceCreateResult extends Result
         return $this->result['RandomNum'];
     }
 
-    public function createTime(): DateTime|null
+    public function createTime(): ?Carbon
     {
         if ($createTime = $this->result['CreateTime']) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $createTime);

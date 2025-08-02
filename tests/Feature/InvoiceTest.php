@@ -169,7 +169,7 @@ describe('發票功能測試', function () {
                 ->create()
                 ->withOrder('Order003')
                 ->forConsumer('載具客戶')
-                ->withCarrier('/ABC.123', CarrierType::MOBILE)
+                ->withCarrier(CarrierType::MOBILE, '/ABC.123')
                 ->withItem('載具商品', quantity: 1, unit: '個', price: 500, amount: 500)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(500, 25, 525)
@@ -233,8 +233,7 @@ describe('發票功能測試', function () {
                 ->withItem('等待觸發商品', quantity: 1, unit: '個', price: 200, amount: 200)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(200, 10, 210)
-                ->defer()
-                ->issue();
+                ->deferIssue();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
@@ -263,8 +262,8 @@ describe('發票功能測試', function () {
 
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->orderNo())->toBe('Order004')
-                ->and($result->invoiceNumber())->toBe('')
-                ->and($result->createTime())->toBe('');
+                ->and($result->invoiceNumber())->toBeNull()
+                ->and($result->createTime())->toBeNull();
         });
 
         it('可以預約開立發票', function () {
@@ -322,8 +321,8 @@ describe('發票功能測試', function () {
 
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->orderNo())->toBe('Order005')
-                ->and($result->invoiceNumber())->toBe('')
-                ->and($result->CreateTime())->toBe('');
+                ->and($result->invoiceNumber())->toBeNull()
+                ->and($result->createTime())->toBeNull();
         });
     });
 
