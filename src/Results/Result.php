@@ -41,11 +41,11 @@ abstract class Result
 
     public function errorCode(): ?string
     {
-        return !$this->isSuccess() ? $this->status : null;
+        return ! $this->isSuccess() ? $this->status : null;
     }
 
     public function errorMessage(): ?string
     {
-        return !$this->isSuccess() ? $this->message : null;
+        return ! $this->isSuccess() ? $this->message : null;
     }
 }

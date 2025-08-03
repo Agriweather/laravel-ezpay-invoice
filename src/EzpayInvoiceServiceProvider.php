@@ -3,7 +3,6 @@
 namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class EzpayInvoiceServiceProvider extends ServiceProvider

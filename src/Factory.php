@@ -3,7 +3,6 @@
 namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use PHPUnit\Framework\Assert as PHPUnit;
 
 class Factory
 {

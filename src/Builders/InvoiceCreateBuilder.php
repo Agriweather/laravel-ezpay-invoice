@@ -44,7 +44,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 商店自訂訂單編號
      *
-     * @param  string  $orderNo 商店自訂訂單編號，限英、數字、_ 格式。同一商店中此編號不可重覆。
+     * @param  string  $orderNo  商店自訂訂單編號，限英、數字、_ 格式。同一商店中此編號不可重覆。
      */
     public function withOrder(string $orderNo): self
     {
@@ -56,8 +56,8 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 開立發票給公司
      *
-     * @param  string  $businessName 營業人名稱，長度限 60 字，若長度不足使用則帶入買方統一編號。
-     * @param  string  $taxIdNumber 買受人統一編號
+     * @param  string  $businessName  營業人名稱，長度限 60 字，若長度不足使用則帶入買方統一編號。
+     * @param  string  $taxIdNumber  買受人統一編號
      */
     public function forBusiness(string $businessName, string $taxIdNumber): self
     {
@@ -71,7 +71,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 開立發票給消費者
      *
-     * @param  string  $consumerName 個人姓名或識別碼，長度限 30 字。
+     * @param  string  $consumerName  個人姓名或識別碼，長度限 30 字。
      */
     public function forConsumer(string $consumerName): self
     {
@@ -84,7 +84,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 買受人電子信箱
      *
-     * @param  string  $email 買受人電子信箱，當載具類別為 ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`) 時為必填。
+     * @param  string  $email  買受人電子信箱，當載具類別為 ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`) 時為必填。
      */
     public function withEmail(string $email): self
     {
@@ -96,7 +96,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 買受人地址
      *
-     * @param  string  $address 買受人的聯絡地址
+     * @param  string  $address  買受人的聯絡地址
      */
     public function withAddress(string $address): self
     {
@@ -115,9 +115,6 @@ class InvoiceCreateBuilder extends Builder
      * - 手機條碼 (`CarrierType::MOBILE`): 第1碼 / + 7碼英、數字
      * - 自然人憑證 (`CarrierType::CITIZEN_CERT`): 2碼大寫英文 + 14碼數字
      * - ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`): 提供可識別買受人之代號(例：e-mail、手機號碼、會員編號…等)，由賣方自訂即可，同一個代號則視為同一個買受人。ezPay 平台將以賣方統編加上買受人代號做為該買受人的 ezPay 電子發票載具號碼。
-     *
-     * @param  \Agriweather\EzpayInvoice\Enums\CarrierType  $carrierType
-     * @param  string  $carrierId
      */
     public function withCarrier(CarrierType $carrierType, string $carrierId): self
     {
@@ -134,7 +131,7 @@ class InvoiceCreateBuilder extends Builder
      *
      * 當提供捐贈碼時，不可再提供 **買受人載具資訊** (Carrier)。
      *
-     * @param  string  $loveCode 捐贈碼，3~7 碼純數字
+     * @param  string  $loveCode  捐贈碼，3~7 碼純數字
      */
     public function withLoveCode(string $loveCode): self
     {
@@ -148,7 +145,7 @@ class InvoiceCreateBuilder extends Builder
      *
      * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才可使用此參數。
      *
-     * @param  bool  $print 是否索取紙本發票
+     * @param  bool  $print  是否索取紙本發票
      */
     public function withPrint(bool $print = true): self
     {
@@ -178,7 +175,7 @@ class InvoiceCreateBuilder extends Builder
      * 則直接開放買受人 (中獎人) 可至本平台合作之超商 Kiosk
      * (目前為 全家便利商店 FamiPort) 操作列印以進行兌獎。
      *
-     * @param  bool  $enabled 是否啟用
+     * @param  bool  $enabled  是否啟用
      */
     public function withKioskPrint(bool $enabled = true): self
     {
@@ -197,8 +194,8 @@ class InvoiceCreateBuilder extends Builder
      * - 免稅 (`TaxType::TAX_FREE`)：不需要提供稅率，稅率自動設為 0。
      * - 混合應稅與免稅或零稅率 (`TaxType::MIXED`)：當開立發票給公司時才可使用此參數，混合應稅與免稅或零稅率。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType 稅別
-     * @param  int|null  $taxRate 稅率，單位為百分比 (1% = 1)
+     * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType  稅別
+     * @param  int|null  $taxRate  稅率，單位為百分比 (1% = 1)
      */
     public function withTax(TaxType $taxType, ?int $taxRate = null): self
     {
@@ -221,7 +218,7 @@ class InvoiceCreateBuilder extends Builder
      * - 非經海關 (`CustomsClearance::NON_CUSTOMS`)：不需要提供海關清關資訊。
      * - 經海關 (`CustomsClearance::CUSTOMS`)：需要提供海關清關資訊。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\CustomsClearance  $customsClearance 海關清關方式
+     * @param  \Agriweather\EzpayInvoice\Enums\CustomsClearance  $customsClearance  海關清關方式
      */
     public function withCustomsClearance(CustomsClearance $customsClearance): self
     {
@@ -241,9 +238,9 @@ class InvoiceCreateBuilder extends Builder
      * - 銷售額(零稅率)：將所有零稅率商品的小計金額加總。
      * - 銷售額(免稅)：將所有免稅商品的小計金額加總。
      *
-     * @param  int|null  $salesAmount 應稅銷售額
-     * @param  int|null  $zeroAmount 零稅率銷售額
-     * @param  int|null  $freeAmount 免稅銷售額
+     * @param  int|null  $salesAmount  應稅銷售額
+     * @param  int|null  $zeroAmount  零稅率銷售額
+     * @param  int|null  $freeAmount  免稅銷售額
      */
     public function withMixedTaxAmount(?int $salesAmount = null, ?int $zeroAmount = null, ?int $freeAmount = null): self
     {
@@ -294,9 +291,9 @@ class InvoiceCreateBuilder extends Builder
      * - 發票稅額：將 發票銷售額 乘以 稅率。
      * - 發票總金額(含稅)：發票銷售額 + 發票稅額。
      *
-     * @param  int|null  $amount 發票銷售額(未稅)
-     * @param  int|null  $taxAmount 發票稅額
-     * @param  int|null  $totalAmount 發票總金額(含稅)
+     * @param  int|null  $amount  發票銷售額(未稅)
+     * @param  int|null  $taxAmount  發票稅額
+     * @param  int|null  $totalAmount  發票總金額(含稅)
      */
     public function withAmount(?int $amount = null, ?int $taxAmount = null, ?int $totalAmount = null): self
     {
@@ -347,20 +344,21 @@ class InvoiceCreateBuilder extends Builder
      * - 未稅：當開立發票給公司時，商品單價和小計為未稅金額。
      * - 含稅：當開立發票給消費者時，商品單價和小計為含稅金額。
      *
-     * @param  string  $name 商品名稱
-     * @param  int  $quantity 商品數量
-     * @param  string  $unit 商品單位
-     * @param  int  $price 商品單價
-     * @param  int|null  $amount 商品小計
-     * @param  \Agriweather\EzpayInvoice\Enums\TaxType|null  $taxType 商品稅別
+     * @param  string  $name  商品名稱
+     * @param  int  $quantity  商品數量
+     * @param  string  $unit  商品單位
+     * @param  int  $price  商品單價
+     * @param  int|null  $amount  商品小計
+     * @param  \Agriweather\EzpayInvoice\Enums\TaxType|null  $taxType  商品稅別
      */
-    public function withItem(string $name,
-                             int $quantity,
-                             string $unit,
-                             int $price,
-                             ?int $amount = null,
-                             ?TaxType $taxType = null): self
-    {
+    public function withItem(
+        string $name,
+        int $quantity,
+        string $unit,
+        int $price,
+        ?int $amount = null,
+        ?TaxType $taxType = null
+    ): self {
         $this->items['ItemName'][] = $name;
         $this->items['ItemCount'][] = (string) $quantity;
         $this->items['ItemUnit'][] = $unit;
@@ -388,7 +386,7 @@ class InvoiceCreateBuilder extends Builder
      * - 未稅：當開立發票給公司時，商品單價和小計為未稅金額。
      * - 含稅：當開立發票給消費者時，商品單價和小計為含稅金額。
      *
-     * @param  array  $items 商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`，參數 `amount` 和 `taxType` 為可選。
+     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`，參數 `amount` 和 `taxType` 為可選。
      */
     public function withItems(array $items): self
     {
@@ -413,7 +411,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 發票備註
      *
-     * @param  string  $comment 發票備註，字數限 200 字，如有難字則再縮短。
+     * @param  string  $comment  發票備註，字數限 200 字，如有難字則再縮短。
      */
     public function withComment(string $comment): self
     {
@@ -468,7 +466,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 預約自動開立發票
      *
-     * @param  string  $createDate 預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
+     * @param  string  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      */
     public function scheduleAt(string $createDate): InvoiceCreateResult
     {

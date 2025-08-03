@@ -5,6 +5,7 @@ namespace Agriweather\EzpayInvoice\Crypto;
 class EzpayCrypto
 {
     protected string $hashKey;
+
     protected string $hashIV;
 
     public function encryptPostData(array $postData): string
