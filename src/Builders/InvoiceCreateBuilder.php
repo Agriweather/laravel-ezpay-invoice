@@ -16,8 +16,8 @@ class InvoiceCreateBuilder extends Builder
 {
     protected function boot(): void
     {
-        $this->crypto->setHashKey($this->config['merchant_hash_key']);
-        $this->crypto->setHashIv($this->config['merchant_hash_iv']);
+        $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
+        $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
         $this->postData = [
             'RespondType' => 'JSON',
@@ -446,7 +446,7 @@ class InvoiceCreateBuilder extends Builder
         }
 
         $this->formData = [
-            'MerchantID_' => $this->config['merchant_id'],
+            'MerchantID_' => $this->factory->config('merchant_id'),
             'PostData_' => $this->crypto->encryptPostData($this->postData),
         ];
 

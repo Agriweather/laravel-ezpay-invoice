@@ -3,11 +3,18 @@
 namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 class Factory
 {
+    /**
+     * ezPay 發票平台生產環境的 baseURL。
+     */
     protected string $productionBaseUrl = 'https://inv.ezpay.com.tw';
 
+    /**
+     * ezPay 發票平台測試環境的 baseURL。
+     */
     protected string $testingBaseUrl = 'https://cinv.ezpay.com.tw';
 
     public function __construct(
@@ -20,14 +27,23 @@ class Factory
     public function invoice(): Invoice
     {
         return new Invoice(
-            $this, $this->crypto, $this->config, $this->baseUrl()
+            $this, $this->crypto
         );
     }
 
-    protected function baseUrl()
+    public function baseUrl(): string
     {
         return $this->config['env'] === 'production'
             ? $this->productionBaseUrl
             : $this->testingBaseUrl;
+    }
+
+    public function config(?string $key = null)
+    {
+        if (isset($key)) {
+            return $this->config[$key] ?? null;
+        }
+
+        return $this->config;
     }
 }

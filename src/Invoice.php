@@ -10,9 +10,7 @@ class Invoice
 {
     public function __construct(
         protected Factory $factory,
-        protected EzpayCrypto $crypto,
-        protected array $config,
-        protected string $baseUrl
+        protected EzpayCrypto $crypto
     ) {
         //
     }
@@ -20,14 +18,14 @@ class Invoice
     public function create(): InvoiceCreateBuilder
     {
         return new InvoiceCreateBuilder(
-            $this->factory, $this->crypto, $this->config, $this->baseUrl
+            $this->factory, $this->crypto
         );
     }
 
     public function query(): InvoiceQueryBuilder
     {
         return new InvoiceQueryBuilder(
-            $this->factory, $this->crypto, $this->config, $this->baseUrl
+            $this->factory, $this->crypto
         );
     }
 }

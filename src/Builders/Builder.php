@@ -24,9 +24,7 @@ abstract class Builder
 
     public function __construct(
         protected Factory $factory,
-        protected EzpayCrypto $crypto,
-        protected array $config,
-        protected string $baseUrl
+        protected EzpayCrypto $crypto
     ) {
         $this->boot();
     }
@@ -37,6 +35,6 @@ abstract class Builder
     {
         return Http::asForm()
             ->withUserAgent('ezPay')
-            ->post($this->baseUrl.$this->endpoint, $this->formData);
+            ->post($this->factory->baseUrl().$this->endpoint, $this->formData);
     }
 }
