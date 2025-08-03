@@ -2,19 +2,24 @@
 
 namespace Agriweather\EzpayInvoice\Builders;
 
-use Carbon\Carbon;
+use Agriweather\EzpayInvoice\Options\InvoiceQueryOptions;
 
 class InvoiceQueryBuilder extends Builder
 {
+    protected InvoiceQueryOptions $options;
+
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->postData = [
-            'RespondType' => 'JSON',
-            'Version' => '1.3',
-            'TimeStamp' => Carbon::now()->timestamp,
-        ];
+        $this->options = new InvoiceQueryOptions([
+            'merchantId' => $this->factory->config('merchant_id'),
+        ]);
+    }
+
+    public function getOptions(): InvoiceQueryOptions
+    {
+        return $this->options;
     }
 }

@@ -8,24 +8,27 @@ use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
 use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
 use Agriweather\EzpayInvoice\Enums\InvoiceStatus;
 use Agriweather\EzpayInvoice\Enums\TaxType;
+use Agriweather\EzpayInvoice\Options\InvoiceCreateOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
-use Carbon\Carbon;
 use InvalidArgumentException;
 
 class InvoiceCreateBuilder extends Builder
 {
+    protected InvoiceCreateOptions $options;
+
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->postData = [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'Status' => (string) InvoiceStatus::IMMEDIATE->value,
-            'PrintFlag' => InvoicePrintFlag::YES->value,
-        ];
+        $this->options = new InvoiceCreateOptions([
+            'merchantId' => $this->factory->config('merchant_id'),
+        ]);
+    }
+
+    public function getOptions(): InvoiceCreateOptions
+    {
+        return $this->options;
     }
 
     /**
@@ -34,9 +37,9 @@ class InvoiceCreateBuilder extends Builder
      * 若商店同時使用 ezPay 簡單付金流服務，請於此參數傳送 ezPay 交易序號，
      * 以便對應金流交易開立發票；未使用者則不需輸入。
      */
-    public function withEzPayTransNumber(string $orderNo): self
+    public function withEzPayTransNumber(string $transNumber): self
     {
-        $this->postData['TransNum'] = $orderNo;
+        $this->options->ezPayTransNumber = $transNumber;
 
         return $this;
     }
@@ -48,7 +51,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withOrder(string $orderNo): self
     {
-        $this->postData['MerchantOrderNo'] = $orderNo;
+        $this->options->orderNo = $orderNo;
 
         return $this;
     }
@@ -61,9 +64,9 @@ class InvoiceCreateBuilder extends Builder
      */
     public function forBusiness(string $businessName, string $taxIdNumber): self
     {
-        $this->postData['Category'] = InvoiceCategory::B2B->value;
-        $this->postData['BuyerName'] = $businessName;
-        $this->postData['BuyerUBN'] = $taxIdNumber;
+        $this->options->category = InvoiceCategory::B2B;
+        $this->options->buyerName = $businessName;
+        $this->options->buyerTaxIdNumber = $taxIdNumber;
 
         return $this;
     }
@@ -75,20 +78,8 @@ class InvoiceCreateBuilder extends Builder
      */
     public function forConsumer(string $consumerName): self
     {
-        $this->postData['Category'] = InvoiceCategory::B2C->value;
-        $this->postData['BuyerName'] = $consumerName;
-
-        return $this;
-    }
-
-    /**
-     * 買受人電子信箱
-     *
-     * @param  string  $email  買受人電子信箱，當載具類別為 ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`) 時為必填。
-     */
-    public function withEmail(string $email): self
-    {
-        $this->postData['BuyerEmail'] = $email;
+        $this->options->category = InvoiceCategory::B2C;
+        $this->options->buyerName = $consumerName;
 
         return $this;
     }
@@ -100,7 +91,19 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withAddress(string $address): self
     {
-        $this->postData['BuyerAddress'] = $address;
+        $this->options->buyerAddress = $address;
+
+        return $this;
+    }
+
+    /**
+     * 買受人電子信箱
+     *
+     * @param  string  $email  買受人電子信箱，當載具類別為 ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`) 時為必填。
+     */
+    public function withEmail(string $email): self
+    {
+        $this->options->buyerEmail = $email;
 
         return $this;
     }
@@ -116,10 +119,10 @@ class InvoiceCreateBuilder extends Builder
      * - 自然人憑證 (`CarrierType::CITIZEN_CERT`): 2碼大寫英文 + 14碼數字
      * - ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`): 提供可識別買受人之代號(例：e-mail、手機號碼、會員編號…等)，由賣方自訂即可，同一個代號則視為同一個買受人。ezPay 平台將以賣方統編加上買受人代號做為該買受人的 ezPay 電子發票載具號碼。
      */
-    public function withCarrier(CarrierType $carrierType, string $carrierId): self
+    public function withCarrier(CarrierType $carrierType, string $carrierNumber): self
     {
-        $this->postData['CarrierType'] = (string) $carrierType->value;
-        $this->postData['CarrierNum'] = rawurlencode(trim($carrierId));
+        $this->options->carrierType = $carrierType;
+        $this->options->carrierNumber = rawurlencode(trim($carrierNumber));
 
         return $this;
     }
@@ -135,7 +138,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withLoveCode(string $loveCode): self
     {
-        $this->postData['LoveCode'] = $loveCode;
+        $this->options->loveCode = $loveCode;
 
         return $this;
     }
@@ -149,9 +152,9 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withPrint(bool $print = true): self
     {
-        $this->postData['PrintFlag'] = $print
-            ? InvoicePrintFlag::YES->value
-            : InvoicePrintFlag::NO->value;
+        $this->options->printFlag = $print
+            ? InvoicePrintFlag::YES
+            : InvoicePrintFlag::NO;
 
         return $this;
     }
@@ -180,7 +183,7 @@ class InvoiceCreateBuilder extends Builder
     public function withKioskPrint(bool $enabled = true): self
     {
         if ($enabled) {
-            $this->postData['KioskPrintFlag'] = '1';
+            $this->options->enableKioskPrint = true;
         }
 
         return $this;
@@ -199,12 +202,12 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withTax(TaxType $taxType, ?int $taxRate = null): self
     {
-        $this->postData['TaxType'] = (string) $taxType->value;
+        $this->options->taxType = $taxType;
 
         if ($taxType === TaxType::ZERO_RATE || $taxType === TaxType::TAX_FREE) {
-            $this->postData['TaxRate'] = '0';
-        } elseif (! is_null($taxRate)) {
-            $this->postData['TaxRate'] = (string) $taxRate;
+            $this->options->taxRate = 0;
+        } elseif (isset($taxRate)) {
+            $this->options->taxRate = $taxRate;
         }
 
         return $this;
@@ -222,7 +225,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withCustomsClearance(CustomsClearance $customsClearance): self
     {
-        $this->postData['CustomsClearance'] = $customsClearance->value;
+        $this->options->customsClearance = $customsClearance;
 
         return $this;
     }
@@ -244,39 +247,41 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withMixedTaxAmount(?int $salesAmount = null, ?int $zeroAmount = null, ?int $freeAmount = null): self
     {
-        if ($this->postData['TaxType'] !== (string) TaxType::MIXED->value) {
+        if ($this->options->taxType !== TaxType::MIXED) {
             throw new InvalidArgumentException('混合稅別銷售額僅在稅別為混合稅別時可用。');
         }
 
-        /** @var array<string, int> */
+        /** @var array<int, int> */
         $amounts = [];
 
-        foreach ($this->items['TaxType'] as $i => $itemTaxType) {
-            $amounts[$itemTaxType] = ($amounts[$itemTaxType] ?? 0) + (int) $this->items['ItemAmt'][$i];
+        foreach ($this->options->itemTaxTypes as $i => $itemTaxType) {
+            $amounts[$itemTaxType->value] = (
+                $amounts[$itemTaxType->value] ?? 0
+            ) + $this->options->itemAmounts[$i];
         }
 
         // 銷售額(應稅)
-        if (! is_null($salesAmount)) {
-            $this->postData['AmtSales'] = (string) $salesAmount;
+        if (isset($salesAmount)) {
+            $this->options->salesAmount = $salesAmount;
         } else {
             // 若未提供應稅銷售額，則使用應稅商品金額總和
-            $this->postData['AmtSales'] = (string) ($amounts[(string) TaxType::TAXABLE->value] ?? 0);
+            $this->options->salesAmount = $amounts[TaxType::TAXABLE->value] ?? 0;
         }
 
         // 銷售額(零稅率)
-        if (! is_null($zeroAmount)) {
-            $this->postData['AmtZero'] = (string) $zeroAmount;
+        if (isset($zeroAmount)) {
+            $this->options->zeroTaxAmount = $zeroAmount;
         } else {
             // 若未提供零稅率銷售額，則使用零稅率商品金額總和
-            $this->postData['AmtZero'] = (string) ($amounts[(string) TaxType::ZERO_RATE->value] ?? 0);
+            $this->options->zeroTaxAmount = $amounts[TaxType::ZERO_RATE->value] ?? 0;
         }
 
         // 銷售額(免稅)
-        if (! is_null($freeAmount)) {
-            $this->postData['AmtFree'] = (string) $freeAmount;
+        if (isset($freeAmount)) {
+            $this->options->freeTaxAmount = $freeAmount;
         } else {
             // 若未提供免稅銷售額，則使用免稅商品金額總和
-            $this->postData['AmtFree'] = (string) ($amounts[(string) TaxType::TAX_FREE->value] ?? 0);
+            $this->options->freeTaxAmount = $amounts[TaxType::TAX_FREE->value] ?? 0;
         }
 
         return $this;
@@ -298,41 +303,36 @@ class InvoiceCreateBuilder extends Builder
     public function withAmount(?int $amount = null, ?int $taxAmount = null, ?int $totalAmount = null): self
     {
         // 發票銷售額(未稅)
-        if (! is_null($amount)) {
-            $this->postData['Amt'] = (string) $amount;
-        } elseif ($this->postData['TaxType'] === (string) TaxType::MIXED->value) {
+        if (isset($amount)) {
+            $this->options->amount = $amount;
+        } elseif ($this->options->taxType === TaxType::MIXED) {
             // 若未提供銷售額，且為混合稅率，則發票銷售額為 AmtSales + AmtZero + AmtFree。
-            $this->postData['Amt'] = (string) (
-                (int) ($this->items['AmtSales'] ?? 0) +
-                (int) ($this->items['AmtZero'] ?? 0) +
-                (int) ($this->items['AmtFree'] ?? 0)
+            $this->options->amount = (
+                ($this->options->salesAmount ?? 0) +
+                ($this->options->zeroTaxAmount ?? 0) +
+                ($this->options->freeTaxAmount ?? 0)
             );
         } else {
             // 若未提供銷售額，則使用商品小計金額總和
-            $this->postData['Amt'] = (string) array_sum($this->items['ItemAmt'] ?? []);
+            $this->options->amount = array_sum($this->options->itemAmounts);
         }
 
         // 發票稅額
-        if (! is_null($taxAmount)) {
-            $this->postData['TaxAmt'] = (string) $taxAmount;
+        if (isset($taxAmount)) {
+            $this->options->taxAmount = $taxAmount;
         } else {
             // 若未提供稅額，則為銷售額 * 稅率
-            $taxAmount = (int) round(
-                ($this->postData['Amt'] ?? 0) *
-                ($this->postData['TaxRate'] ?? 0) / 100
+            $this->options->taxAmount = round(
+                $this->options->amount * $this->options->taxRate / 100
             );
-            $this->postData['TaxAmt'] = (string) $taxAmount;
         }
 
         // 發票總金額(含稅)
-        if (! is_null($totalAmount)) {
-            $this->postData['TotalAmt'] = (string) $totalAmount;
+        if (isset($totalAmount)) {
+            $this->options->totalAmount = $totalAmount;
         } else {
             // 若未提供總金額，則為銷售額 + 稅額
-            $this->postData['TotalAmt'] = (string) (
-                (int) ($this->postData['Amt'] ?? 0) +
-                (int) ($this->postData['TaxAmt'] ?? 0)
-            );
+            $this->options->totalAmount = $this->options->amount + $this->options->taxAmount;
         }
 
         return $this;
@@ -359,22 +359,22 @@ class InvoiceCreateBuilder extends Builder
         ?int $amount = null,
         ?TaxType $taxType = null
     ): self {
-        $this->items['ItemName'][] = $name;
-        $this->items['ItemCount'][] = (string) $quantity;
-        $this->items['ItemUnit'][] = $unit;
-        $this->items['ItemPrice'][] = (string) $price;
-        $this->items['ItemAmt'][] = is_null($amount)
-            ? (string) ($quantity * $price)
-            : (string) $amount;
+        $this->options->itemNames[] = $name;
+        $this->options->itemQuantities[] = $quantity;
+        $this->options->itemUnits[] = $unit;
+        $this->options->itemPrices[] = $price;
+        $this->options->itemAmounts[] = is_null($amount)
+            ? ($quantity * $price)
+            : $amount;
 
-        if (isset($this->postData['TaxType']) && $this->postData['TaxType'] === (string) TaxType::MIXED->value) {
+        if ($this->options->taxType === TaxType::MIXED) {
             if (is_null($taxType)) {
                 throw new InvalidArgumentException('當設定為混合稅別時，必須提供每個商品的稅別。');
             } elseif ($taxType === TaxType::MIXED) {
                 throw new InvalidArgumentException('商品稅別不能為混合稅別。');
             }
 
-            $this->items['ItemTaxType'][] = (string) $taxType->value;
+            $this->options->itemTaxTypes[] = $taxType;
         }
 
         return $this;
@@ -415,7 +415,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function withComment(string $comment): self
     {
-        $this->postData['Comment'] = $comment;
+        $this->options->comment = $comment;
 
         return $this;
     }
@@ -426,23 +426,6 @@ class InvoiceCreateBuilder extends Builder
     public function issue(): InvoiceCreateResult
     {
         $this->endpoint = '/Api/invoice_issue';
-
-        $this->postData['ItemName'] = implode('|', $this->items['ItemName'] ?? []);
-        $this->postData['ItemCount'] = implode('|', $this->items['ItemCount'] ?? []);
-        $this->postData['ItemUnit'] = implode('|', $this->items['ItemUnit'] ?? []);
-        $this->postData['ItemPrice'] = implode('|', $this->items['ItemPrice'] ?? []);
-        $this->postData['ItemAmt'] = implode('|', $this->items['ItemAmt'] ?? []);
-
-        if (is_array($this->items['ItemTaxType'] ?? []) &&
-            count(($this->items['ItemTaxType'] ?? [])) > 0
-        ) {
-            $this->postData['ItemTaxType'] = implode('|', $this->items['ItemTaxType']);
-        }
-
-        $this->formData = [
-            'MerchantID_' => $this->factory->config('merchant_id'),
-            'PostData_' => $this->crypto->encryptPostData($this->postData),
-        ];
 
         $result = new InvoiceCreateResult($this->sendRequest()->json());
 
@@ -458,7 +441,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function deferIssue(): InvoiceCreateResult
     {
-        $this->postData['Status'] = (string) InvoiceStatus::DEFERRED->value;
+        $this->options->status = InvoiceStatus::DEFERRED;
 
         return $this->issue();
     }
@@ -470,8 +453,8 @@ class InvoiceCreateBuilder extends Builder
      */
     public function scheduleAt(string $createDate): InvoiceCreateResult
     {
-        $this->postData['Status'] = (string) InvoiceStatus::SCHEDULED->value;
-        $this->postData['CreateStatusTime'] = $createDate;
+        $this->options->status = InvoiceStatus::SCHEDULED;
+        $this->options->createDate = $createDate;
 
         return $this->issue();
     }

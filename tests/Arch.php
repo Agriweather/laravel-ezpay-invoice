@@ -27,6 +27,13 @@ arch('facades')
         'Illuminate\Support\Facades\Facade',
     ]);
 
+arch('options')
+    ->expect('Agriweather\EzpayInvoice\Options')
+    ->toOnlyUse([
+        'Agriweather\EzpayInvoice\Enums',
+        'Carbon\Carbon',
+    ]);
+
 arch('results')
     ->expect('Agriweather\EzpayInvoice\Results')
     ->toOnlyUse([
