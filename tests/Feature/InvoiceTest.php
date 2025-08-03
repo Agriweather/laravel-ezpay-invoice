@@ -15,7 +15,7 @@ use function Pest\Laravel\partialMock;
 
 describe('發票功能測試', function () {
     describe('發票開立流程', function () {
-        it('可以成功開立 B2C 發票', function () {
+        test('可以成功開立 B2C 發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -82,7 +82,7 @@ describe('發票功能測試', function () {
                 ->and($result->randomNumber())->toBe('1234');
         });
 
-        it('可以成功開立 B2B 發票', function () {
+        test('可以成功開立 B2B 發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -151,7 +151,7 @@ describe('發票功能測試', function () {
                 ->and($result->randomNumber())->toBe('1234');
         });
 
-        it('可以開立載具發票', function () {
+        test('可以開立載具發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -212,7 +212,7 @@ describe('發票功能測試', function () {
                 ->and($result->orderNo())->toBe('Order003');
         });
 
-        it('可以開立發票並等待觸發', function () {
+        test('可以開立發票並等待觸發', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -270,7 +270,7 @@ describe('發票功能測試', function () {
                 ->and($result->createTime())->toBeNull();
         });
 
-        it('可以預約開立發票', function () {
+        test('可以預約開立發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -331,7 +331,7 @@ describe('發票功能測試', function () {
     });
 
     describe('發票查詢功能', function () {
-        it('可以透過發票號碼及隨機碼查詢發票', function () {
+        test('可以透過發票號碼及隨機碼查詢發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -413,7 +413,7 @@ describe('發票功能測試', function () {
                 ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
         });
 
-        it('可以透過訂單編號及發票金額查詢發票', function () {
+        test('可以透過訂單編號及發票金額查詢發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -495,7 +495,7 @@ describe('發票功能測試', function () {
                 ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
         });
 
-        it('可以跳轉到 ezPay 平台查詢發票', function () {
+        test('可以跳轉到 ezPay 平台查詢發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -521,7 +521,7 @@ describe('發票功能測試', function () {
                 ->content()->toContain('name="PostData_"');
         });
 
-        it('可以取得請求查詢發票的 formData 資料', function () {
+        test('可以取得請求查詢發票的 formData 資料', function () {
             /** @var array */
             $formData = EzpayInvoice::invoice()
                 ->query()
@@ -536,7 +536,7 @@ describe('發票功能測試', function () {
     });
 
     describe('發票作廢功能', function () {
-        it('可以作廢已開立的發票', function () {
+        test('可以作廢已開立的發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -574,7 +574,7 @@ describe('發票功能測試', function () {
     });
 
     describe('發票觸發功能', function () {
-        it('可以觸發等待中的發票', function () {
+        test('可以觸發等待中的發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

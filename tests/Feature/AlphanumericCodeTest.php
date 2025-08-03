@@ -15,7 +15,7 @@ use function Pest\Laravel\partialMock;
 
 describe('字軌管理功能測試', function () {
     describe('字軌申請功能', function () {
-        it('可以成功申請新字軌', function () {
+        test('可以成功申請新字軌', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -75,7 +75,7 @@ describe('字軌管理功能測試', function () {
     });
 
     describe('字軌查詢功能', function () {
-        it('可以查詢字軌資訊', function () {
+        test('可以查詢字軌資訊', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -134,7 +134,7 @@ describe('字軌管理功能測試', function () {
     });
 
     describe('字軌管理功能', function () {
-        it('可以暫停字軌', function () {
+        test('可以暫停字軌', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -179,7 +179,7 @@ describe('字軌管理功能測試', function () {
                 ->and($result->flag)->toBe(AlphanumericCodeFlag::PAUSED);
         });
 
-        it('可以啟用字軌', function () {
+        test('可以啟用字軌', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -224,7 +224,7 @@ describe('字軌管理功能測試', function () {
                 ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
         });
 
-        it('可以停用字軌', function () {
+        test('可以停用字軌', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

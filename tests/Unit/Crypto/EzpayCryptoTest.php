@@ -3,7 +3,7 @@
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 
 describe('EzpayCrypto', function () {
-    it('可以建立實例並加入金鑰', function () {
+    test('可以建立實例並加入金鑰', function () {
         $crypto = new EzpayCrypto();
         $crypto
             ->setHashKey('TEST_MERCHANT_HASH_KEY')

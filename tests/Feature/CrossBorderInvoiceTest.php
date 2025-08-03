@@ -12,7 +12,7 @@ use function Pest\Laravel\partialMock;
 
 describe('境外電商發票功能測試', function () {
     describe('境外電商發票開立', function () {
-        it('可以成功開立境外電商發票', function () {
+        test('可以成功開立境外電商發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -74,7 +74,7 @@ describe('境外電商發票功能測試', function () {
     });
 
     describe('境外電商發票查詢', function () {
-        it('可以查詢境外電商發票', function () {
+        test('可以查詢境外電商發票', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

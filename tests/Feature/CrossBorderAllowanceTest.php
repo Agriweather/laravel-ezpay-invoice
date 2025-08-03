@@ -11,7 +11,7 @@ use function Pest\Laravel\partialMock;
 
 describe('境外電商折讓管理功能測試', function () {
     describe('境外電商折讓開立流程', function () {
-        it('可以開立境外電商折讓', function () {
+        test('可以開立境外電商折讓', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -70,7 +70,7 @@ describe('境外電商折讓管理功能測試', function () {
     });
 
     describe('境外電商折讓觸發功能', function () {
-        it('可以確認境外電商折讓', function () {
+        test('可以確認境外電商折讓', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -114,7 +114,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ->and($result->remainingAmount)->toBe(0);
         });
 
-        it('可以取消境外電商折讓', function () {
+        test('可以取消境外電商折讓', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -160,7 +160,7 @@ describe('境外電商折讓管理功能測試', function () {
     });
 
     describe('境外電商折讓作廢功能', function () {
-        it('可以作廢已開立的境外電商折讓', function () {
+        test('可以作廢已開立的境外電商折讓', function () {
             partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

@@ -3,7 +3,7 @@
 use Agriweather\EzpayInvoice\Results\Result;
 
 describe('Result', function () {
-    it('可以解析成功結果', function () {
+    test('可以解析成功結果', function () {
         $result = new UnitTestResult([
             'Status' => 'SUCCESS',
             'Message' => '發票開立成功',
@@ -18,7 +18,7 @@ describe('Result', function () {
         expect($result->isSuccess())->toBeTrue();
     });
 
-    it('可以解析失敗結果', function () {
+    test('可以解析失敗結果', function () {
         $result = new UnitTestResult([
             'Status' => 'KEY10002',
             'Message' => '資料解密錯誤',
