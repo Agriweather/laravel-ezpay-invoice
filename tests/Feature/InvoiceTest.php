@@ -4,6 +4,7 @@ use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
 use Agriweather\EzpayInvoice\Results\InvoiceResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
@@ -74,7 +75,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
                 ->and($result->checkCode())->toBe('123456789')
                 ->and($result->orderNo())->toBe('Order001')
                 ->and($result->invoiceNumber())->toBe('GG72002017')
@@ -143,7 +144,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
                 ->and($result->checkCode())->toBe('123456789')
                 ->and($result->orderNo())->toBe('Order002')
                 ->and($result->invoiceNumber())->toBe('GG72002018')
@@ -207,7 +208,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
                 ->and($result->orderNo())->toBe('Order003');
         });
 
@@ -263,7 +264,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
                 ->and($result->orderNo())->toBe('Order004')
                 ->and($result->invoiceNumber())->toBeNull()
                 ->and($result->createTime())->toBeNull();
@@ -322,7 +323,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
                 ->and($result->orderNo())->toBe('Order005')
                 ->and($result->invoiceNumber())->toBeNull()
                 ->and($result->createTime())->toBeNull();
