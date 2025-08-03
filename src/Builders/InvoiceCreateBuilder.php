@@ -146,9 +146,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 索取紙本發票
      *
-     * 當開立發票給消費者 (`forConsumer()`) 時才適用此參數。
-     *
-     * 只有當提供載具資訊或捐贈碼時，才可使用此參數。
+     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才可使用此參數。
      *
      * @param  bool  $print 是否索取紙本發票
      */
@@ -164,9 +162,7 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 不索取紙本發票
      *
-     * 當開立發票給消費者 (`forConsumer()`) 時才適用此參數。
-     *
-     * 只有當提供載具資訊或捐贈碼時，才可使用此參數。
+     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才可使用此參數。
      */
     public function withoutPrint(): self
     {

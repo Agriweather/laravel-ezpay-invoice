@@ -87,14 +87,14 @@ describe('發票功能測試', function () {
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order002',
                 'Status' => '1',
+                'PrintFlag' => 'Y',
+                'MerchantOrderNo' => 'Order002',
                 'Category' => 'B2B',
                 'BuyerName' => '測試公司有限公司',
                 'BuyerUBN' => '12345678',
                 'BuyerEmail' => 'business@company.com',
                 'BuyerAddress' => '台北市信義區信義路五段7號',
-                'PrintFlag' => 'Y',
                 'TaxType' => '1',
                 'TaxRate' => '5',
                 'Amt' => '1000',
@@ -129,7 +129,7 @@ describe('發票功能測試', function () {
 
             $result = EzpayInvoice::invoice()
                 ->create()
-                ->withOrder('ORDER-002')
+                ->withOrder('Order002')
                 ->forBusiness('測試公司有限公司', '12345678')
                 ->withEmail('business@company.com')
                 ->withAddress('台北市信義區信義路五段7號')
@@ -156,15 +156,13 @@ describe('發票功能測試', function () {
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order003',
                 'Status' => '1',
+                'PrintFlag' => 'N',
+                'MerchantOrderNo' => 'Order003',
                 'Category' => 'B2C',
                 'BuyerName' => '載具客戶',
-                'BuyerEmail' => 'customer@example.com',
-                'BuyerAddress' => '台北市信義區',
                 'CarrierType' => '0',
-                'CarrierNum' => '/ABC.123',
-                'PrintFlag' => 'N',
+                'CarrierNum' => '%2FABC.123',
                 'TaxType' => '1',
                 'TaxRate' => '5',
                 'Amt' => '500',
@@ -199,6 +197,7 @@ describe('發票功能測試', function () {
                 ->withOrder('Order003')
                 ->forConsumer('載具客戶')
                 ->withCarrier(CarrierType::MOBILE, '/ABC.123')
+                ->withoutPrint()
                 ->withItem('載具商品', quantity: 1, unit: '個', price: 500, amount: 500)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(500, 25, 525)
@@ -217,11 +216,11 @@ describe('發票功能測試', function () {
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order004',
                 'Status' => '0',
+                'PrintFlag' => 'Y',
+                'MerchantOrderNo' => 'Order004',
                 'Category' => 'B2C',
                 'BuyerName' => '等待觸發客戶',
-                'PrintFlag' => 'Y',
                 'TaxType' => '1',
                 'TaxRate' => '5',
                 'Amt' => '200',
@@ -275,12 +274,12 @@ describe('發票功能測試', function () {
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order005',
                 'Status' => '3',
+                'PrintFlag' => 'Y',
+                'MerchantOrderNo' => 'Order005',
                 'CreateStatusTime' => '2024-12-01',
                 'Category' => 'B2C',
                 'BuyerName' => '預約客戶',
-                'PrintFlag' => 'Y',
                 'TaxType' => '1',
                 'TaxRate' => '5',
                 'Amt' => '200',
