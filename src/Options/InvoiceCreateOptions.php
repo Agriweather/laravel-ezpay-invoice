@@ -2,16 +2,19 @@
 
 namespace Agriweather\EzpayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\CarrierType;
-use Agriweather\EzpayInvoice\Enums\CustomsClearance;
 use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
 use Agriweather\EzpayInvoice\Enums\InvoiceStatus;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Carbon\Carbon;
 
 class InvoiceCreateOptions extends Options
 {
+    use Concerns\HasAmount;
+    use Concerns\HasBuyer;
+    use Concerns\HasCarrier;
+    use Concerns\HasItems;
+    use Concerns\HasTax;
+
     public string $merchantId = '';
 
     public ?string $ezPayTransNumber = null;
@@ -23,60 +26,6 @@ class InvoiceCreateOptions extends Options
     public ?string $createDate = null;
 
     public InvoiceCategory $category = InvoiceCategory::B2C;
-
-    public string $buyerName = '';
-
-    public ?string $buyerTaxIdNumber = null;
-
-    public ?string $buyerAddress = null;
-
-    public ?string $buyerEmail = null;
-
-    public ?CarrierType $carrierType = null;
-
-    public ?string $carrierNumber = null;
-
-    public ?string $loveCode = null;
-
-    public InvoicePrintFlag $printFlag = InvoicePrintFlag::YES;
-
-    public ?bool $enableKioskPrint = null;
-
-    public TaxType $taxType = TaxType::TAXABLE;
-
-    public int $taxRate = 0;
-
-    public ?CustomsClearance $customsClearance = null;
-
-    public int $amount = 0;
-
-    public ?int $salesAmount = null;
-
-    public ?int $zeroTaxAmount = null;
-
-    public ?int $freeTaxAmount = null;
-
-    public int $taxAmount = 0;
-
-    public int $totalAmount = 0;
-
-    /** @var string[] */
-    public array $itemNames = [];
-
-    /** @var int[] */
-    public array $itemQuantities = [];
-
-    /** @var string[] */
-    public array $itemUnits = [];
-
-    /** @var int[] */
-    public array $itemPrices = [];
-
-    /** @var int[] */
-    public array $itemAmounts = [];
-
-    /** @var \Agriweather\EzpayInvoice\Enums\TaxType[]|null */
-    public ?array $itemTaxTypes = null;
 
     public ?string $comment = null;
 
