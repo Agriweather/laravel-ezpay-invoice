@@ -21,9 +21,8 @@ class InvoiceCreateBuilder extends Builder
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new InvoiceCreateOptions([
-            'merchantId' => $this->factory->config('merchant_id'),
-        ]);
+        $this->options = new InvoiceCreateOptions();
+        $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
     public function getOptions(): InvoiceCreateOptions
