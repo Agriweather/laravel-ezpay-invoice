@@ -3,6 +3,7 @@
 namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Support\ServiceProvider;
 
 class EzpayInvoiceServiceProvider extends ServiceProvider
@@ -24,6 +25,7 @@ class EzpayInvoiceServiceProvider extends ServiceProvider
 
         $this->app->singleton(Factory::class, function ($app) {
             return new Factory(
+                $app->make(HttpClient::class),
                 $app->make(EzpayCrypto::class),
                 $app['config']->get('ezpay_invoice')
             );

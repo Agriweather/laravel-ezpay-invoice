@@ -5,8 +5,8 @@ namespace Agriweather\EzpayInvoice\Builders;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Factory;
 use Agriweather\EzpayInvoice\Options\Options;
+use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
@@ -18,6 +18,7 @@ abstract class Builder
     protected string $endpoint = '';
 
     public function __construct(
+        protected HttpClient $client,
         protected Factory $factory,
         protected EzpayCrypto $crypto
     ) {
@@ -40,7 +41,8 @@ abstract class Builder
             );
         }
 
-        return Http::asForm()
+        return $this->client
+            ->asForm()
             ->withUserAgent('ezPay')
             ->post($url, $formData);
     }
