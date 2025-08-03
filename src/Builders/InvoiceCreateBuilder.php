@@ -202,16 +202,16 @@ class InvoiceCreateBuilder extends Builder
      * - 混合應稅與免稅或零稅率 (`TaxType::MIXED`)：當開立發票給公司時才可使用此參數，混合應稅與免稅或零稅率。
      *
      * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType 稅別
-     * @param  int|null  $rate 稅率，單位為百分比 (1% = 1)
+     * @param  int|null  $taxRate 稅率，單位為百分比 (1% = 1)
      */
-    public function withTax(TaxType $taxType, ?int $rate = null): self
+    public function withTax(TaxType $taxType, ?int $taxRate = null): self
     {
         $this->postData['TaxType'] = (string) $taxType->value;
 
         if ($taxType === TaxType::ZERO_RATE || $taxType === TaxType::TAX_FREE) {
             $this->postData['TaxRate'] = '0';
-        } elseif (is_null($rate)) {
-            $this->postData['TaxRate'] = (string) $rate;
+        } elseif (! is_null($taxRate)) {
+            $this->postData['TaxRate'] = (string) $taxRate;
         }
 
         return $this;
@@ -438,7 +438,12 @@ class InvoiceCreateBuilder extends Builder
         $this->postData['ItemUnit'] = implode('|', $this->items['ItemUnit'] ?? []);
         $this->postData['ItemPrice'] = implode('|', $this->items['ItemPrice'] ?? []);
         $this->postData['ItemAmt'] = implode('|', $this->items['ItemAmt'] ?? []);
-        $this->postData['ItemTaxType'] = implode('|', $this->items['ItemTaxType'] ?? []);
+
+        if (is_array($this->items['ItemTaxType'] ?? []) &&
+            count(($this->items['ItemTaxType'] ?? [])) > 0
+        ) {
+            $this->postData['ItemTaxType'] = implode('|', $this->items['ItemTaxType']);
+        }
 
         $this->formData = [
             'MerchantID_' => $this->config['merchant_id'],
