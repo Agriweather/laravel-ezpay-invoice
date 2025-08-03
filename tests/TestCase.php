@@ -3,10 +3,25 @@
 namespace Agriweather\EzpayInvoice\Tests;
 
 use Agriweather\EzpayInvoice\EzpayInvoiceServiceProvider;
+use Carbon\Carbon;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Carbon::setTestNow('2025-01-01 00:00:00');
+    }
+
+    protected function tearDown(): void
+    {
+        Carbon::setTestNow();
+
+        parent::tearDown();
+    }
+
     protected function getPackageProviders($app)
     {
         return [

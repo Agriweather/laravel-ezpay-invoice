@@ -3,6 +3,7 @@
 use Agriweather\EzpayInvoice\Enums\CurrencyType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -46,7 +47,7 @@ describe('境外電商發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'CBOrder001',
                 'Status' => '1',
                 'BuyerName' => 'John Doe',
@@ -126,7 +127,7 @@ describe('境外電商發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'SearchType' => '0',
                 'MerchantOrderNo' => '',
                 'TotalAmt' => '',

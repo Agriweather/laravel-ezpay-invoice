@@ -5,6 +5,7 @@ use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\InvoiceResult;
 use Agriweather\EzpayInvoice\Results\Result;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
@@ -50,7 +51,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'Order001',
                 'Status' => '1',
                 'Category' => 'B2C',
@@ -118,7 +119,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'Order002',
                 'Status' => '1',
                 'Category' => 'B2B',
@@ -182,7 +183,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'Order003',
                 'Status' => '1',
                 'Category' => 'B2C',
@@ -242,7 +243,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'Order004',
                 'Status' => '0',
                 'Category' => 'B2C',
@@ -300,7 +301,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'MerchantOrderNo' => 'Order005',
                 'Status' => '3',
                 'CreateStatusTime' => '2024-12-01',
@@ -393,7 +394,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'SearchType' => '0',
                 'MerchantOrderNo' => '',
                 'TotalAmt' => '',
@@ -475,7 +476,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'SearchType' => '1',
                 'MerchantOrderNo' => 'Order001',
                 'TotalAmt' => '1050',
@@ -549,7 +550,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNumber' => 'GG72002017',
                 'InvalidReason' => '客戶取消訂單',
             ]);
@@ -592,7 +593,7 @@ describe('發票功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceTransNo' => '25072516392250538',
                 'MerchantOrderNo' => 'Order004',
                 'TotalAmt' => '210',

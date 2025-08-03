@@ -9,6 +9,7 @@ use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
 use Agriweather\EzpayInvoice\Enums\InvoiceStatus;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
+use Carbon\Carbon;
 use InvalidArgumentException;
 
 class InvoiceCreateBuilder extends Builder
@@ -21,7 +22,7 @@ class InvoiceCreateBuilder extends Builder
         $this->postData = [
             'RespondType' => 'JSON',
             'Version' => '1.5',
-            'TimeStamp' => time(),
+            'TimeStamp' => Carbon::now()->timestamp,
             'Status' => (string) InvoiceStatus::IMMEDIATE->value,
             'PrintFlag' => InvoicePrintFlag::YES->value,
         ];

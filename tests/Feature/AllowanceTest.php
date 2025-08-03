@@ -2,6 +2,7 @@
 
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -40,7 +41,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNo' => 'GG72002018',
                 'MerchantOrderNo' => 'Order001',
                 'ItemName' => '退貨商品',
@@ -96,7 +97,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNo' => 'GG72002018',
                 'MerchantOrderNo' => 'Order001',
                 'ItemName' => '商品A|商品B',
@@ -146,7 +147,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNo' => 'GG72002018',
                 'MerchantOrderNo' => 'Order001',
                 'ItemName' => '退貨商品',
@@ -195,7 +196,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceStatus' => 'C',
                 'AllowanceNo' => 'A250726001830959',
                 'MerchantOrderNo' => 'Order001',
@@ -238,7 +239,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceStatus' => 'D',
                 'AllowanceNo' => 'A250726001830959',
                 'MerchantOrderNo' => 'Order001',
@@ -279,7 +280,7 @@ describe('折讓管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceNo' => 'A250726001830959',
                 'InvalidReason' => '作廢原因',
             ]);

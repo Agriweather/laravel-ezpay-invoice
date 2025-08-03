@@ -2,6 +2,7 @@
 
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\CodeValidationResult;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -31,7 +32,7 @@ describe('驗證功能測試', function () {
             });
 
             EzpayInvoice::assertSentPostData([
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
             ]);
 
@@ -63,7 +64,7 @@ describe('驗證功能測試', function () {
             });
 
             EzpayInvoice::assertSentPostData([
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
             ]);
 
@@ -97,7 +98,7 @@ describe('驗證功能測試', function () {
             });
 
             EzpayInvoice::assertSentPostData([
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
             ]);
 
@@ -129,7 +130,7 @@ describe('驗證功能測試', function () {
             });
 
             EzpayInvoice::assertSentPostData([
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
             ]);
 

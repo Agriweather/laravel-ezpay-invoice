@@ -6,6 +6,7 @@ use Agriweather\EzpayInvoice\Enums\InvoiceType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\AlphanumericCodeResult;
 use Agriweather\EzpayInvoice\Results\Result;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -48,7 +49,7 @@ describe('字軌管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'Year' => '113',
                 'Term' => '4',
                 'AphabeticLetter' => 'AA',
@@ -112,7 +113,7 @@ describe('字軌管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'Year' => '114',
                 'Term' => '4',
             ]);
@@ -164,7 +165,7 @@ describe('字軌管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::PAUSED,
@@ -209,7 +210,7 @@ describe('字軌管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::ACTIVE,
@@ -254,7 +255,7 @@ describe('字軌管理功能測試', function () {
             EzpayInvoice::assertSentPostData([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
-                'TimeStamp' => time(),
+                'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::DISABLED,
