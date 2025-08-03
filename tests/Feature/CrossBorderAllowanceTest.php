@@ -12,7 +12,8 @@ use function Pest\Laravel\partialMock;
 describe('境外電商折讓管理功能測試', function () {
     describe('境外電商折讓開立流程', function () {
         test('可以開立境外電商折讓', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -27,7 +28,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'TotalAmt' => '105.50',
                 'BuyerEmail' => 'customer@example.com',
                 'Status' => '1',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -71,7 +72,8 @@ describe('境外電商折讓管理功能測試', function () {
 
     describe('境外電商折讓觸發功能', function () {
         test('可以確認境外電商折讓', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -79,7 +81,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
                 'TotalAmt' => '105.50',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -115,7 +117,8 @@ describe('境外電商折讓管理功能測試', function () {
         });
 
         test('可以取消境外電商折讓', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -123,7 +126,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
                 'TotalAmt' => '105.50',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -161,13 +164,14 @@ describe('境外電商折讓管理功能測試', function () {
 
     describe('境外電商折讓作廢功能', function () {
         test('可以作廢已開立的境外電商折讓', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceNo' => 'A250802013300379',
                 'InvalidReason' => '作廢原因',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([

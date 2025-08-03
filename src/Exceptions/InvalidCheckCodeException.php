@@ -1,0 +1,22 @@
+<?php
+
+namespace Agriweather\EzpayInvoice\Exceptions;
+
+use RuntimeException;
+
+class InvalidCheckCodeException extends RuntimeException
+{
+    protected array $checkCodeData;
+
+    public function __construct(array $checkCodeData)
+    {
+        $this->checkCodeData = $checkCodeData;
+
+        parent::__construct('檢查碼無效');
+    }
+
+    public function getCheckCodeData(): array
+    {
+        return $this->checkCodeData;
+    }
+}

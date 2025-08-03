@@ -12,10 +12,11 @@ use function Pest\Laravel\partialMock;
 describe('驗證功能測試', function () {
     describe('手機條碼驗證功能', function () {
         test('可以驗證有效的手機條碼', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -44,10 +45,11 @@ describe('驗證功能測試', function () {
         });
 
         test('可以驗證無效的手機條碼', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -78,10 +80,11 @@ describe('驗證功能測試', function () {
 
     describe('捐贈碼驗證功能', function () {
         test('可以驗證有效的捐贈碼', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -110,10 +113,11 @@ describe('驗證功能測試', function () {
         });
 
         test('可以驗證無效的捐贈碼', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([

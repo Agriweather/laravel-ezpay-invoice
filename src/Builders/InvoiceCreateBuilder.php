@@ -21,7 +21,7 @@ class InvoiceCreateBuilder extends Builder
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new InvoiceCreateOptions();
+        $this->options = new InvoiceCreateOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
@@ -428,7 +428,7 @@ class InvoiceCreateBuilder extends Builder
 
         $result = new InvoiceCreateResult($this->sendRequest()->json());
 
-        // TODO: verify check code
+        $this->crypto->verifyCheckCode($result);
 
         return $result;
     }

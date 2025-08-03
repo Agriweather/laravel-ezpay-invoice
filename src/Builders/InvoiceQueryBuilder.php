@@ -13,7 +13,7 @@ class InvoiceQueryBuilder extends Builder
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new InvoiceQueryOptions();
+        $this->options = new InvoiceQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 

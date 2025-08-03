@@ -17,7 +17,8 @@ use function Pest\Laravel\partialMock;
 describe('發票功能測試', function () {
     describe('發票開立流程', function () {
         test('可以成功開立 B2C 發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -25,8 +26,8 @@ describe('發票功能測試', function () {
                 'Status' => '1',
                 'Category' => 'B2C',
                 'BuyerName' => 'John Doe',
-                'BuyerEmail' => 'customer@example.com',
                 'BuyerAddress' => '台北市信義區信義路五段7號',
+                'BuyerEmail' => 'customer@example.com',
                 'PrintFlag' => 'Y',
                 'TaxType' => '1',
                 'TaxRate' => '5',
@@ -38,7 +39,8 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '1000',
                 'ItemAmt' => '1000',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -84,7 +86,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以成功開立 B2B 發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -94,8 +97,8 @@ describe('發票功能測試', function () {
                 'Category' => 'B2B',
                 'BuyerName' => '測試公司有限公司',
                 'BuyerUBN' => '12345678',
-                'BuyerEmail' => 'business@company.com',
                 'BuyerAddress' => '台北市信義區信義路五段7號',
+                'BuyerEmail' => 'business@company.com',
                 'TaxType' => '1',
                 'TaxRate' => '5',
                 'Amt' => '1000',
@@ -106,7 +109,8 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個|個',
                 'ItemPrice' => '300|400',
                 'ItemAmt' => '600|400',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -153,7 +157,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以開立載具發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -174,7 +179,8 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '500',
                 'ItemAmt' => '500',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -213,7 +219,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以開立發票並等待觸發', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -232,7 +239,8 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -271,7 +279,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以預約開立發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -291,7 +300,8 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -332,7 +342,8 @@ describe('發票功能測試', function () {
 
     describe('發票查詢功能', function () {
         test('可以透過發票號碼及隨機碼查詢發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -341,7 +352,8 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '',
                 'InvoiceNumber' => 'GG72002017',
                 'RandomNum' => '1234',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -414,7 +426,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以透過訂單編號及發票金額查詢發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -423,7 +436,8 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '1050',
                 'InvoiceNumber' => '',
                 'RandomNum' => '',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -496,7 +510,8 @@ describe('發票功能測試', function () {
         });
 
         test('可以跳轉到 ezPay 平台查詢發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -506,7 +521,8 @@ describe('發票功能測試', function () {
                 'InvoiceNumber' => '',
                 'RandomNum' => '',
                 'DisplayFlag' => '1',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             /** @var \Illuminate\Http\Response */
             $response = EzpayInvoice::invoice()
@@ -537,13 +553,15 @@ describe('發票功能測試', function () {
 
     describe('發票作廢功能', function () {
         test('可以作廢已開立的發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNumber' => 'GG72002017',
                 'InvalidReason' => '客戶取消訂單',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -575,14 +593,16 @@ describe('發票功能測試', function () {
 
     describe('發票觸發功能', function () {
         test('可以觸發等待中的發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceTransNo' => '25072516392250538',
                 'MerchantOrderNo' => 'Order004',
                 'TotalAmt' => '210',
-            ]);
+            ])->andReturn('');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([

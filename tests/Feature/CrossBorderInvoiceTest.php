@@ -13,7 +13,8 @@ use function Pest\Laravel\partialMock;
 describe('境外電商發票功能測試', function () {
     describe('境外電商發票開立', function () {
         test('可以成功開立境外電商發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -32,7 +33,7 @@ describe('境外電商發票功能測試', function () {
                 'Currency' => 'USD',
                 'OriginalCurrencyAmount' => '100.00',
                 'ExchangeRate' => '30.5',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -75,7 +76,8 @@ describe('境外電商發票功能測試', function () {
 
     describe('境外電商發票查詢', function () {
         test('可以查詢境外電商發票', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -84,7 +86,7 @@ describe('境外電商發票功能測試', function () {
                 'TotalAmt' => '',
                 'InvoiceNumber' => 'CBOrder001',
                 'RandomNum' => '1234',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([

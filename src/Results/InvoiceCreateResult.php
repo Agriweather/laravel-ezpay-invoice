@@ -2,9 +2,10 @@
 
 namespace Agriweather\EzpayInvoice\Results;
 
+use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
 use Carbon\Carbon;
 
-final class InvoiceCreateResult extends Result
+final class InvoiceCreateResult extends Result implements CheckCodeVerifiable
 {
     /**
      * 商店代號

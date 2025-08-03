@@ -2,12 +2,19 @@
 
 namespace Agriweather\EzpayInvoice\Crypto;
 
+use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
+use Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException;
+use Agriweather\EzpayInvoice\Results\Result;
+
 class EzpayCrypto
 {
     protected string $hashKey;
 
     protected string $hashIV;
 
+    /**
+     * 加密 post data
+     */
     public function encryptPostData(array $postData): string
     {
         $postDataStr = http_build_query($postData);
@@ -23,6 +30,9 @@ class EzpayCrypto
         return $encryptedPostData;
     }
 
+    /**
+     * 解密 post data
+     */
     public function decryptPostData(string $encryptedPostData): array
     {
         $resultStr = $this->removePadding(openssl_decrypt(
@@ -59,9 +69,31 @@ class EzpayCrypto
         return substr($string, 0, -$pad);
     }
 
-    public function verifyCheckCode(): void
+    /**
+     * 驗證檢查碼
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     */
+    public function verifyCheckCode(Result $result): void
     {
-        // TODO
+        if ($result instanceof CheckCodeVerifiable) {
+            $checkCodeData = [
+                'MerchantID' => $result->merchantID(),
+                'MerchantOrderNo' => $result->orderNo(),
+                'InvoiceTransNo' => $result->invoiceTransNo(),
+                'TotalAmt' => $result->totalAmount(),
+                'RandomNum' => $result->randomNumber(),
+            ];
+            ksort($checkCodeData);
+            $checkStr = http_build_query($checkCodeData);
+            $checkCode = strtoupper(hash(
+                'sha256', 'HashIV='.$this->hashIV.'&'.$checkStr.'&HashKey='.$this->hashKey
+            ));
+
+            if ($checkCode !== $result->checkCode()) {
+                throw new InvalidCheckCodeException($checkCodeData);
+            }
+        }
     }
 
     public function verifyCheckValue(): void

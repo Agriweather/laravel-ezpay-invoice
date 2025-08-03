@@ -16,7 +16,8 @@ use function Pest\Laravel\partialMock;
 describe('字軌管理功能測試', function () {
     describe('字軌申請功能', function () {
         test('可以成功申請新字軌', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -26,7 +27,7 @@ describe('字軌管理功能測試', function () {
                 'StartNumber' => '24000100',
                 'EndNumber' => '24000199',
                 'Type' => '07',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -76,13 +77,14 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌查詢功能', function () {
         test('可以查詢字軌資訊', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Year' => '114',
                 'Term' => '4',
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -135,14 +137,15 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌管理功能', function () {
         test('可以暫停字軌', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::PAUSED,
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -180,14 +183,15 @@ describe('字軌管理功能測試', function () {
         });
 
         test('可以啟用字軌', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::ACTIVE,
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
@@ -225,14 +229,15 @@ describe('字軌管理功能測試', function () {
         });
 
         test('可以停用字軌', function () {
-            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::DISABLED,
-            ]);
+            ])->andReturn('');
 
             Http::fake([
                 '*' => Http::response([
