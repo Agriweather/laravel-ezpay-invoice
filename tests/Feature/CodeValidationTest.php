@@ -1,14 +1,22 @@
 <?php
 
+use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\CodeValidationResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\partialMock;
+
 describe('驗證功能測試', function () {
     describe('手機條碼驗證功能', function () {
         it('可以驗證有效的手機條碼', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'TimeStamp' => Carbon::now()->timestamp,
+                'CellphoneBarcode' => '/AAA.CCC',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -31,16 +39,16 @@ describe('驗證功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'TimeStamp' => Carbon::now()->timestamp,
-                'CellphoneBarcode' => '/AAA.CCC',
-            ]);
-
             expect($result)->toBeInstanceOf(CodeValidationResult::class)
                 ->and($result->isValid())->toBeTrue();
         });
 
         it('可以驗證無效的手機條碼', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'TimeStamp' => Carbon::now()->timestamp,
+                'CellphoneBarcode' => '/AAA.CCC',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -62,11 +70,6 @@ describe('驗證功能測試', function () {
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
-
-            EzpayInvoice::assertSentPostData([
-                'TimeStamp' => Carbon::now()->timestamp,
-                'CellphoneBarcode' => '/AAA.CCC',
-            ]);
 
             expect($result)->toBeInstanceOf(CodeValidationResult::class)
                 ->and($result->isValid())->toBeFalse();
@@ -75,6 +78,11 @@ describe('驗證功能測試', function () {
 
     describe('捐贈碼驗證功能', function () {
         it('可以驗證有效的捐贈碼', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'TimeStamp' => Carbon::now()->timestamp,
+                'Lovecode' => 123,
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -97,16 +105,16 @@ describe('驗證功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Lovecode' => 123,
-            ]);
-
             expect($result)->toBeInstanceOf(CodeValidationResult::class)
                 ->and($result->isValid())->toBeTrue();
         });
 
         it('可以驗證無效的捐贈碼', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'TimeStamp' => Carbon::now()->timestamp,
+                'Lovecode' => 123,
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -128,11 +136,6 @@ describe('驗證功能測試', function () {
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
-
-            EzpayInvoice::assertSentPostData([
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Lovecode' => 123,
-            ]);
 
             expect($result)->toBeInstanceOf(CodeValidationResult::class)
                 ->and($result->isValid())->toBeFalse();

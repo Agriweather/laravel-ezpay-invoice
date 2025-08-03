@@ -1,5 +1,6 @@
 <?php
 
+use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\AlphanumericCodeFlag;
 use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzpayInvoice\Enums\InvoiceType;
@@ -10,9 +11,23 @@ use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\partialMock;
+
 describe('字軌管理功能測試', function () {
     describe('字軌申請功能', function () {
         it('可以成功申請新字軌', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'Year' => '113',
+                'Term' => '4',
+                'AphabeticLetter' => 'AA',
+                'StartNumber' => '24000100',
+                'EndNumber' => '24000199',
+                'Type' => '07',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -46,18 +61,6 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Year' => '113',
-                'Term' => '4',
-                'AphabeticLetter' => 'AA',
-                'StartNumber' => '24000100',
-                'EndNumber' => '24000199',
-                'Type' => '07',
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->managementNo())->toBe('0t0ghr0fyv')
                 ->and($result->year())->toBe(113)
@@ -73,6 +76,14 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌查詢功能', function () {
         it('可以查詢字軌資訊', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'Year' => '114',
+                'Term' => '4',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -110,14 +121,6 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Year' => '114',
-                'Term' => '4',
-            ]);
-
             expect($alphanumericCodeResult)->toBeInstanceOf(AlphanumericCodeResult::class)
                 ->and($alphanumericCodeResult->managementNo)->toBe('0t0ghr0fyv')
                 ->and($alphanumericCodeResult->year)->toBe(113)
@@ -132,6 +135,15 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌管理功能', function () {
         it('可以暫停字軌', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::PAUSED,
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -162,21 +174,21 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::PAUSED,
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->managementNo)->toBe('0t0ghr0fyv')
                 ->and($result->flag)->toBe(AlphanumericCodeFlag::PAUSED);
         });
 
         it('可以啟用字軌', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::ACTIVE,
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -207,21 +219,21 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::ACTIVE,
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->managementNo)->toBe('0t0ghr0fyv')
                 ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
         });
 
         it('可以停用字軌', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'ManagementNo' => '0t0ghr0fyv',
+                'Year' => '114',
+                'Flag' => AlphanumericCodeFlag::DISABLED,
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -251,15 +263,6 @@ describe('字軌管理功能測試', function () {
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
-
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::DISABLED,
-            ]);
 
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->managementNo)->toBe('0t0ghr0fyv')

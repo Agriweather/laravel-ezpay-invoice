@@ -1,5 +1,6 @@
 <?php
 
+use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CurrencyType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
@@ -7,9 +8,32 @@ use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\partialMock;
+
 describe('境外電商發票功能測試', function () {
     describe('境外電商發票開立', function () {
         it('可以成功開立境外電商發票', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'MerchantOrderNo' => 'CBOrder001',
+                'Status' => '1',
+                'BuyerName' => 'John Doe',
+                'BuyerEmail' => 'customer@example.com',
+                'Amt' => '100.00',
+                'TaxAmt' => '5.50',
+                'TotalAmt' => '105.50',
+                'ItemName' => '國際商品',
+                'ItemCount' => '1',
+                'ItemUnit' => 'EA',
+                'ItemPrice' => '105.50',
+                'ItemAmt' => '105.50',
+                'Currency' => 'USD',
+                'OriginalCurrencyAmount' => '100.00',
+                'ExchangeRate' => '30.5',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -44,27 +68,6 @@ describe('境外電商發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceIssue';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'CBOrder001',
-                'Status' => '1',
-                'BuyerName' => 'John Doe',
-                'BuyerEmail' => 'customer@example.com',
-                'Amt' => '100.00',
-                'TaxAmt' => '5.50',
-                'TotalAmt' => '105.50',
-                'ItemName' => '國際商品',
-                'ItemCount' => '1',
-                'ItemUnit' => 'EA',
-                'ItemPrice' => '105.50',
-                'ItemAmt' => '105.50',
-                'Currency' => 'USD',
-                'OriginalCurrencyAmount' => '100.00',
-                'ExchangeRate' => '30.5',
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->invoiceNumber())->toBe('CB00000016');
         });
@@ -72,6 +75,17 @@ describe('境外電商發票功能測試', function () {
 
     describe('境外電商發票查詢', function () {
         it('可以查詢境外電商發票', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'SearchType' => '0',
+                'MerchantOrderNo' => '',
+                'TotalAmt' => '',
+                'InvoiceNumber' => 'CBOrder001',
+                'RandomNum' => '1234',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -123,17 +137,6 @@ describe('境外電商發票功能測試', function () {
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
-
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'SearchType' => '0',
-                'MerchantOrderNo' => '',
-                'TotalAmt' => '',
-                'InvoiceNumber' => 'CBOrder001',
-                'RandomNum' => '1234',
-            ]);
 
             expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
                 ->and($invoiceResult->invoiceNumber)->toBe('CBOrder001')

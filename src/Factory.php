@@ -24,11 +24,6 @@ class Factory
         );
     }
 
-    public function assertSentPostData()
-    {
-        // TODO
-    }
-
     protected function baseUrl()
     {
         return $this->config['env'] === 'production'

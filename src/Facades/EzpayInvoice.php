@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Agriweather\EzpayInvoice\Invoice invoice()
- * @method static void assertSentPostData()
  *
  * @see \Agriweather\EzpayInvoice\Factory
  */

@@ -1,14 +1,34 @@
 <?php
 
+use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\partialMock;
+
 describe('境外電商折讓管理功能測試', function () {
     describe('境外電商折讓開立流程', function () {
         it('可以開立境外電商折讓', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'InvoiceNo' => 'CB00000022',
+                'MerchantOrderNo' => 'CBOrder001',
+                'ItemName' => '退貨商品',
+                'ItemCount' => '1',
+                'ItemUnit' => 'EA',
+                'ItemPrice' => '105.50',
+                'ItemAmt' => '105.50',
+                'ItemTaxAmt' => '0',
+                'TotalAmt' => '105.50',
+                'BuyerEmail' => 'customer@example.com',
+                'Status' => '1',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -39,23 +59,6 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderAllowanceIssue';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNo' => 'CB00000022',
-                'MerchantOrderNo' => 'CBOrder001',
-                'ItemName' => '退貨商品',
-                'ItemCount' => '1',
-                'ItemUnit' => 'EA',
-                'ItemPrice' => '105.50',
-                'ItemAmt' => '105.50',
-                'ItemTaxAmt' => '0',
-                'TotalAmt' => '105.50',
-                'BuyerEmail' => 'customer@example.com',
-                'Status' => '1',
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->checkCode())->toBe('123456789')
                 ->and($result->allowanceNo())->toBe('A250802013300379')
@@ -68,6 +71,16 @@ describe('境外電商折讓管理功能測試', function () {
 
     describe('境外電商折讓觸發功能', function () {
         it('可以確認境外電商折讓', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.3',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'AllowanceStatus' => 'C',
+                'AllowanceNo' => 'A250802013300379',
+                'MerchantOrderNo' => 'CBOrder001',
+                'TotalAmt' => '105.50',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -96,22 +109,22 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceStatus' => 'C',
-                'AllowanceNo' => 'A250802013300379',
-                'MerchantOrderNo' => 'CBOrder001',
-                'TotalAmt' => '105.50',
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->allowanceAmount)->toBe(105.50)
                 ->and($result->remainingAmount)->toBe(0);
         });
 
         it('可以取消境外電商折讓', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.3',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'AllowanceStatus' => 'D',
+                'AllowanceNo' => 'A250802013300379',
+                'MerchantOrderNo' => 'CBOrder001',
+                'TotalAmt' => '105.50',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -140,16 +153,6 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceStatus' => 'D',
-                'AllowanceNo' => 'A250802013300379',
-                'MerchantOrderNo' => 'CBOrder001',
-                'TotalAmt' => '105.50',
-            ]);
-
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->allowanceAmount)->toBe(0)
                 ->and($result->remainingAmount)->toBe(0);
@@ -158,6 +161,14 @@ describe('境外電商折讓管理功能測試', function () {
 
     describe('境外電商折讓作廢功能', function () {
         it('可以作廢已開立的境外電商折讓', function () {
+            partialMock(EzpayCrypto::class)->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'AllowanceNo' => 'A250802013300379',
+                'InvalidReason' => '作廢原因',
+            ]);
+
             Http::fake([
                 '*' => Http::response([
                     'Status' => 'SUCCESS',
@@ -181,14 +192,6 @@ describe('境外電商折讓管理功能測試', function () {
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
             });
-
-            EzpayInvoice::assertSentPostData([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceNo' => 'A250802013300379',
-                'InvalidReason' => '作廢原因',
-            ]);
 
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result['AllowanceNo'])->toBe('A250802013300379');
