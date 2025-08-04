@@ -145,7 +145,9 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 索取紙本發票
      *
-     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才可使用此參數。
+     * 當開立發票給公司 (`forBusiness()`) 時，預設固定為 `true`，因此不需設定。
+     *
+     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才需設定此參數。
      *
      * @param  bool  $print  是否索取紙本發票
      */
@@ -161,7 +163,9 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 不索取紙本發票
      *
-     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才可使用此參數。
+     * 當開立發票給公司 (`forBusiness()`) 時，預設固定為 `true`，因此不需設定。
+     *
+     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才需設定此參數。
      */
     public function withoutPrint(): self
     {
@@ -253,7 +257,7 @@ class InvoiceCreateBuilder extends Builder
         /** @var array<int, int> */
         $amounts = [];
 
-        foreach ($this->options->itemTaxTypes as $i => $itemTaxType) {
+        foreach (($this->options->itemTaxTypes ?? []) as $i => $itemTaxType) {
             $amounts[$itemTaxType->value] = (
                 $amounts[$itemTaxType->value] ?? 0
             ) + $this->options->itemAmounts[$i];
