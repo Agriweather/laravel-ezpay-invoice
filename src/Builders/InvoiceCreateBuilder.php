@@ -201,16 +201,16 @@ class InvoiceCreateBuilder extends Builder
      * - 混合應稅與免稅或零稅率 (`TaxType::MIXED`)：當開立發票給公司時才可使用此參數，混合應稅與免稅或零稅率。
      *
      * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType  稅別
-     * @param  int|null  $taxRate  稅率，單位為百分比 (1% = 1)
+     * @param  int|float|null  $taxRate  稅率，單位為百分比 (1% = 1)
      */
-    public function withTax(TaxType $taxType, ?int $taxRate = null): self
+    public function withTax(TaxType $taxType, int|float|null $taxRate = null): self
     {
         $this->options->taxType = $taxType;
 
         if ($taxType === TaxType::ZERO_RATE || $taxType === TaxType::TAX_FREE) {
-            $this->options->taxRate = 0;
+            $this->options->taxRate = 0.0;
         } elseif (isset($taxRate)) {
-            $this->options->taxRate = $taxRate;
+            $this->options->taxRate = (float) $taxRate;
         }
 
         return $this;
@@ -325,7 +325,7 @@ class InvoiceCreateBuilder extends Builder
             $this->options->taxAmount = $taxAmount;
         } else {
             // 若未提供稅額，則為銷售額 * 稅率
-            $this->options->taxAmount = round(
+            $this->options->taxAmount = (int) round(
                 $this->options->amount * $this->options->taxRate / 100
             );
         }

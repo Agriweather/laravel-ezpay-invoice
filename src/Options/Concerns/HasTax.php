@@ -9,7 +9,7 @@ trait HasTax
 {
     public TaxType $taxType = TaxType::TAXABLE;
 
-    public int $taxRate = 0;
+    public float $taxRate = 0.0;
 
     public ?CustomsClearance $customsClearance = null;
 
