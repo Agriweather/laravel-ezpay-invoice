@@ -4,7 +4,7 @@ namespace Agriweather\EzpayInvoice\Options;
 
 use Carbon\Carbon;
 
-class InvoiceVoidQueryOptions extends Options
+class InvoiceInvalidateQueryOptions extends Options
 {
     public string $merchantId = '';
 

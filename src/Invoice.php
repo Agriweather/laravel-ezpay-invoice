@@ -3,12 +3,13 @@
 namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Builders\InvoiceCreateBuilder;
+use Agriweather\EzpayInvoice\Builders\InvoiceInvalidateQueryBuilder;
 use Agriweather\EzpayInvoice\Builders\InvoiceQueryBuilder;
 use Agriweather\EzpayInvoice\Builders\InvoiceTriggerQueryBuilder;
-use Agriweather\EzpayInvoice\Builders\InvoiceVoidQueryBuilder;
 use Agriweather\EzpayInvoice\Contracts\FormPostSender;
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzpayInvoice\Results\InvoiceInvalidateResult;
 
 class Invoice
 {
@@ -51,10 +52,10 @@ class Invoice
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function void(string $invoiceNumber, string $reason)
+    public function invalidate(string $invoiceNumber, string $reason): InvoiceInvalidateResult
     {
-        return (new InvoiceVoidQueryBuilder(
+        return (new InvoiceInvalidateQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        ))->void($invoiceNumber, $reason);
+        ))->invalidate($invoiceNumber, $reason);
     }
 }

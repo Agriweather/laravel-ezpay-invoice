@@ -33,7 +33,7 @@ class EzpayInvoiceServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(FormPostSenderContract::class, function ($app) {
+        $this->app->singleton(FormPostSenderContract::class, function () {
             return new FormPostSender;
         });
 

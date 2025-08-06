@@ -669,7 +669,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()->void('GG72002017', '客戶取消訂單');
+            $result = EzpayInvoice::invoice()->invalidate('GG72002017', '客戶取消訂單');
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';

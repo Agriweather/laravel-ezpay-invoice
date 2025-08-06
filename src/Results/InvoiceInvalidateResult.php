@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzpayInvoice\Results;
 
-final class InvoiceVoidResult extends Result
+final class InvoiceInvalidateResult extends Result
 {
     use Concerns\HasCheckCode;
     use Concerns\HasCreateTime;
