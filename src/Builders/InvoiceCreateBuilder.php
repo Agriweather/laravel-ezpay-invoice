@@ -425,12 +425,15 @@ class InvoiceCreateBuilder extends Builder
 
     /**
      * 開立發票
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function issue(): InvoiceCreateResult
     {
         $this->endpoint = '/Api/invoice_issue';
 
-        $result = new InvoiceCreateResult($this->sendRequest()->json());
+        $result = new InvoiceCreateResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);
 

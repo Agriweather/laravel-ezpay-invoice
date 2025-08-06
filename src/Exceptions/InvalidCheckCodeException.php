@@ -12,7 +12,7 @@ class InvalidCheckCodeException extends RuntimeException
     {
         $this->checkCodeData = $checkCodeData;
 
-        parent::__construct('檢查碼無效');
+        parent::__construct('驗證檢查碼無效');
     }
 
     public function getCheckCodeData(): array

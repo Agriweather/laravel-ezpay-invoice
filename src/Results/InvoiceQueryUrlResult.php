@@ -8,8 +8,6 @@ final class InvoiceQueryUrlResult extends Result
 
     public function __construct(array $data)
     {
-        $this->status = $data['Status'] ?? '';
-        $this->message = $data['Message'] ?? '';
         $this->url = $data['Result'];
     }
 

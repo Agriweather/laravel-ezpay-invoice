@@ -85,12 +85,15 @@ class InvoiceQueryBuilder extends Builder
 
     /**
      * 查詢發票資訊
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function get(): InvoiceQueryResult
     {
         $this->setupSearchRequest();
 
-        $result = new InvoiceQueryResult($this->sendRequest()->json());
+        $result = new InvoiceQueryResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);
 
@@ -124,6 +127,8 @@ class InvoiceQueryBuilder extends Builder
 
     /**
      * 回傳 ezPay 平台顯示發票查詢結果頁面的 URL
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      */
     public function getEZPayQueryUrl(): InvoiceQueryUrlResult
     {
@@ -131,7 +136,7 @@ class InvoiceQueryBuilder extends Builder
 
         $this->options->displayFlag = DisplayFlag::RETURN_URL;
 
-        return new InvoiceQueryUrlResult($this->sendRequest()->json());
+        return new InvoiceQueryUrlResult($this->sendRequest());
     }
 
     public function setFormPostSender(FormPostSender $formPostSender): self

@@ -45,7 +45,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -107,7 +107,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -165,7 +165,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -209,7 +209,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -255,7 +255,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -299,7 +299,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -343,7 +343,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -390,7 +390,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
@@ -439,7 +439,7 @@ describe('InvoiceCreateBuilder', function () {
 
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
-        $response->expects('json')->andReturn([]);
+        $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');

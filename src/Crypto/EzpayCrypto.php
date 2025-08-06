@@ -91,7 +91,9 @@ class EzpayCrypto
             ));
 
             if ($checkCode !== $result->checkCode()) {
-                throw new InvalidCheckCodeException($checkCodeData);
+                throw new InvalidCheckCodeException($checkCodeData + [
+                    'CheckCode' => $result->checkCode(),
+                ]);
             }
         }
     }

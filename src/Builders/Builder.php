@@ -4,9 +4,9 @@ namespace Agriweather\EzpayInvoice\Builders;
 
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException;
 use Agriweather\EzpayInvoice\Factory;
 use Agriweather\EzpayInvoice\Options\Options;
-use Illuminate\Http\Client\Response as ClientResponse;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
@@ -47,13 +47,28 @@ abstract class Builder
         ];
     }
 
-    protected function sendRequest(): ClientResponse
+    /**
+     * 發送 API 請求到 ezPay 發票平台。
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     */
+    protected function sendRequest(): array
     {
         $requestData = $this->toRequestData();
 
-        return $this->httpSender->send(
+        $response = $this->httpSender->send(
             $requestData['url'],
             $requestData['formData']
         );
+
+        $data = $response->json();
+
+        if ($data['Status'] !== 'SUCCESS') {
+            throw new EzpayInvoiceException(
+                $requestData['url'], $requestData['formData'], $data['Status'], $data['Message']
+            );
+        }
+
+        return $data;
     }
 }
