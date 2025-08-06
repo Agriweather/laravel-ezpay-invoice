@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzpayInvoice;
 
+use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Illuminate\Http\Client\Factory as HttpClient;
 
 class Factory
 {
@@ -18,8 +18,8 @@ class Factory
     protected string $testingBaseUrl = 'https://cinv.ezpay.com.tw';
 
     public function __construct(
-        protected HttpClient $client,
         protected EzpayCrypto $crypto,
+        protected HttpSender $httpSender,
         protected array $config
     ) {
         //
@@ -28,7 +28,7 @@ class Factory
     public function invoice(): Invoice
     {
         return new Invoice(
-            $this->client, $this, $this->crypto
+            $this, $this->crypto, $this->httpSender
         );
     }
 
