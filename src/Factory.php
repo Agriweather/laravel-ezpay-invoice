@@ -34,6 +34,13 @@ class Factory
         );
     }
 
+    public function alphanumericCode(): AlphanumericCode
+    {
+        return new AlphanumericCode(
+            $this, $this->crypto, $this->httpSender
+        );
+    }
+
     public function codeValidation(): CodeValidation
     {
         return new CodeValidation(

@@ -1,12 +1,13 @@
 <?php
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\AlphanumericCodeFlag;
+use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
 use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzpayInvoice\Enums\InvoiceType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeResult;
-use Agriweather\EzpayInvoice\Results\Result;
+use Agriweather\EzpayInvoice\Results\AlphanumericCodeCreateResult;
+use Agriweather\EzpayInvoice\Results\AlphanumericCodeQueryResult;
+use Agriweather\EzpayInvoice\Results\AlphanumericCodeUpdateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -52,7 +53,7 @@ describe('字軌管理功能測試', function () {
             $result = EzpayInvoice::alphanumericCode()
                 ->create()
                 ->withYear(113)
-                ->withTerm(InvoiceTerm::FOURTH)
+                ->withTerm(InvoiceTerm::JUL_AUG)
                 ->withCode('AA')
                 ->withRange('24000100', '24000199')
                 ->withType(InvoiceType::GENERAL)
@@ -62,16 +63,16 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(AlphanumericCodeCreateResult::class)
                 ->and($result->managementNo())->toBe('0t0ghr0fyv')
                 ->and($result->year())->toBe(113)
-                ->and($result->term())->toBe(InvoiceTerm::FOURTH)
+                ->and($result->term())->toBe(InvoiceTerm::JUL_AUG)
                 ->and($result->alphabeticLetter())->toBe('AA')
                 ->and($result->startNumber())->toBe('24000100')
                 ->and($result->endNumber())->toBe('24000199')
                 ->and($result->type())->toBe(InvoiceType::GENERAL)
                 ->and($result->lastNumber())->toBe(100)
-                ->and($result->flag())->toBe(AlphanumericCodeFlag::ACTIVE);
+                ->and($result->status())->toBe(AlphanumericCodeStatus::ENABLED);
         });
     });
 
@@ -110,28 +111,23 @@ describe('字軌管理功能測試', function () {
 
             $alphanumericCodeResult = EzpayInvoice::alphanumericCode()
                 ->query()
-                // ->withNo('00455ujp8')
                 ->withYear(113)
-                ->withTerm(InvoiceTerm::FOURTH)
-                // ->withStatus(1)
-                // ->withPaused()
-                // ->withEnabled()
-                // ->withDisabled()
+                ->withTerm(InvoiceTerm::JUL_AUG)
                 ->get();
 
             Http::assertSent(function (Request $request) {
-                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/searchNumber';
             });
 
-            expect($alphanumericCodeResult)->toBeInstanceOf(AlphanumericCodeResult::class)
-                ->and($alphanumericCodeResult->managementNo)->toBe('0t0ghr0fyv')
-                ->and($alphanumericCodeResult->year)->toBe(113)
-                ->and($alphanumericCodeResult->term)->toBe(InvoiceTerm::FOURTH)
-                ->and($alphanumericCodeResult->alphabeticLetter)->toBe('AA')
-                ->and($alphanumericCodeResult->startNumber)->toBe('24000100')
-                ->and($alphanumericCodeResult->endNumber)->toBe('24000199')
-                ->and($alphanumericCodeResult->type)->toBe(InvoiceType::GENERAL)
-                ->and($alphanumericCodeResult->lastNumber)->toBe(100);
+            expect($alphanumericCodeResult)->toBeInstanceOf(AlphanumericCodeQueryResult::class)
+                ->and($alphanumericCodeResult->managementNo())->toBe('0t0ghr0fyv')
+                ->and($alphanumericCodeResult->year())->toBe(113)
+                ->and($alphanumericCodeResult->term())->toBe(InvoiceTerm::JUL_AUG)
+                ->and($alphanumericCodeResult->alphabeticLetter())->toBe('AA')
+                ->and($alphanumericCodeResult->startNumber())->toBe('24000100')
+                ->and($alphanumericCodeResult->endNumber())->toBe('24000199')
+                ->and($alphanumericCodeResult->type())->toBe(InvoiceType::GENERAL)
+                ->and($alphanumericCodeResult->lastNumber())->toBe(100);
         });
     });
 
@@ -143,8 +139,8 @@ describe('字軌管理功能測試', function () {
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::PAUSED,
+                'Year' => '113',
+                'Flag' => '0',
             ])->andReturn('encrypted_data');
 
             Http::fake([
@@ -169,7 +165,7 @@ describe('字軌管理功能測試', function () {
 
             $result = EzpayInvoice::alphanumericCode()
                 ->query()
-                ->withNo('00455ujp8')
+                ->withNo('0t0ghr0fyv')
                 ->withYear(113)
                 ->pause();
 
@@ -177,9 +173,9 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->managementNo)->toBe('0t0ghr0fyv')
-                ->and($result->flag)->toBe(AlphanumericCodeFlag::PAUSED);
+            expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+                ->and($result->managementNo())->toBe('0t0ghr0fyv')
+                ->and($result->status())->toBe(AlphanumericCodeStatus::PAUSED);
         });
 
         test('可以啟用字軌', function () {
@@ -189,8 +185,8 @@ describe('字軌管理功能測試', function () {
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::ACTIVE,
+                'Year' => '113',
+                'Flag' => '1',
             ])->andReturn('encrypted_data');
 
             Http::fake([
@@ -215,17 +211,17 @@ describe('字軌管理功能測試', function () {
 
             $result = EzpayInvoice::alphanumericCode()
                 ->query()
-                ->withNo('00455ujp8')
+                ->withNo('0t0ghr0fyv')
                 ->withYear(113)
-                ->active();
+                ->enable();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->managementNo)->toBe('0t0ghr0fyv')
-                ->and($result->flag)->toBe(AlphanumericCodeFlag::ACTIVE);
+            expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+                ->and($result->managementNo())->toBe('0t0ghr0fyv')
+                ->and($result->status())->toBe(AlphanumericCodeStatus::ENABLED);
         });
 
         test('可以停用字軌', function () {
@@ -235,8 +231,8 @@ describe('字軌管理功能測試', function () {
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '114',
-                'Flag' => AlphanumericCodeFlag::DISABLED,
+                'Year' => '113',
+                'Flag' => '2',
             ])->andReturn('encrypted_data');
 
             Http::fake([
@@ -261,7 +257,7 @@ describe('字軌管理功能測試', function () {
 
             $result = EzpayInvoice::alphanumericCode()
                 ->query()
-                ->withNo('00455ujp8')
+                ->withNo('0t0ghr0fyv')
                 ->withYear(113)
                 ->disable();
 
@@ -269,9 +265,9 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->managementNo)->toBe('0t0ghr0fyv')
-                ->and($result->flag)->toBe(AlphanumericCodeFlag::DISABLED);
+            expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+                ->and($result->managementNo())->toBe('0t0ghr0fyv')
+                ->and($result->status())->toBe(AlphanumericCodeStatus::DISABLED);
         });
     });
 });
