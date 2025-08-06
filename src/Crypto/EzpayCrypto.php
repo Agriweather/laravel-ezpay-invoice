@@ -3,6 +3,8 @@
 namespace Agriweather\EzpayInvoice\Crypto;
 
 use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
+use Agriweather\EzpayInvoice\Exceptions\DecryptException;
+use Agriweather\EzpayInvoice\Exceptions\EncryptException;
 use Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException;
 use Agriweather\EzpayInvoice\Results\Result;
 
@@ -14,36 +16,53 @@ class EzpayCrypto
 
     /**
      * 加密 post data
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EncryptException
      */
     public function encryptPostData(array $postData): string
     {
         $postDataStr = http_build_query($postData);
 
-        $encryptedPostData = trim(bin2hex(openssl_encrypt(
+        $value = openssl_encrypt(
             $this->addPadding($postDataStr),
             'AES-256-CBC',
             $this->hashKey,
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
             $this->hashIV
-        )));
+        );
+
+        if ($value === false) {
+            throw new EncryptException('加密錯誤');
+        }
+
+        $encryptedPostData = trim(bin2hex($value));
 
         return $encryptedPostData;
     }
 
     /**
      * 解密 post data
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\DecryptException
      */
     public function decryptPostData(string $encryptedPostData): array
     {
-        $resultStr = $this->removePadding(openssl_decrypt(
+        $value = openssl_decrypt(
             hex2bin(trim($encryptedPostData)),
             'AES-256-CBC',
             $this->hashKey,
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
             $this->hashIV
-        ));
+        );
+
+        if ($value === false) {
+            throw new DecryptException('解密錯誤');
+        }
+
+        $resultStr = $this->removePadding($value);
 
         $result = [];
+
         parse_str($resultStr, $result);
 
         return $result;
@@ -67,6 +86,16 @@ class EzpayCrypto
         }
 
         return substr($string, 0, -$pad);
+    }
+
+    /**
+     * 生成檢查碼
+     */
+    public function encodeCheckValue(string $string): string
+    {
+        return strtoupper(hash(
+            'sha256', 'HashKey='.$this->hashKey.'&'.$string.'&HashIV='.$this->hashIV
+        ));
     }
 
     /**
@@ -96,11 +125,6 @@ class EzpayCrypto
                 ]);
             }
         }
-    }
-
-    public function verifyCheckValue(): void
-    {
-        // TODO
     }
 
     public function setHashKey(string $hashKey): self
