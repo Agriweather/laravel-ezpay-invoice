@@ -9,6 +9,7 @@ use Agriweather\EzpayInvoice\Options\InvoiceQueryOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryUrlResult;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 
 class InvoiceQueryBuilder extends Builder
 {
@@ -32,9 +33,19 @@ class InvoiceQueryBuilder extends Builder
 
     /**
      * 透過發票號碼查詢 (需帶入 發票號碼 + 隨機碼 查詢)
+     *
+     * @throws \InvalidArgumentException
      */
     public function withInvoice(string $invoiceNumber): self
     {
+        if (isset($this->options->searchType) &&
+            $this->options->searchType !== SearchType::BY_INVOICE_NUMBER
+        ) {
+            throw new InvalidArgumentException(
+                '當前已經使用了其他的查詢方式，無法再使用 發票號碼 + 隨機碼 查詢。請依照文件說明使用。'
+            );
+        }
+
         $this->options->invoiceNumber = $invoiceNumber;
         $this->options->searchType = SearchType::BY_INVOICE_NUMBER;
 
@@ -43,19 +54,40 @@ class InvoiceQueryBuilder extends Builder
 
     /**
      * 透過隨機碼查詢 (需帶入 發票號碼 + 隨機碼 查詢)
+     *
+     * @throws \InvalidArgumentException
      */
     public function withRandomNumber(string $randomNumber): self
     {
+        if (isset($this->options->searchType) &&
+            $this->options->searchType !== SearchType::BY_INVOICE_NUMBER
+        ) {
+            throw new InvalidArgumentException(
+                '當前已經使用了其他的查詢方式，無法再使用 發票號碼 + 隨機碼 查詢。請依照文件說明使用。'
+            );
+        }
+
         $this->options->randomNumber = $randomNumber;
+        $this->options->searchType = SearchType::BY_INVOICE_NUMBER;
 
         return $this;
     }
 
     /**
      * 透過訂單編號查詢 (需帶入 訂單編號 + 發票金額 查詢)
+     *
+     * @throws \InvalidArgumentException
      */
     public function withOrder(string $orderNo): self
     {
+        if (isset($this->options->searchType) &&
+            $this->options->searchType !== SearchType::BY_ORDER_NUMBER
+        ) {
+            throw new InvalidArgumentException(
+                '當前已經使用了其他的查詢方式，無法再使用 訂單編號 + 發票金額 查詢。請依照文件說明使用。'
+            );
+        }
+
         $this->options->orderNo = $orderNo;
         $this->options->searchType = SearchType::BY_ORDER_NUMBER;
 
@@ -64,23 +96,23 @@ class InvoiceQueryBuilder extends Builder
 
     /**
      * 透過發票金額查詢 (需帶入 訂單編號 + 發票金額 查詢)
+     *
+     * @throws \InvalidArgumentException
      */
     public function withTotalAmount(int $totalAmount): self
     {
+        if (isset($this->options->searchType) &&
+            $this->options->searchType !== SearchType::BY_ORDER_NUMBER
+        ) {
+            throw new InvalidArgumentException(
+                '當前已經使用了其他的查詢方式，無法再使用 訂單編號 + 發票金額 查詢。請依照文件說明使用。'
+            );
+        }
+
         $this->options->totalAmount = $totalAmount;
+        $this->options->searchType = SearchType::BY_ORDER_NUMBER;
 
         return $this;
-    }
-
-    protected function setupSearchRequest(): void
-    {
-        $this->endpoint = '/Api/invoice_search';
-        $this->options->version = '1.3';
-
-        $this->options->orderNo = $this->options->orderNo ?: '';
-        $this->options->totalAmount = $this->options->totalAmount ?: 0;
-        $this->options->randomNumber = $this->options->randomNumber ?: '';
-        $this->options->invoiceNumber = $this->options->invoiceNumber ?: '';
     }
 
     /**
@@ -91,7 +123,7 @@ class InvoiceQueryBuilder extends Builder
      */
     public function get(): InvoiceQueryResult
     {
-        $this->setupSearchRequest();
+        $this->endpoint = '/Api/invoice_search';
 
         $result = new InvoiceQueryResult($this->sendRequest());
 
@@ -118,7 +150,7 @@ class InvoiceQueryBuilder extends Builder
      */
     public function toRedirectRequestData(): array
     {
-        $this->setupSearchRequest();
+        $this->endpoint = '/Api/invoice_search';
 
         $this->options->displayFlag = DisplayFlag::WEB_DISPLAY;
 
@@ -126,17 +158,17 @@ class InvoiceQueryBuilder extends Builder
     }
 
     /**
-     * 回傳 ezPay 平台顯示發票查詢結果頁面的 URL
+     * 回傳 ezPay 平台顯示發票查詢頁面的 URL
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      */
-    public function getEZPayQueryUrl(): InvoiceQueryUrlResult
+    public function getEzPaySearchUrl(): string
     {
-        $this->setupSearchRequest();
+        $this->endpoint = '/Api/invoice_search';
 
         $this->options->displayFlag = DisplayFlag::RETURN_URL;
 
-        return new InvoiceQueryUrlResult($this->sendRequest());
+        return (new InvoiceQueryUrlResult($this->sendRequest()))->url();
     }
 
     public function setFormPostSender(FormPostSender $formPostSender): self

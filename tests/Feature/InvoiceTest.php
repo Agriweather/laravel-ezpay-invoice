@@ -6,7 +6,6 @@ use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
-use Agriweather\EzpayInvoice\Results\InvoiceQueryUrlResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -585,58 +584,17 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceQueryUrlResult = EzpayInvoice::invoice()
+            $ezpaySearchUrl = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
-                ->getEZPayQueryUrl();
+                ->getEzPaySearchUrl();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            expect($invoiceQueryUrlResult)->toBeInstanceOf(InvoiceQueryUrlResult::class)
-                ->and($invoiceQueryUrlResult->url())->toBe('https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx');
-        });
-    });
-
-    describe('發票作廢功能', function () {
-        test('可以作廢已開立的發票', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNumber' => 'GG72002017',
-                'InvalidReason' => '客戶取消訂單',
-            ])->andReturn('encrypted_data');
-            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
-
-            Http::fake([
-                '*' => Http::response([
-                    'Status' => 'SUCCESS',
-                    'Message' => '電子發票作廢開立成功',
-                    'Result' => json_encode([
-                        'CheckCode' => '123456789',
-                        'MerchantID' => '111335678',
-                        'InvoiceNumber' => 'GG72002017',
-                        'CreateTime' => '2025-01-01 00:00:00',
-                    ]),
-                ], 200),
-            ]);
-
-            $result = EzpayInvoice::invoice()
-                ->query()
-                ->find('GG72002017')
-                ->because('客戶取消訂單')
-                ->void();
-
-            Http::assertSent(function (Request $request) {
-                return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
-            });
-
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->invoiceNumber())->toBe('GG72002017');
+            expect($ezpaySearchUrl)->toBe('https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx');
         });
     });
 
@@ -671,10 +629,10 @@ describe('發票功能測試', function () {
             ]);
 
             $result = EzpayInvoice::invoice()
-                ->query()
+                ->triggerQuery()
                 ->withInvoiceTransNo('25072516392250538')
                 ->withOrder('Order004')
-                ->withAmount(210)
+                ->withTotalAmount(210)
                 ->trigger();
 
             Http::assertSent(function (Request $request) {
@@ -683,6 +641,42 @@ describe('發票功能測試', function () {
 
             expect($result)->toBeInstanceOf(Result::class)
                 ->and($result->InvoiceNumber())->toBe('GG72002017');
+        });
+    });
+
+    describe('發票作廢功能', function () {
+        test('可以作廢已開立的發票', function () {
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.0',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'InvoiceNumber' => 'GG72002017',
+                'InvalidReason' => '客戶取消訂單',
+            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
+
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '電子發票作廢開立成功',
+                    'Result' => json_encode([
+                        'CheckCode' => '123456789',
+                        'MerchantID' => '111335678',
+                        'InvoiceNumber' => 'GG72002017',
+                        'CreateTime' => '2025-01-01 00:00:00',
+                    ]),
+                ], 200),
+            ]);
+
+            $result = EzpayInvoice::invoice()->void('GG72002017', '客戶取消訂單');
+
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
+            });
+
+            expect($result)->toBeInstanceOf(Result::class)
+                ->and($result->invoiceNumber())->toBe('GG72002017');
         });
     });
 });

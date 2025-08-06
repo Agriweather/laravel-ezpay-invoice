@@ -10,23 +10,15 @@ class InvoiceQueryOptions extends Options
 {
     public string $merchantId = '';
 
-    public string $version = '';
-
-    public ?string $orderNo = null;
-
-    public ?string $ezPayTransNumber = null;
-
-    public ?string $invoiceNumber = null;
-
-    public ?string $invoiceTransNumber = null;
-
     public ?SearchType $searchType = null;
 
-    public ?int $totalAmount = null;
+    public string $orderNo = '';
 
-    public ?string $randomNumber = null;
+    public int $totalAmount = 0;
 
-    public ?string $invalidReason = null;
+    public string $invoiceNumber = '';
+
+    public string $randomNumber = '';
 
     public ?DisplayFlag $displayFlag = null;
 
@@ -36,20 +28,15 @@ class InvoiceQueryOptions extends Options
             'MerchantID_' => $this->merchantId,
             'PostData_' => array_filter([
                 'RespondType' => 'JSON',
-                'Version' => $this->version,
+                'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => $this->orderNo,
-                'TransNum' => $this->ezPayTransNumber,
-                'InvoiceNumber' => $this->invoiceNumber,
-                'InvoiceTransNo' => $this->invoiceTransNumber,
                 'SearchType' => isset($this->searchType)
                     ? (string) $this->searchType->value
                     : null,
-                'TotalAmt' => isset($this->totalAmount)
-                    ? (string) $this->totalAmount
-                    : null,
+                'MerchantOrderNo' => $this->orderNo,
+                'TotalAmt' => (string) $this->totalAmount,
+                'InvoiceNumber' => $this->invoiceNumber,
                 'RandomNum' => $this->randomNumber,
-                'InvalidReason' => $this->invalidReason,
                 'DisplayFlag' => isset($this->displayFlag)
                     ? (string) $this->displayFlag->value
                     : null,
