@@ -28,7 +28,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'TotalAmt' => '105.50',
                 'BuyerEmail' => 'customer@example.com',
                 'Status' => '1',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -81,7 +81,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
                 'TotalAmt' => '105.50',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -126,7 +126,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
                 'TotalAmt' => '105.50',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -171,7 +171,7 @@ describe('境外電商折讓管理功能測試', function () {
                 'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceNo' => 'A250802013300379',
                 'InvalidReason' => '作廢原因',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([

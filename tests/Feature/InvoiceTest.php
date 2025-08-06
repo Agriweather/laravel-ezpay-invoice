@@ -40,7 +40,7 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '1000',
                 'ItemAmt' => '1000',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -110,7 +110,7 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個|個',
                 'ItemPrice' => '300|400',
                 'ItemAmt' => '600|400',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -180,7 +180,7 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '500',
                 'ItemAmt' => '500',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -240,7 +240,7 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -301,7 +301,7 @@ describe('發票功能測試', function () {
                 'ItemUnit' => '個',
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -353,7 +353,7 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '0',
                 'InvoiceNumber' => 'GG72002017',
                 'RandomNum' => '1234',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -437,7 +437,7 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '1050',
                 'InvoiceNumber' => '',
                 'RandomNum' => '',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -522,7 +522,7 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '1050',
                 'RandomNum' => '',
                 'DisplayFlag' => '1',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             $response = EzpayInvoice::invoice()
                 ->query()
@@ -533,7 +533,7 @@ describe('發票功能測試', function () {
             expect($response)->toBeInstanceOf(Response::class)
                 ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
                 ->content()->toContain('name="MerchantID_" value="111335678"')
-                ->content()->toContain('name="PostData_"');
+                ->content()->toContain('name="PostData_" value="encrypted_data"');
         });
 
         test('可以取得請求查詢發票的 formData 資料', function () {
@@ -548,7 +548,7 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '1050',
                 'RandomNum' => '',
                 'DisplayFlag' => '1',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             $requestData = EzpayInvoice::invoice()
                 ->query()
@@ -575,7 +575,7 @@ describe('發票功能測試', function () {
                 'TotalAmt' => '1050',
                 'RandomNum' => '',
                 'DisplayFlag' => '2',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -609,7 +609,7 @@ describe('發票功能測試', function () {
                 'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceNumber' => 'GG72002017',
                 'InvalidReason' => '客戶取消訂單',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -650,7 +650,7 @@ describe('發票功能測試', function () {
                 'InvoiceTransNo' => '25072516392250538',
                 'MerchantOrderNo' => 'Order004',
                 'TotalAmt' => '210',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([

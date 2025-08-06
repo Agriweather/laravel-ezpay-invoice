@@ -16,7 +16,7 @@ describe('驗證功能測試', function () {
             $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -49,7 +49,7 @@ describe('驗證功能測試', function () {
             $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/AAA.CCC',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -84,7 +84,7 @@ describe('驗證功能測試', function () {
             $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -117,7 +117,7 @@ describe('驗證功能測試', function () {
             $ezpayCrypto->expects('encryptPostData')->with([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Lovecode' => 123,
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([

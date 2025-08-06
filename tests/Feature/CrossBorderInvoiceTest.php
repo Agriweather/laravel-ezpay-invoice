@@ -33,7 +33,7 @@ describe('境外電商發票功能測試', function () {
                 'Currency' => 'USD',
                 'OriginalCurrencyAmount' => '100.00',
                 'ExchangeRate' => '30.5',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -86,7 +86,7 @@ describe('境外電商發票功能測試', function () {
                 'TotalAmt' => '',
                 'InvoiceNumber' => 'CBOrder001',
                 'RandomNum' => '1234',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([

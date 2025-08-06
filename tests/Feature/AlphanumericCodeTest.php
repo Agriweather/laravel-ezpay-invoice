@@ -27,7 +27,7 @@ describe('字軌管理功能測試', function () {
                 'StartNumber' => '24000100',
                 'EndNumber' => '24000199',
                 'Type' => '07',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -84,7 +84,7 @@ describe('字軌管理功能測試', function () {
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Year' => '114',
                 'Term' => '4',
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -145,7 +145,7 @@ describe('字軌管理功能測試', function () {
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::PAUSED,
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -191,7 +191,7 @@ describe('字軌管理功能測試', function () {
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::ACTIVE,
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -237,7 +237,7 @@ describe('字軌管理功能測試', function () {
                 'ManagementNo' => '0t0ghr0fyv',
                 'Year' => '114',
                 'Flag' => AlphanumericCodeFlag::DISABLED,
-            ])->andReturn('');
+            ])->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
