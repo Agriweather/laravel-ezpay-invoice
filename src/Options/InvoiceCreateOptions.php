@@ -3,7 +3,7 @@
 namespace Agriweather\EzpayInvoice\Options;
 
 use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzpayInvoice\Enums\InvoiceStatus;
+use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Carbon\Carbon;
 
@@ -21,7 +21,7 @@ class InvoiceCreateOptions extends Options
 
     public string $orderNo = '';
 
-    public InvoiceStatus $status = InvoiceStatus::IMMEDIATE;
+    public InvoiceCreateStatus $status = InvoiceCreateStatus::IMMEDIATE;
 
     public ?string $createDate = null;
 

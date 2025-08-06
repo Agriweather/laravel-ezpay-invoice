@@ -5,8 +5,8 @@ namespace Agriweather\EzpayInvoice\Builders;
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\CustomsClearance;
 use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
+use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
 use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzpayInvoice\Enums\InvoiceStatus;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Options\InvoiceCreateOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
@@ -444,7 +444,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function deferIssue(): InvoiceCreateResult
     {
-        $this->options->status = InvoiceStatus::DEFERRED;
+        $this->options->status = InvoiceCreateStatus::DEFERRED;
 
         return $this->issue();
     }
@@ -456,7 +456,7 @@ class InvoiceCreateBuilder extends Builder
      */
     public function scheduleAt(string $createDate): InvoiceCreateResult
     {
-        $this->options->status = InvoiceStatus::SCHEDULED;
+        $this->options->status = InvoiceCreateStatus::SCHEDULED;
         $this->options->createDate = $createDate;
 
         return $this->issue();

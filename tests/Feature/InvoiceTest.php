@@ -5,7 +5,7 @@ use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
-use Agriweather\EzpayInvoice\Results\InvoiceResult;
+use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -349,7 +349,7 @@ describe('發票功能測試', function () {
                 'TimeStamp' => Carbon::now()->timestamp,
                 'SearchType' => '0',
                 'MerchantOrderNo' => '',
-                'TotalAmt' => '',
+                'TotalAmt' => '0',
                 'InvoiceNumber' => 'GG72002017',
                 'RandomNum' => '1234',
             ])->andReturn('');
@@ -417,12 +417,12 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
-                ->and($invoiceResult->invoiceNumber)->toBe('GG72002017')
-                ->and($invoiceResult->merchantOrderNo)->toBe('Order001')
-                ->and($invoiceResult->totalAmount)->toBe(1050)
-                ->and($invoiceResult->buyerName)->toBe('John Doe')
-                ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
+            expect($invoiceResult)->toBeInstanceOf(InvoiceQueryResult::class)
+                ->and($invoiceResult->invoiceNumber())->toBe('GG72002017')
+                ->and($invoiceResult->orderNo())->toBe('Order001')
+                ->and($invoiceResult->totalAmount())->toBe(1050)
+                ->and($invoiceResult->buyerName())->toBe('John Doe')
+                ->and($invoiceResult->buyerEmail())->toBe('customer@example.com');
         });
 
         test('可以透過訂單編號及發票金額查詢發票', function () {
@@ -494,19 +494,19 @@ describe('發票功能測試', function () {
             $invoiceResult = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAmount(1050)
+                ->withAotalAmount(1050)
                 ->get();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
-                ->and($invoiceResult->invoiceNumber)->toBe('GG72002017')
-                ->and($invoiceResult->merchantOrderNo)->toBe('Order001')
-                ->and($invoiceResult->totalAmount)->toBe(1050)
-                ->and($invoiceResult->buyerName)->toBe('John Doe')
-                ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
+            expect($invoiceResult)->toBeInstanceOf(InvoiceQueryResult::class)
+                ->and($invoiceResult->invoiceNumber())->toBe('GG72002017')
+                ->and($invoiceResult->orderNo())->toBe('Order001')
+                ->and($invoiceResult->totalAmount())->toBe(1050)
+                ->and($invoiceResult->buyerName())->toBe('John Doe')
+                ->and($invoiceResult->buyerEmail())->toBe('customer@example.com');
         });
 
         test('可以跳轉到 ezPay 平台查詢發票', function () {
@@ -528,7 +528,7 @@ describe('發票功能測試', function () {
             $response = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAmount(1050)
+                ->withAotalAmount(1050)
                 ->redirectToEZPay();
 
             expect($response)->toBeInstanceOf(Response::class)
@@ -542,7 +542,7 @@ describe('發票功能測試', function () {
             $formData = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAmount(1050)
+                ->withAotalAmount(1050)
                 ->toFormData();
 
             expect($formData)->toBeArray()

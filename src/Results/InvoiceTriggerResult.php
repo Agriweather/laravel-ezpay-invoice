@@ -4,9 +4,8 @@ namespace Agriweather\EzpayInvoice\Results;
 
 use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
 
-final class InvoiceCreateResult extends Result implements CheckCodeVerifiable
+final class InvoiceTriggerResult extends Result implements CheckCodeVerifiable
 {
-    use Concerns\HasBarCode;
     use Concerns\HasCheckCode;
     use Concerns\HasCreateTime;
     use Concerns\HasInvoiceNumber;
