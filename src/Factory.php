@@ -34,6 +34,13 @@ class Factory
         );
     }
 
+    public function codeValidation(): CodeValidation
+    {
+        return new CodeValidation(
+            $this, $this->crypto, $this->httpSender
+        );
+    }
+
     public function baseUrl(): string
     {
         return $this->config['env'] === 'production'

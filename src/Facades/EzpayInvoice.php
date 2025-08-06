@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Agriweather\EzpayInvoice\Invoice invoice()
+ * @method static \Agriweather\EzpayInvoice\CodeValidation codeValidation()
  *
  * @see \Agriweather\EzpayInvoice\Factory
  */
