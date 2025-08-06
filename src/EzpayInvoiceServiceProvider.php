@@ -2,8 +2,10 @@
 
 namespace Agriweather\EzpayInvoice;
 
+use Agriweather\EzpayInvoice\Contracts\FormPostSender as FormPostSenderContract;
 use Agriweather\EzpayInvoice\Contracts\HttpSender as HttpSenderContract;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzpayInvoice\Senders\FormPostSender;
 use Agriweather\EzpayInvoice\Senders\HttpSender;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Support\ServiceProvider;
@@ -31,10 +33,15 @@ class EzpayInvoiceServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->singleton(FormPostSenderContract::class, function ($app) {
+            return new FormPostSender;
+        });
+
         $this->app->singleton(Factory::class, function ($app) {
             return new Factory(
                 $app->make(EzpayCrypto::class),
-                $app->make(HttpSender::class),
+                $app->make(HttpSenderContract::class),
+                $app->make(FormPostSenderContract::class),
                 $app['config']->get('ezpay_invoice')
             );
         });

@@ -2,9 +2,9 @@
 
 namespace Agriweather\EzpayInvoice\Contracts;
 
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\Response as ClientResponse;
 
 interface HttpSender extends Sender
 {
-    public function send(string $url, array $data): Response;
+    public function send(string $url, array $data): ClientResponse;
 }

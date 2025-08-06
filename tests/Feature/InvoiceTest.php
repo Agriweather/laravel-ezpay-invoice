@@ -6,6 +6,7 @@ use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
+use Agriweather\EzpayInvoice\Results\InvoiceQueryUrlResult;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -494,7 +495,7 @@ describe('發票功能測試', function () {
             $invoiceResult = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAotalAmount(1050)
+                ->withTotalAmount(1050)
                 ->get();
 
             Http::assertSent(function (Request $request) {
@@ -515,39 +516,87 @@ describe('發票功能測試', function () {
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'SearchType' => '1',
                 'MerchantOrderNo' => 'Order001',
-                'TotalAmt' => '1050',
                 'InvoiceNumber' => '',
+                'SearchType' => '1',
+                'TotalAmt' => '1050',
                 'RandomNum' => '',
                 'DisplayFlag' => '1',
             ])->andReturn('');
-            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
-            /** @var \Illuminate\Http\Response */
             $response = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAotalAmount(1050)
+                ->withTotalAmount(1050)
                 ->redirectToEZPay();
 
             expect($response)->toBeInstanceOf(Response::class)
                 ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
-                ->content()->toContain('name="MerchantID_" value="Order001"')
+                ->content()->toContain('name="MerchantID_" value="111335678"')
                 ->content()->toContain('name="PostData_"');
         });
 
         test('可以取得請求查詢發票的 formData 資料', function () {
-            /** @var array */
-            $formData = EzpayInvoice::invoice()
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.3',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'MerchantOrderNo' => 'Order001',
+                'InvoiceNumber' => '',
+                'SearchType' => '1',
+                'TotalAmt' => '1050',
+                'RandomNum' => '',
+                'DisplayFlag' => '1',
+            ])->andReturn('');
+
+            $requestData = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
-                ->withAotalAmount(1050)
-                ->toFormData();
+                ->withTotalAmount(1050)
+                ->toRedirectRequestData();
 
-            expect($formData)->toBeArray()
-                ->and($formData['MerchantID_'])->toBe('Order001')
-                ->and($formData['PostData_'])->toBeString();
+            expect($requestData)->toBeArray()
+                ->and($requestData['url'])->toBe('https://cinv.ezpay.com.tw/Api/invoice_search')
+                ->and($requestData['formData'])->toBeArray()
+                ->and($requestData['formData']['MerchantID_'])->toBe('111335678')
+                ->and($requestData['formData']['PostData_'])->toBeString();
+        });
+
+        test('可以取得 ezPay 平台查詢發票的網址', function () {
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->with([
+                'RespondType' => 'JSON',
+                'Version' => '1.3',
+                'TimeStamp' => Carbon::now()->timestamp,
+                'MerchantOrderNo' => 'Order001',
+                'InvoiceNumber' => '',
+                'SearchType' => '1',
+                'TotalAmt' => '1050',
+                'RandomNum' => '',
+                'DisplayFlag' => '2',
+            ])->andReturn('');
+
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '查詢成功',
+                    'Result' => 'https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx',
+                ], 200),
+            ]);
+
+            $invoiceQueryUrlResult = EzpayInvoice::invoice()
+                ->query()
+                ->withOrder('Order001')
+                ->withTotalAmount(1050)
+                ->getEZPayQueryUrl();
+
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
+            });
+
+            expect($invoiceQueryUrlResult)->toBeInstanceOf(InvoiceQueryUrlResult::class)
+                ->and($invoiceQueryUrlResult->url())->toBe('https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx');
         });
     });
 

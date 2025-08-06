@@ -6,7 +6,7 @@ use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Factory;
 use Agriweather\EzpayInvoice\Options\Options;
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\Response as ClientResponse;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
@@ -29,7 +29,7 @@ abstract class Builder
 
     abstract public function getOptions(): Options;
 
-    protected function sendRequest(): Response
+    public function toRequestData(): array
     {
         $url = $this->factory->baseUrl().$this->endpoint;
         $formData = $this->getOptions()->toArray();
@@ -41,6 +41,19 @@ abstract class Builder
             );
         }
 
-        return $this->httpSender->send($url, $formData);
+        return [
+            'url' => $url,
+            'formData' => $formData,
+        ];
+    }
+
+    protected function sendRequest(): ClientResponse
+    {
+        $requestData = $this->toRequestData();
+
+        return $this->httpSender->send(
+            $requestData['url'],
+            $requestData['formData']
+        );
     }
 }

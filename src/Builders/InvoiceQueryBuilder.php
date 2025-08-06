@@ -2,13 +2,19 @@
 
 namespace Agriweather\EzpayInvoice\Builders;
 
+use Agriweather\EzpayInvoice\Contracts\FormPostSender;
+use Agriweather\EzpayInvoice\Enums\DisplayFlag;
 use Agriweather\EzpayInvoice\Enums\SearchType;
 use Agriweather\EzpayInvoice\Options\InvoiceQueryOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
+use Agriweather\EzpayInvoice\Results\InvoiceQueryUrlResult;
+use Illuminate\Http\Response;
 
 class InvoiceQueryBuilder extends Builder
 {
     protected InvoiceQueryOptions $options;
+
+    protected FormPostSender $formPostSender;
 
     protected function boot(): void
     {
@@ -59,17 +65,14 @@ class InvoiceQueryBuilder extends Builder
     /**
      * 透過發票金額查詢 (需帶入 訂單編號 + 發票金額 查詢)
      */
-    public function withAotalAmount(int $totalAmount): self
+    public function withTotalAmount(int $totalAmount): self
     {
         $this->options->totalAmount = $totalAmount;
 
         return $this;
     }
 
-    /**
-     * 查詢發票資訊
-     */
-    public function get()
+    protected function setupSearchRequest(): void
     {
         $this->endpoint = '/Api/invoice_search';
         $this->options->version = '1.3';
@@ -78,6 +81,14 @@ class InvoiceQueryBuilder extends Builder
         $this->options->totalAmount = $this->options->totalAmount ?: 0;
         $this->options->randomNumber = $this->options->randomNumber ?: '';
         $this->options->invoiceNumber = $this->options->invoiceNumber ?: '';
+    }
+
+    /**
+     * 查詢發票資訊
+     */
+    public function get(): InvoiceQueryResult
+    {
+        $this->setupSearchRequest();
 
         $result = new InvoiceQueryResult($this->sendRequest()->json());
 
@@ -86,13 +97,47 @@ class InvoiceQueryBuilder extends Builder
         return $result;
     }
 
-    public function redirectToEZPay()
+    /**
+     * 跳轉到 ezPay 平台顯示發票查詢結果
+     */
+    public function redirectToEZPay(): Response
     {
-        //
+        $requestData = $this->toRedirectRequestData();
+
+        return $this->formPostSender->send(
+            $requestData['url'],
+            $requestData['formData']
+        );
     }
 
-    public function getEZPayQueryUrl()
+    /**
+     * 跳轉到 ezPay 平台顯示發票查詢結果的請求表單資料
+     */
+    public function toRedirectRequestData(): array
     {
-        //
+        $this->setupSearchRequest();
+
+        $this->options->displayFlag = DisplayFlag::WEB_DISPLAY;
+
+        return parent::toRequestData();
+    }
+
+    /**
+     * 回傳 ezPay 平台顯示發票查詢結果頁面的 URL
+     */
+    public function getEZPayQueryUrl(): InvoiceQueryUrlResult
+    {
+        $this->setupSearchRequest();
+
+        $this->options->displayFlag = DisplayFlag::RETURN_URL;
+
+        return new InvoiceQueryUrlResult($this->sendRequest()->json());
+    }
+
+    public function setFormPostSender(FormPostSender $formPostSender): self
+    {
+        $this->formPostSender = $formPostSender;
+
+        return $this;
     }
 }

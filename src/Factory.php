@@ -2,6 +2,7 @@
 
 namespace Agriweather\EzpayInvoice;
 
+use Agriweather\EzpayInvoice\Contracts\FormPostSender;
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 
@@ -20,6 +21,7 @@ class Factory
     public function __construct(
         protected EzpayCrypto $crypto,
         protected HttpSender $httpSender,
+        protected FormPostSender $formPostSender,
         protected array $config
     ) {
         //
@@ -28,7 +30,7 @@ class Factory
     public function invoice(): Invoice
     {
         return new Invoice(
-            $this, $this->crypto, $this->httpSender
+            $this, $this->crypto, $this->httpSender, $this->formPostSender
         );
     }
 

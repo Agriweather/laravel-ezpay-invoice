@@ -4,6 +4,7 @@ namespace Agriweather\EzpayInvoice;
 
 use Agriweather\EzpayInvoice\Builders\InvoiceCreateBuilder;
 use Agriweather\EzpayInvoice\Builders\InvoiceQueryBuilder;
+use Agriweather\EzpayInvoice\Contracts\FormPostSender;
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 
@@ -12,7 +13,8 @@ class Invoice
     public function __construct(
         protected Factory $factory,
         protected EzpayCrypto $crypto,
-        protected HttpSender $httpSender
+        protected HttpSender $httpSender,
+        protected FormPostSender $formPostSender
     ) {
         //
     }
@@ -26,8 +28,8 @@ class Invoice
 
     public function query(): InvoiceQueryBuilder
     {
-        return new InvoiceQueryBuilder(
+        return (new InvoiceQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        );
+        ))->setFormPostSender($this->formPostSender);
     }
 }
