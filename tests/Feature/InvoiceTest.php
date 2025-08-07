@@ -690,6 +690,9 @@ describe('發票功能測試', function () {
             ]);
 
             $result = EzpayInvoice::invoice()
+                ->invalidateQuery()
+                ->withInvoice('GG72002017')
+                ->because('客戶取消訂單')
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'RespondType' => 'JSON',
@@ -701,7 +704,7 @@ describe('發票功能測試', function () {
 
                     return $options;
                 })
-                ->invalidate('GG72002017', '客戶取消訂單');
+                ->invalidate();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';

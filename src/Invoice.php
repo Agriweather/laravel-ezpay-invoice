@@ -9,7 +9,6 @@ use Agriweather\EzpayInvoice\Builders\InvoiceTriggerQueryBuilder;
 use Agriweather\EzpayInvoice\Contracts\FormPostSender;
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Results\InvoiceInvalidateResult;
 
 class Invoice extends SubFactory
 {
@@ -43,18 +42,10 @@ class Invoice extends SubFactory
         ));
     }
 
-    /**
-     * 作廢發票
-     *
-     * @param  string  $invoiceNumber  發票號碼
-     * @param  string  $reason  作廢原因，字數限中文 6 字或英文 20 字。
-     *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     */
-    public function invalidate(string $invoiceNumber, string $reason): InvoiceInvalidateResult
+    public function invalidateQuery(): InvoiceInvalidateQueryBuilder
     {
         return $this->prepareBuilder(new InvoiceInvalidateQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        ))->invalidate($invoiceNumber, $reason);
+        ));
     }
 }

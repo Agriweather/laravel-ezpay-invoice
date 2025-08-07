@@ -2,6 +2,7 @@
 
 namespace Agriweather\EzpayInvoice;
 
+use Agriweather\EzpayInvoice\Builders\CodeValidationBuilder;
 use Agriweather\EzpayInvoice\Contracts\FormPostSender;
 use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
@@ -48,9 +49,9 @@ class Factory
         );
     }
 
-    public function codeValidation(): CodeValidation
+    public function codeValidation(): CodeValidationBuilder
     {
-        return new CodeValidation(
+        return new CodeValidationBuilder(
             $this, $this->crypto, $this->httpSender
         );
     }

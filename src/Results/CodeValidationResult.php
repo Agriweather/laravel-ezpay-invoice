@@ -2,14 +2,22 @@
 
 namespace Agriweather\EzpayInvoice\Results;
 
-final class CheckBarcodeResult extends Result
+final class CodeValidationResult extends Result
 {
     /**
      * 手機條碼
      */
-    public function barcode(): string
+    public function barcode(): ?string
     {
-        return $this->result['PhoneBarcode'];
+        return $this->result['CellphoneBarcode'] ?? null;
+    }
+
+    /**
+     * 捐贈碼
+     */
+    public function loveCode(): ?string
+    {
+        return $this->result['Lovecode'] ?? null;
     }
 
     /**

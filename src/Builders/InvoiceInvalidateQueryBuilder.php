@@ -24,19 +24,37 @@ class InvoiceInvalidateQueryBuilder extends Builder
     }
 
     /**
-     * 作廢發票
+     * 發票號碼
      *
      * @param  string  $invoiceNumber  發票號碼
-     * @param  string  $reason  作廢原因，字數限中文 6 字或英文 20 字。
+     */
+    public function withInvoice(string $invoiceNumber): self
+    {
+        $this->options->invoiceNumber = $invoiceNumber;
+
+        return $this;
+    }
+
+    /**
+     * 作廢原因
+     *
+     * @param  string  $invalidReason  作廢原因，字數限中文 6 字或英文 20 字。
+     */
+    public function because(string $invalidReason): self
+    {
+        $this->options->invalidReason = $invalidReason;
+
+        return $this;
+    }
+
+    /**
+     * 作廢發票
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      */
-    public function invalidate(string $invoiceNumber, string $reason): InvoiceInvalidateResult
+    public function invalidate(): InvoiceInvalidateResult
     {
         $this->endpoint = '/Api/invoice_invalid';
-
-        $this->options->invoiceNumber = $invoiceNumber;
-        $this->options->invalidReason = $reason;
 
         return new InvoiceInvalidateResult($this->sendRequest());
     }

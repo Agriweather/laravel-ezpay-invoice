@@ -3,8 +3,7 @@
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\CheckBarcodeResult;
-use Agriweather\EzpayInvoice\Results\CheckLoveCodeResult;
+use Agriweather\EzpayInvoice\Results\CodeValidationResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -42,13 +41,15 @@ describe('驗證功能測試', function () {
 
                     return $options;
                 })
-                ->checkBarcode('/ABC.123');
+                ->withBarcode('/ABC.123')
+                ->check();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
 
-            expect($result)->toBeInstanceOf(CheckBarcodeResult::class)
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->barcode())->toBe('/ABC.123')
                 ->and($result->isValid())->toBeTrue();
         });
 
@@ -81,13 +82,15 @@ describe('驗證功能測試', function () {
 
                     return $options;
                 })
-                ->checkBarcode('/ABC.123');
+                ->withBarcode('/ABC.123')
+                ->check();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkBarCode';
             });
 
-            expect($result)->toBeInstanceOf(CheckBarcodeResult::class)
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->barcode())->toBe('/ABC.123')
                 ->and($result->isValid())->toBeFalse();
         });
     });
@@ -122,13 +125,15 @@ describe('驗證功能測試', function () {
 
                     return $options;
                 })
-                ->checkLoveCode('123');
+                ->withLoveCode('123')
+                ->check();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
 
-            expect($result)->toBeInstanceOf(CheckLoveCodeResult::class)
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->loveCode())->toBe('123')
                 ->and($result->isValid())->toBeTrue();
         });
 
@@ -161,13 +166,15 @@ describe('驗證功能測試', function () {
 
                     return $options;
                 })
-                ->checkLoveCode('123');
+                ->withLoveCode('123')
+                ->check();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
             });
 
-            expect($result)->toBeInstanceOf(CheckLoveCodeResult::class)
+            expect($result)->toBeInstanceOf(CodeValidationResult::class)
+                ->and($result->loveCode())->toBe('123')
                 ->and($result->isValid())->toBeFalse();
         });
     });
