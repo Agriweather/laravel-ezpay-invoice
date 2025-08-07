@@ -9,7 +9,7 @@ use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Results\CheckBarcodeResult;
 use Agriweather\EzpayInvoice\Results\CheckLoveCodeResult;
 
-class CodeValidation
+class CodeValidation extends SubFactory
 {
     public function __construct(
         protected Factory $factory,
@@ -29,7 +29,7 @@ class CodeValidation
      */
     public function checkBarcode(string $barcode): CheckBarcodeResult
     {
-        return (new CheckBarcodeBuilder(
+        return $this->prepareBuilder(new CheckBarcodeBuilder(
             $this->factory, $this->crypto, $this->httpSender
         ))->check($barcode);
     }
@@ -44,7 +44,7 @@ class CodeValidation
      */
     public function checkLoveCode(string $lovecode): CheckLoveCodeResult
     {
-        return (new CheckLoveCodeBuilder(
+        return $this->prepareBuilder(new CheckLoveCodeBuilder(
             $this->factory, $this->crypto, $this->httpSender
         ))->check($lovecode);
     }

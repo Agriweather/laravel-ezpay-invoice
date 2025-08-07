@@ -39,10 +39,6 @@ class InvoiceInvalidateQueryBuilder extends Builder
         $this->options->invoiceNumber = $invoiceNumber;
         $this->options->invalidReason = $reason;
 
-        $result = new InvoiceInvalidateResult($this->sendRequest());
-
-        $this->crypto->verifyCheckCode($result);
-
-        return $result;
+        return new InvoiceInvalidateResult($this->sendRequest());
     }
 }

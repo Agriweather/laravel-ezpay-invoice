@@ -12,6 +12,7 @@ use Illuminate\Support\Traits\Tappable;
 
 abstract class Builder
 {
+    use Concerns\HasTransformOptions;
     use Conditionable;
     use Tappable;
 
@@ -29,10 +30,19 @@ abstract class Builder
 
     abstract public function getOptions(): Options;
 
+    /**
+     * 取得 HTTP 請求數據
+     */
     public function toRequestData(): array
     {
         $url = $this->factory->baseUrl().$this->endpoint;
-        $formData = $this->getOptions()->toArray();
+        $options = $this->getOptions();
+
+        if ($this->transformOptionsCallback) {
+            $options = call_user_func($this->transformOptionsCallback, $options);
+        }
+
+        $formData = $options->toArray();
 
         // 如果有 PostData_ 則進行加密
         if (isset($formData['PostData_'])) {
@@ -48,7 +58,7 @@ abstract class Builder
     }
 
     /**
-     * 發送 API 請求到 ezPay 發票平台。
+     * 發送 API 請求到 ezPay 發票平台
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      */

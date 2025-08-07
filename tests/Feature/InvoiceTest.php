@@ -4,6 +4,7 @@ use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzpayInvoice\Options\Options;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
 use Agriweather\EzpayInvoice\Results\Result;
@@ -18,28 +19,7 @@ describe('發票功能測試', function () {
     describe('發票開立流程', function () {
         test('可以成功開立 B2C 發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.5',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order001',
-                'Status' => '1',
-                'Category' => 'B2C',
-                'BuyerName' => 'John Doe',
-                'BuyerAddress' => '台北市信義區信義路五段7號',
-                'BuyerEmail' => 'customer@example.com',
-                'PrintFlag' => 'Y',
-                'TaxType' => '1',
-                'TaxRate' => '5',
-                'Amt' => '1000',
-                'TaxAmt' => '50',
-                'TotalAmt' => '1050',
-                'ItemName' => '測試商品',
-                'ItemCount' => '1',
-                'ItemUnit' => '個',
-                'ItemPrice' => '1000',
-                'ItemAmt' => '1000',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -71,6 +51,32 @@ describe('發票功能測試', function () {
                 ->withItem('測試商品', quantity: 1, unit: '個', price: 1000, amount: 1000)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(1000, 50, 1050)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.5',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'Order001',
+                        'Status' => '1',
+                        'Category' => 'B2C',
+                        'BuyerName' => 'John Doe',
+                        'BuyerAddress' => '台北市信義區信義路五段7號',
+                        'BuyerEmail' => 'customer@example.com',
+                        'PrintFlag' => 'Y',
+                        'TaxType' => '1',
+                        'TaxRate' => '5',
+                        'Amt' => '1000',
+                        'TaxAmt' => '50',
+                        'TotalAmt' => '1050',
+                        'ItemName' => '測試商品',
+                        'ItemCount' => '1',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '1000',
+                        'ItemAmt' => '1000',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -87,29 +93,7 @@ describe('發票功能測試', function () {
 
         test('可以成功開立 B2B 發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.5',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Status' => '1',
-                'PrintFlag' => 'Y',
-                'MerchantOrderNo' => 'Order002',
-                'Category' => 'B2B',
-                'BuyerName' => '測試公司有限公司',
-                'BuyerUBN' => '12345678',
-                'BuyerAddress' => '台北市信義區信義路五段7號',
-                'BuyerEmail' => 'business@company.com',
-                'TaxType' => '1',
-                'TaxRate' => '5',
-                'Amt' => '1000',
-                'TaxAmt' => '50',
-                'TotalAmt' => '1050',
-                'ItemName' => '商品A|商品B',
-                'ItemCount' => '2|1',
-                'ItemUnit' => '個|個',
-                'ItemPrice' => '300|400',
-                'ItemAmt' => '600|400',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -142,6 +126,33 @@ describe('發票功能測試', function () {
                 ->withItem('商品B', quantity: 1, unit: '個', price: 400, amount: 400)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(1000, 50, 1050)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.5',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'Order002',
+                        'Status' => '1',
+                        'Category' => 'B2B',
+                        'BuyerName' => '測試公司有限公司',
+                        'BuyerUBN' => '12345678',
+                        'BuyerAddress' => '台北市信義區信義路五段7號',
+                        'BuyerEmail' => 'business@company.com',
+                        'PrintFlag' => 'Y',
+                        'TaxType' => '1',
+                        'TaxRate' => '5',
+                        'Amt' => '1000',
+                        'TaxAmt' => '50',
+                        'TotalAmt' => '1050',
+                        'ItemName' => '商品A|商品B',
+                        'ItemCount' => '2|1',
+                        'ItemUnit' => '個|個',
+                        'ItemPrice' => '300|400',
+                        'ItemAmt' => '600|400',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -158,28 +169,7 @@ describe('發票功能測試', function () {
 
         test('可以開立載具發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.5',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order003',
-                'Status' => '1',
-                'Category' => 'B2C',
-                'BuyerName' => '載具客戶',
-                'CarrierType' => '0',
-                'CarrierNum' => '%2FABC.123',
-                'PrintFlag' => 'N',
-                'TaxType' => '1',
-                'TaxRate' => '5',
-                'Amt' => '500',
-                'TaxAmt' => '25',
-                'TotalAmt' => '525',
-                'ItemName' => '載具商品',
-                'ItemCount' => '1',
-                'ItemUnit' => '個',
-                'ItemPrice' => '500',
-                'ItemAmt' => '500',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -208,6 +198,32 @@ describe('發票功能測試', function () {
                 ->withItem('載具商品', quantity: 1, unit: '個', price: 500, amount: 500)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(500, 25, 525)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.5',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'Order003',
+                        'Status' => '1',
+                        'Category' => 'B2C',
+                        'BuyerName' => '載具客戶',
+                        'CarrierType' => '0',
+                        'CarrierNum' => '%2FABC.123',
+                        'PrintFlag' => 'N',
+                        'TaxType' => '1',
+                        'TaxRate' => '5',
+                        'Amt' => '500',
+                        'TaxAmt' => '25',
+                        'TotalAmt' => '525',
+                        'ItemName' => '載具商品',
+                        'ItemCount' => '1',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '500',
+                        'ItemAmt' => '500',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -220,26 +236,7 @@ describe('發票功能測試', function () {
 
         test('可以開立發票並等待觸發', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.5',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Status' => '0',
-                'PrintFlag' => 'Y',
-                'MerchantOrderNo' => 'Order004',
-                'Category' => 'B2C',
-                'BuyerName' => '等待觸發客戶',
-                'TaxType' => '1',
-                'TaxRate' => '5',
-                'Amt' => '200',
-                'TaxAmt' => '10',
-                'TotalAmt' => '210',
-                'ItemName' => '等待觸發商品',
-                'ItemCount' => '1',
-                'ItemUnit' => '個',
-                'ItemPrice' => '200',
-                'ItemAmt' => '200',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -266,6 +263,30 @@ describe('發票功能測試', function () {
                 ->withItem('等待觸發商品', quantity: 1, unit: '個', price: 200, amount: 200)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(200, 10, 210)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.5',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'Order004',
+                        'Status' => '0',
+                        'Category' => 'B2C',
+                        'BuyerName' => '等待觸發客戶',
+                        'PrintFlag' => 'Y',
+                        'TaxType' => '1',
+                        'TaxRate' => '5',
+                        'Amt' => '200',
+                        'TaxAmt' => '10',
+                        'TotalAmt' => '210',
+                        'ItemName' => '等待觸發商品',
+                        'ItemCount' => '1',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '200',
+                        'ItemAmt' => '200',
+                    ]);
+
+                    return $options;
+                })
                 ->deferIssue();
 
             Http::assertSent(function (Request $request) {
@@ -280,27 +301,7 @@ describe('發票功能測試', function () {
 
         test('可以預約開立發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.5',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Status' => '3',
-                'PrintFlag' => 'Y',
-                'MerchantOrderNo' => 'Order005',
-                'CreateStatusTime' => '2024-12-01',
-                'Category' => 'B2C',
-                'BuyerName' => '預約客戶',
-                'TaxType' => '1',
-                'TaxRate' => '5',
-                'Amt' => '200',
-                'TaxAmt' => '10',
-                'TotalAmt' => '210',
-                'ItemName' => '預約商品',
-                'ItemCount' => '1',
-                'ItemUnit' => '個',
-                'ItemPrice' => '200',
-                'ItemAmt' => '200',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -327,6 +328,31 @@ describe('發票功能測試', function () {
                 ->withItem('預約商品', quantity: 1, unit: '個', price: 200, amount: 200)
                 ->withTax(TaxType::TAXABLE, 5)
                 ->withAmount(200, 10, 210)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.5',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'Order005',
+                        'Status' => '3',
+                        'CreateStatusTime' => '2024-12-01',
+                        'Category' => 'B2C',
+                        'BuyerName' => '預約客戶',
+                        'PrintFlag' => 'Y',
+                        'TaxType' => '1',
+                        'TaxRate' => '5',
+                        'Amt' => '200',
+                        'TaxAmt' => '10',
+                        'TotalAmt' => '210',
+                        'ItemName' => '預約商品',
+                        'ItemCount' => '1',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '200',
+                        'ItemAmt' => '200',
+                    ]);
+
+                    return $options;
+                })
                 ->scheduleAt('2024-12-01');
 
             Http::assertSent(function (Request $request) {
@@ -343,16 +369,7 @@ describe('發票功能測試', function () {
     describe('發票查詢功能', function () {
         test('可以透過發票號碼及隨機碼查詢發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'SearchType' => '0',
-                'MerchantOrderNo' => '',
-                'TotalAmt' => '0',
-                'InvoiceNumber' => 'GG72002017',
-                'RandomNum' => '1234',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -411,6 +428,20 @@ describe('發票功能測試', function () {
                 ->query()
                 ->withInvoice('GG72002017')
                 ->withRandomNumber('1234')
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'SearchType' => '0',
+                        'MerchantOrderNo' => '',
+                        'TotalAmt' => '0',
+                        'InvoiceNumber' => 'GG72002017',
+                        'RandomNum' => '1234',
+                    ]);
+
+                    return $options;
+                })
                 ->get();
 
             Http::assertSent(function (Request $request) {
@@ -427,16 +458,7 @@ describe('發票功能測試', function () {
 
         test('可以透過訂單編號及發票金額查詢發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'SearchType' => '1',
-                'MerchantOrderNo' => 'Order001',
-                'TotalAmt' => '1050',
-                'InvoiceNumber' => '',
-                'RandomNum' => '',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -495,6 +517,20 @@ describe('發票功能測試', function () {
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'SearchType' => '1',
+                        'MerchantOrderNo' => 'Order001',
+                        'TotalAmt' => '1050',
+                        'InvoiceNumber' => '',
+                        'RandomNum' => '',
+                    ]);
+
+                    return $options;
+                })
                 ->get();
 
             Http::assertSent(function (Request $request) {
@@ -511,17 +547,7 @@ describe('發票功能測試', function () {
 
         test('可以跳轉到 ezPay 平台查詢發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order001',
-                'InvoiceNumber' => '',
-                'SearchType' => '1',
-                'TotalAmt' => '1050',
-                'RandomNum' => '',
-                'DisplayFlag' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             $response = EzpayInvoice::invoice()
                 ->query()
@@ -537,22 +563,27 @@ describe('發票功能測試', function () {
 
         test('可以取得請求查詢發票的 formData 資料', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order001',
-                'InvoiceNumber' => '',
-                'SearchType' => '1',
-                'TotalAmt' => '1050',
-                'RandomNum' => '',
-                'DisplayFlag' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             $requestData = EzpayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'SearchType' => '1',
+                        'MerchantOrderNo' => 'Order001',
+                        'TotalAmt' => '1050',
+                        'InvoiceNumber' => '',
+                        'RandomNum' => '',
+                        'DisplayFlag' => '1',
+                    ]);
+
+                    return $options;
+                })
                 ->toRedirectRequestData();
 
             expect($requestData)->toBeArray()
@@ -564,17 +595,7 @@ describe('發票功能測試', function () {
 
         test('可以取得 ezPay 平台查詢發票的網址', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'Order001',
-                'InvoiceNumber' => '',
-                'SearchType' => '1',
-                'TotalAmt' => '1050',
-                'RandomNum' => '',
-                'DisplayFlag' => '2',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -601,14 +622,7 @@ describe('發票功能測試', function () {
     describe('發票觸發功能', function () {
         test('可以觸發等待中的發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceTransNo' => '25072516392250538',
-                'MerchantOrderNo' => 'Order004',
-                'TotalAmt' => '210',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
             $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
@@ -633,6 +647,18 @@ describe('發票功能測試', function () {
                 ->withInvoiceTransNo('25072516392250538')
                 ->withOrder('Order004')
                 ->withTotalAmount(210)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceTransNo' => '25072516392250538',
+                        'MerchantOrderNo' => 'Order004',
+                        'TotalAmt' => '210',
+                    ]);
+
+                    return $options;
+                })
                 ->trigger();
 
             Http::assertSent(function (Request $request) {
@@ -647,14 +673,7 @@ describe('發票功能測試', function () {
     describe('發票作廢功能', function () {
         test('可以作廢已開立的發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNumber' => 'GG72002017',
-                'InvalidReason' => '客戶取消訂單',
-            ])->andReturn('encrypted_data');
-            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -669,7 +688,19 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()->invalidate('GG72002017', '客戶取消訂單');
+            $result = EzpayInvoice::invoice()
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceNumber' => 'GG72002017',
+                        'InvalidReason' => '客戶取消訂單',
+                    ]);
+
+                    return $options;
+                })
+                ->invalidate('GG72002017', '客戶取消訂單');
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';

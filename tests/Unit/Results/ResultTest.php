@@ -15,7 +15,7 @@ describe('Result', function () {
             ]),
         ]);
 
-        expect($result->result())->toEqual([
+        expect($result->result())->toBe([
             'CheckCode' => '123456789',
             'MerchantID' => '111335678',
             'MerchantOrderNo' => 'Order001',

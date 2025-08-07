@@ -5,6 +5,7 @@ use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
 use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzpayInvoice\Enums\InvoiceType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzpayInvoice\Options\Options;
 use Agriweather\EzpayInvoice\Results\AlphanumericCodeCreateResult;
 use Agriweather\EzpayInvoice\Results\AlphanumericCodeQueryResult;
 use Agriweather\EzpayInvoice\Results\AlphanumericCodeUpdateResult;
@@ -18,17 +19,7 @@ describe('字軌管理功能測試', function () {
     describe('字軌申請功能', function () {
         test('可以成功申請新字軌', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Year' => '113',
-                'Term' => '4',
-                'AphabeticLetter' => 'AA',
-                'StartNumber' => '24000100',
-                'EndNumber' => '24000199',
-                'Type' => '07',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -57,6 +48,21 @@ describe('字軌管理功能測試', function () {
                 ->withCode('AA')
                 ->withRange('24000100', '24000199')
                 ->withType(InvoiceType::GENERAL)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'Year' => '113',
+                        'Term' => '4',
+                        'AphabeticLetter' => 'AA',
+                        'StartNumber' => '24000100',
+                        'EndNumber' => '24000199',
+                        'Type' => '07',
+                    ]);
+
+                    return $options;
+                })
                 ->save();
 
             Http::assertSent(function (Request $request) {
@@ -79,13 +85,7 @@ describe('字軌管理功能測試', function () {
     describe('字軌查詢功能', function () {
         test('可以查詢字軌資訊', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'Year' => '114',
-                'Term' => '4',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -113,6 +113,17 @@ describe('字軌管理功能測試', function () {
                 ->query()
                 ->withYear(113)
                 ->withTerm(InvoiceTerm::JUL_AUG)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'Year' => '113',
+                        'Term' => '4',
+                    ]);
+
+                    return $options;
+                })
                 ->get();
 
             Http::assertSent(function (Request $request) {
@@ -134,14 +145,7 @@ describe('字軌管理功能測試', function () {
     describe('字軌管理功能', function () {
         test('可以暫停字軌', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '113',
-                'Flag' => '0',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -167,6 +171,18 @@ describe('字軌管理功能測試', function () {
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Flag' => '0',
+                    ]);
+
+                    return $options;
+                })
                 ->pause();
 
             Http::assertSent(function (Request $request) {
@@ -180,14 +196,7 @@ describe('字軌管理功能測試', function () {
 
         test('可以啟用字軌', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '113',
-                'Flag' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -213,6 +222,18 @@ describe('字軌管理功能測試', function () {
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Flag' => '1',
+                    ]);
+
+                    return $options;
+                })
                 ->enable();
 
             Http::assertSent(function (Request $request) {
@@ -226,14 +247,7 @@ describe('字軌管理功能測試', function () {
 
         test('可以停用字軌', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'ManagementNo' => '0t0ghr0fyv',
-                'Year' => '113',
-                'Flag' => '2',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -259,6 +273,18 @@ describe('字軌管理功能測試', function () {
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'ManagementNo' => '0t0ghr0fyv',
+                        'Year' => '113',
+                        'Flag' => '2',
+                    ]);
+
+                    return $options;
+                })
                 ->disable();
 
             Http::assertSent(function (Request $request) {

@@ -11,7 +11,7 @@ use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Results\InvoiceInvalidateResult;
 
-class Invoice
+class Invoice extends SubFactory
 {
     public function __construct(
         protected Factory $factory,
@@ -24,23 +24,23 @@ class Invoice
 
     public function create(): InvoiceCreateBuilder
     {
-        return new InvoiceCreateBuilder(
+        return $this->prepareBuilder(new InvoiceCreateBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        );
+        ));
     }
 
     public function query(): InvoiceQueryBuilder
     {
-        return (new InvoiceQueryBuilder(
+        return $this->prepareBuilder((new InvoiceQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        ))->setFormPostSender($this->formPostSender);
+        ))->setFormPostSender($this->formPostSender));
     }
 
     public function triggerQuery(): InvoiceTriggerQueryBuilder
     {
-        return new InvoiceTriggerQueryBuilder(
+        return $this->prepareBuilder(new InvoiceTriggerQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
-        );
+        ));
     }
 
     /**
@@ -54,7 +54,7 @@ class Invoice
      */
     public function invalidate(string $invoiceNumber, string $reason): InvoiceInvalidateResult
     {
-        return (new InvoiceInvalidateQueryBuilder(
+        return $this->prepareBuilder(new InvoiceInvalidateQueryBuilder(
             $this->factory, $this->crypto, $this->httpSender
         ))->invalidate($invoiceNumber, $reason);
     }

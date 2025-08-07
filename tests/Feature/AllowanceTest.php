@@ -2,6 +2,7 @@
 
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzpayInvoice\Options\Options;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -13,21 +14,7 @@ describe('折讓管理功能測試', function () {
     describe('折讓開立流程', function () {
         test('可以成功開立一般折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNo' => 'GG72002018',
-                'MerchantOrderNo' => 'Order001',
-                'ItemName' => '退貨商品',
-                'ItemCount' => '2',
-                'ItemUnit' => '個',
-                'ItemPrice' => '300',
-                'ItemAmt' => '600',
-                'ItemTaxAmt' => '30',
-                'TotalAmt' => '630',
-                'Status' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -52,6 +39,25 @@ describe('折讓管理功能測試', function () {
                 ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, tax: 30)
                 ->withAmount(630)
                 ->withNotification('customer@example.com')
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceNo' => 'GG72002018',
+                        'MerchantOrderNo' => 'Order001',
+                        'ItemName' => '退貨商品',
+                        'ItemCount' => '2',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '300',
+                        'ItemAmt' => '600',
+                        'ItemTaxAmt' => '30',
+                        'TotalAmt' => '630',
+                        'Status' => '1',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -69,22 +75,7 @@ describe('折讓管理功能測試', function () {
 
         test('可以開立多品項折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNo' => 'GG72002018',
-                'MerchantOrderNo' => 'Order001',
-                'ItemName' => '商品A|商品B',
-                'ItemCount' => '1|1',
-                'ItemUnit' => '個|個',
-                'ItemPrice' => '100|50',
-                'ItemAmt' => '100|50',
-                'ItemTaxAmt' => '5|2',
-                'TotalAmt' => '157',
-                'BuyerEmail' => 'customer@example.com',
-                'Status' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -110,6 +101,26 @@ describe('折讓管理功能測試', function () {
                 ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, tax: 2)
                 ->withAmount(157)
                 ->withNotification('customer@example.com')
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceNo' => 'GG72002018',
+                        'MerchantOrderNo' => 'Order001',
+                        'ItemName' => '商品A|商品B',
+                        'ItemCount' => '1|1',
+                        'ItemUnit' => '個|個',
+                        'ItemPrice' => '100|50',
+                        'ItemAmt' => '100|50',
+                        'ItemTaxAmt' => '5|2',
+                        'TotalAmt' => '157',
+                        'BuyerEmail' => 'customer@example.com',
+                        'Status' => '1',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -121,21 +132,7 @@ describe('折讓管理功能測試', function () {
 
         test('可以開立非立即確認的折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.3',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'InvoiceNo' => 'GG72002018',
-                'MerchantOrderNo' => 'Order001',
-                'ItemName' => '退貨商品',
-                'ItemCount' => '2',
-                'ItemUnit' => '個',
-                'ItemPrice' => '300',
-                'ItemAmt' => '600',
-                'ItemTaxAmt' => '30',
-                'TotalAmt' => '630',
-                'Status' => '1',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -159,6 +156,25 @@ describe('折讓管理功能測試', function () {
                 ->withOrder('Order001')
                 ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, tax: 30)
                 ->withAmount(630)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.3',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceNo' => 'GG72002018',
+                        'MerchantOrderNo' => 'Order001',
+                        'ItemName' => '退貨商品',
+                        'ItemCount' => '2',
+                        'ItemUnit' => '個',
+                        'ItemPrice' => '300',
+                        'ItemAmt' => '600',
+                        'ItemTaxAmt' => '30',
+                        'TotalAmt' => '630',
+                        'Status' => '1',
+                    ]);
+
+                    return $options;
+                })
                 ->pending()
                 ->issue();
 
@@ -173,15 +189,7 @@ describe('折讓管理功能測試', function () {
     describe('折讓觸發功能', function () {
         test('可以確認折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceStatus' => 'C',
-                'AllowanceNo' => 'A250726001830959',
-                'MerchantOrderNo' => 'Order001',
-                'TotalAmt' => '420',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -204,6 +212,19 @@ describe('折讓管理功能測試', function () {
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
                 ->withAmount(420)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'AllowanceStatus' => 'C',
+                        'AllowanceNo' => 'A250726001830959',
+                        'MerchantOrderNo' => 'Order001',
+                        'TotalAmt' => '420',
+                    ]);
+
+                    return $options;
+                })
                 ->confirm();
 
             Http::assertSent(function (Request $request) {
@@ -217,15 +238,7 @@ describe('折讓管理功能測試', function () {
 
         test('可以取消折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceStatus' => 'D',
-                'AllowanceNo' => 'A250726001830959',
-                'MerchantOrderNo' => 'Order001',
-                'TotalAmt' => '420',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -248,6 +261,19 @@ describe('折讓管理功能測試', function () {
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
                 ->withAmount(420)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'AllowanceStatus' => 'D',
+                        'AllowanceNo' => 'A250726001830959',
+                        'MerchantOrderNo' => 'Order001',
+                        'TotalAmt' => '420',
+                    ]);
+
+                    return $options;
+                })
                 ->cancel();
 
             Http::assertSent(function (Request $request) {
@@ -263,13 +289,7 @@ describe('折讓管理功能測試', function () {
     describe('折讓作廢功能', function () {
         test('可以作廢已開立的折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'AllowanceNo' => 'A250726001830959',
-                'InvalidReason' => '作廢原因',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -288,7 +308,18 @@ describe('折讓管理功能測試', function () {
                 ->query()
                 ->withAllowance('A250726001830959')
                 ->because('作廢原因')
-                ->void();
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'AllowanceNo' => 'A250726001830959',
+                        'InvalidReason' => '作廢原因',
+                    ]);
+
+                    return $options;
+                })
+                ->invalidate();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';

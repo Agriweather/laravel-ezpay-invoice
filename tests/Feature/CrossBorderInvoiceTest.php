@@ -3,6 +3,7 @@
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CurrencyType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzpayInvoice\Options\Options;
 use Agriweather\EzpayInvoice\Results\Result;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -14,26 +15,7 @@ describe('境外電商發票功能測試', function () {
     describe('境外電商發票開立', function () {
         test('可以成功開立境外電商發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'MerchantOrderNo' => 'CBOrder001',
-                'Status' => '1',
-                'BuyerName' => 'John Doe',
-                'BuyerEmail' => 'customer@example.com',
-                'Amt' => '100.00',
-                'TaxAmt' => '5.50',
-                'TotalAmt' => '105.50',
-                'ItemName' => '國際商品',
-                'ItemCount' => '1',
-                'ItemUnit' => 'EA',
-                'ItemPrice' => '105.50',
-                'ItemAmt' => '105.50',
-                'Currency' => 'USD',
-                'OriginalCurrencyAmount' => '100.00',
-                'ExchangeRate' => '30.5',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -63,6 +45,30 @@ describe('境外電商發票功能測試', function () {
                 ->withAmount(100.00, 5.50, 105.50)
                 ->withOriginalCurrencyAmount(100.00)
                 ->withExchangeRate(30.5)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'MerchantOrderNo' => 'CBOrder001',
+                        'Status' => '1',
+                        'BuyerName' => 'John Doe',
+                        'BuyerEmail' => 'customer@example.com',
+                        'Amt' => '100.00',
+                        'TaxAmt' => '5.50',
+                        'TotalAmt' => '105.50',
+                        'ItemName' => '國際商品',
+                        'ItemCount' => '1',
+                        'ItemUnit' => 'EA',
+                        'ItemPrice' => '105.50',
+                        'ItemAmt' => '105.50',
+                        'Currency' => 'USD',
+                        'OriginalCurrencyAmount' => '100.00',
+                        'ExchangeRate' => '30.5',
+                    ]);
+
+                    return $options;
+                })
                 ->issue();
 
             Http::assertSent(function (Request $request) {
@@ -77,16 +83,7 @@ describe('境外電商發票功能測試', function () {
     describe('境外電商發票查詢', function () {
         test('可以查詢境外電商發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->with([
-                'RespondType' => 'JSON',
-                'Version' => '1.0',
-                'TimeStamp' => Carbon::now()->timestamp,
-                'SearchType' => '0',
-                'MerchantOrderNo' => '',
-                'TotalAmt' => '',
-                'InvoiceNumber' => 'CBOrder001',
-                'RandomNum' => '1234',
-            ])->andReturn('encrypted_data');
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -134,6 +131,20 @@ describe('境外電商發票功能測試', function () {
                 ->query()
                 ->withInvoice('CBOrder001')
                 ->withRandomNumber('1234')
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'SearchType' => '0',
+                        'MerchantOrderNo' => '',
+                        'TotalAmt' => '',
+                        'InvoiceNumber' => 'CBOrder001',
+                        'RandomNum' => '1234',
+                    ]);
+
+                    return $options;
+                })
                 ->get();
 
             Http::assertSent(function (Request $request) {
