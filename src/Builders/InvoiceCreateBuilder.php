@@ -117,6 +117,9 @@ class InvoiceCreateBuilder extends Builder
      * - 手機條碼 (`CarrierType::MOBILE`): 第1碼 / + 7碼英、數字
      * - 自然人憑證 (`CarrierType::CITIZEN_CERT`): 2碼大寫英文 + 14碼數字
      * - ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`): 提供可識別買受人之代號(例：e-mail、手機號碼、會員編號…等)，由賣方自訂即可，同一個代號則視為同一個買受人。ezPay 平台將以賣方統編加上買受人代號做為該買受人的 ezPay 電子發票載具號碼。
+     *
+     * @param  \Agriweather\EzpayInvoice\Enums\CarrierType  $carrierType  載具類別
+     * @param  string  $carrierNumber  載具號碼
      */
     public function withCarrier(CarrierType $carrierType, string $carrierNumber): self
     {
@@ -238,54 +241,21 @@ class InvoiceCreateBuilder extends Builder
      *
      * 當選擇稅別為 混合應稅與免稅或零稅率 (`TaxType::MIXED`) 時為必填。
      *
-     * 若未提供應稅銷售額、零稅率銷售額或免稅銷售額，則會自動從商品項目中計算：
+     * **銷售額計算方式，請務必與公司財會人員進行確認。**
      *
-     * - 銷售額(應稅)：將所有應稅商品的小計金額加總。
-     * - 銷售額(零稅率)：將所有零稅率商品的小計金額加總。
-     * - 銷售額(免稅)：將所有免稅商品的小計金額加總。
-     *
-     * @param  int|null  $salesAmount  應稅銷售額
-     * @param  int|null  $zeroAmount  零稅率銷售額
-     * @param  int|null  $freeAmount  免稅銷售額
+     * @param  int  $salesAmount  銷售額(課稅別應稅)，該發票中課稅別應稅之銷售額(未稅)。
+     * @param  int  $zeroAmount  銷售額(課稅別零稅率)，該發票中課稅別零稅率之銷售額。
+     * @param  int  $freeAmount  銷售額(課稅別免稅)，該發票中課稅別免稅之銷售額。
      */
-    public function withMixedTaxAmount(?int $salesAmount = null, ?int $zeroAmount = null, ?int $freeAmount = null): self
+    public function withMixedTaxAmount(int $salesAmount, int $zeroAmount, int $freeAmount): self
     {
         if ($this->options->taxType !== TaxType::MIXED) {
             throw new InvalidArgumentException('混合稅別銷售額僅在稅別為混合稅別時可用。');
         }
 
-        /** @var array<int, int> */
-        $amounts = [];
-
-        foreach (($this->options->itemTaxTypes ?? []) as $i => $itemTaxType) {
-            $amounts[$itemTaxType->value] = (
-                $amounts[$itemTaxType->value] ?? 0
-            ) + $this->options->itemAmounts[$i];
-        }
-
-        // 銷售額(應稅)
-        if (isset($salesAmount)) {
-            $this->options->salesAmount = $salesAmount;
-        } else {
-            // 若未提供應稅銷售額，則使用應稅商品金額總和
-            $this->options->salesAmount = $amounts[TaxType::TAXABLE->value] ?? 0;
-        }
-
-        // 銷售額(零稅率)
-        if (isset($zeroAmount)) {
-            $this->options->zeroTaxAmount = $zeroAmount;
-        } else {
-            // 若未提供零稅率銷售額，則使用零稅率商品金額總和
-            $this->options->zeroTaxAmount = $amounts[TaxType::ZERO_RATE->value] ?? 0;
-        }
-
-        // 銷售額(免稅)
-        if (isset($freeAmount)) {
-            $this->options->freeTaxAmount = $freeAmount;
-        } else {
-            // 若未提供免稅銷售額，則使用免稅商品金額總和
-            $this->options->freeTaxAmount = $amounts[TaxType::TAX_FREE->value] ?? 0;
-        }
+        $this->options->salesAmount = $salesAmount;
+        $this->options->zeroTaxAmount = $zeroAmount;
+        $this->options->freeTaxAmount = $freeAmount;
 
         return $this;
     }
@@ -293,50 +263,17 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 銷售金額合計
      *
-     * 若未提供銷售金額合計，則會自動從商品項目中計算：
+     * **銷售額計算方式，請務必與公司財會人員進行確認。**
      *
-     * - 發票銷售額(未稅)：將所有商品小計金額加總。
-     * - 發票稅額：將 發票銷售額 乘以 稅率。
-     * - 發票總金額(含稅)：發票銷售額 + 發票稅額。
-     *
-     * @param  int|null  $amount  發票銷售額(未稅)
-     * @param  int|null  $taxAmount  發票稅額
-     * @param  int|null  $totalAmount  發票總金額(含稅)
+     * @param  int|null  $amount  發票銷售額(未稅)。若為混合稅率，則需要設定為 `withMixedTaxAmount(...)` 方法3個參數的總和。
+     * @param  int|null  $taxAmount  發票稅額。
+     * @param  int|null  $totalAmount  發票總金額(含稅)，發票銷售額 + 發票稅額。
      */
-    public function withAmount(?int $amount = null, ?int $taxAmount = null, ?int $totalAmount = null): self
+    public function withAmount(int $amount, int $taxAmount, int $totalAmount): self
     {
-        // 發票銷售額(未稅)
-        if (isset($amount)) {
-            $this->options->amount = $amount;
-        } elseif ($this->options->taxType === TaxType::MIXED) {
-            // 若未提供銷售額，且為混合稅率，則發票銷售額為 AmtSales + AmtZero + AmtFree。
-            $this->options->amount = (
-                ($this->options->salesAmount ?? 0) +
-                ($this->options->zeroTaxAmount ?? 0) +
-                ($this->options->freeTaxAmount ?? 0)
-            );
-        } else {
-            // 若未提供銷售額，則使用商品小計金額總和
-            $this->options->amount = array_sum($this->options->itemAmounts);
-        }
-
-        // 發票稅額
-        if (isset($taxAmount)) {
-            $this->options->taxAmount = $taxAmount;
-        } else {
-            // 若未提供稅額，則為銷售額 * 稅率
-            $this->options->taxAmount = (int) round(
-                $this->options->amount * $this->options->taxRate / 100
-            );
-        }
-
-        // 發票總金額(含稅)
-        if (isset($totalAmount)) {
-            $this->options->totalAmount = $totalAmount;
-        } else {
-            // 若未提供總金額，則為銷售額 + 稅額
-            $this->options->totalAmount = $this->options->amount + $this->options->taxAmount;
-        }
+        $this->options->amount = $amount;
+        $this->options->taxAmount = $taxAmount;
+        $this->options->totalAmount = $totalAmount;
 
         return $this;
     }
@@ -351,7 +288,7 @@ class InvoiceCreateBuilder extends Builder
      * @param  int  $quantity  商品數量
      * @param  string  $unit  商品單位
      * @param  int  $price  商品單價
-     * @param  int|null  $amount  商品小計
+     * @param  int  $amount  商品小計
      * @param  \Agriweather\EzpayInvoice\Enums\TaxType|null  $taxType  商品稅別
      */
     public function withItem(
@@ -359,16 +296,14 @@ class InvoiceCreateBuilder extends Builder
         int $quantity,
         string $unit,
         int $price,
-        ?int $amount = null,
+        int $amount,
         ?TaxType $taxType = null
     ): self {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;
         $this->options->itemPrices[] = $price;
-        $this->options->itemAmounts[] = is_null($amount)
-            ? ($quantity * $price)
-            : $amount;
+        $this->options->itemAmounts[] = $amount;
 
         if ($this->options->taxType === TaxType::MIXED) {
             if (is_null($taxType)) {
