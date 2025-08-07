@@ -7,6 +7,7 @@ use Agriweather\EzpayInvoice\Enums\CustomsClearance;
 use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
 use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
 use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
+use Agriweather\EzpayInvoice\Enums\ItemTaxType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Options\InvoiceCreateOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
@@ -289,7 +290,7 @@ class InvoiceCreateBuilder extends Builder
      * @param  string  $unit  商品單位
      * @param  int  $price  商品單價
      * @param  int  $amount  商品小計
-     * @param  \Agriweather\EzpayInvoice\Enums\TaxType|null  $taxType  商品稅別
+     * @param  \Agriweather\EzpayInvoice\Enums\ItemTaxType|null  $taxType  商品稅別
      */
     public function withItem(
         string $name,
@@ -297,7 +298,7 @@ class InvoiceCreateBuilder extends Builder
         string $unit,
         int $price,
         int $amount,
-        ?TaxType $taxType = null
+        ?ItemTaxType $taxType = null
     ): self {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
@@ -308,8 +309,6 @@ class InvoiceCreateBuilder extends Builder
         if ($this->options->taxType === TaxType::MIXED) {
             if (is_null($taxType)) {
                 throw new InvalidArgumentException('當設定為混合稅別時，必須提供每個商品的稅別。');
-            } elseif ($taxType === TaxType::MIXED) {
-                throw new InvalidArgumentException('商品稅別不能為混合稅別。');
             }
 
             $this->options->itemTaxTypes[] = $taxType;

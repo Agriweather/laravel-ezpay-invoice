@@ -5,6 +5,7 @@ use Agriweather\EzpayInvoice\Contracts\HttpSender;
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CarrierType;
 use Agriweather\EzpayInvoice\Enums\CustomsClearance;
+use Agriweather\EzpayInvoice\Enums\ItemTaxType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Factory;
 use Carbon\Carbon;
@@ -134,7 +135,7 @@ describe('InvoiceCreateBuilder', function () {
             ->withKioskPrint()
             ->withTax(TaxType::MIXED, 5)
             ->withCustomsClearance(CustomsClearance::CUSTOMS)
-            ->withItem('商品名稱', quantity: 2, unit: '個', price: 100, amount: 200, taxType: TaxType::TAXABLE)
+            ->withItem('商品名稱', quantity: 2, unit: '個', price: 100, amount: 200, taxType: ItemTaxType::TAXABLE)
             ->withMixedTaxAmount(70, 80, 90)
             ->withAmount(200, 5, 205)
             ->withComment('這是一個測試發票')
@@ -317,9 +318,9 @@ describe('InvoiceCreateBuilder', function () {
 
         (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
             ->withTax(TaxType::MIXED, 5)
-            ->withItem('商品名稱1', quantity: 2, unit: '個', price: 100, amount: 200, taxType: TaxType::TAXABLE)
-            ->withItem('商品名稱2', quantity: 1, unit: '個', price: 80, amount: 80, taxType: TaxType::ZERO_RATE)
-            ->withItem('商品名稱3', quantity: 1, unit: '個', price: 90, amount: 90, taxType: TaxType::TAX_FREE)
+            ->withItem('商品名稱1', quantity: 2, unit: '個', price: 100, amount: 200, taxType: ItemTaxType::TAXABLE)
+            ->withItem('商品名稱2', quantity: 1, unit: '個', price: 80, amount: 80, taxType: ItemTaxType::ZERO_RATE)
+            ->withItem('商品名稱3', quantity: 1, unit: '個', price: 90, amount: 90, taxType: ItemTaxType::TAX_FREE)
             ->withMixedTaxAmount(200, 80, 90)
             ->withAmount(370, 19, 389)
             ->issue();

@@ -7,6 +7,7 @@ use Agriweather\EzpayInvoice\Enums\CustomsClearance;
 use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
 use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
 use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
+use Agriweather\EzpayInvoice\Enums\ItemTaxType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Carbon\Carbon;
 
@@ -75,7 +76,7 @@ class InvoiceCreateOptions extends Options
     /** @var int|float|string[] */
     public array $itemAmounts = [];
 
-    /** @var \Agriweather\EzpayInvoice\Enums\TaxType[]|null */
+    /** @var \Agriweather\EzpayInvoice\Enums\ItemTaxType[]|null */
     public ?array $itemTaxTypes = null;
 
     public ?string $comment = null;
@@ -154,9 +155,7 @@ class InvoiceCreateOptions extends Options
                 'ItemPrice' => implode('|', $this->itemPrices),
                 'ItemAmt' => implode('|', $this->itemAmounts),
                 'ItemTaxType' => is_array($this->itemTaxTypes)
-                    ? implode('|', array_map(function (TaxType $type) {
-                        return (string) $type->value;
-                    }, $this->itemTaxTypes))
+                    ? implode('|', array_map(fn (ItemTaxType $type) => (string) $type->value, $this->itemTaxTypes))
                     : null,
                 'Comment' => $this->comment,
             ], fn ($value) => ! is_null($value)),
