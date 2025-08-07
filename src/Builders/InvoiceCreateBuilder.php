@@ -444,6 +444,9 @@ class InvoiceCreateBuilder extends Builder
      * 延遲開立發票
      *
      * 於確認要開立時，再手動觸發。
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function deferIssue(): InvoiceCreateResult
     {
@@ -456,6 +459,9 @@ class InvoiceCreateBuilder extends Builder
      * 預約自動開立發票
      *
      * @param  string  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
+     *
+     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function scheduleAt(string $createDate): InvoiceCreateResult
     {

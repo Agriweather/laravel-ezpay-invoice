@@ -50,7 +50,6 @@ class Invoice extends SubFactory
      * @param  string  $reason  作廢原因，字數限中文 6 字或英文 20 字。
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function invalidate(string $invoiceNumber, string $reason): InvoiceInvalidateResult
     {

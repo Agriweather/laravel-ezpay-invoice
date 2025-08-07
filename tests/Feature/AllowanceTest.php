@@ -3,7 +3,9 @@
 use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\Result;
+use Agriweather\EzpayInvoice\Results\AllowanceCreateResult;
+use Agriweather\EzpayInvoice\Results\AllowanceInvalidateResult;
+use Agriweather\EzpayInvoice\Results\AllowanceTriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -12,7 +14,7 @@ use function Pest\Laravel\partialMock;
 
 describe('折讓管理功能測試', function () {
     describe('折讓開立流程', function () {
-        test('可以成功開立一般折讓', function () {
+        test('可以成功開立折讓', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
             $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
@@ -36,8 +38,8 @@ describe('折讓管理功能測試', function () {
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
-                ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, tax: 30)
-                ->withAmount(630)
+                ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+                ->withTotalAmount(630)
                 ->withNotification('customer@example.com')
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
@@ -53,6 +55,7 @@ describe('折讓管理功能測試', function () {
                         'ItemAmt' => '600',
                         'ItemTaxAmt' => '30',
                         'TotalAmt' => '630',
+                        'BuyerEmail' => 'customer@example.com',
                         'Status' => '1',
                     ]);
 
@@ -64,7 +67,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(AllowanceCreateResult::class)
                 ->and($result->checkCode())->toBe('123456789')
                 ->and($result->allowanceNo())->toBe('A250725235346456')
                 ->and($result->orderNo())->toBe('Order001')
@@ -97,9 +100,9 @@ describe('折讓管理功能測試', function () {
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
-                ->withItem('商品A', quantity: 1, unit: '個', price: 100, amount: 100, tax: 5)
-                ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, tax: 2)
-                ->withAmount(157)
+                ->withItem('商品A', quantity: 1, unit: '個', price: 100, amount: 100, taxAmount: 5)
+                ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, taxAmount: 2)
+                ->withTotalAmount(157)
                 ->withNotification('customer@example.com')
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
@@ -127,7 +130,7 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class);
+            expect($result)->toBeInstanceOf(AllowanceCreateResult::class);
         });
 
         test('可以開立非立即確認的折讓', function () {
@@ -154,8 +157,8 @@ describe('折讓管理功能測試', function () {
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
-                ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, tax: 30)
-                ->withAmount(630)
+                ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+                ->withTotalAmount(630)
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'RespondType' => 'JSON',
@@ -170,19 +173,19 @@ describe('折讓管理功能測試', function () {
                         'ItemAmt' => '600',
                         'ItemTaxAmt' => '30',
                         'TotalAmt' => '630',
-                        'Status' => '1',
+                        'Status' => '0',
                     ]);
 
                     return $options;
                 })
-                ->pending()
+                ->delayCheck()
                 ->issue();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class);
+            expect($result)->toBeInstanceOf(AllowanceCreateResult::class);
         });
     });
 
@@ -208,10 +211,10 @@ describe('折讓管理功能測試', function () {
             ]);
 
             $result = EzpayInvoice::allowance()
-                ->query()
+                ->triggerQuery()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
-                ->withAmount(420)
+                ->withTotalAmount(420)
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'RespondType' => 'JSON',
@@ -231,9 +234,9 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->allowanceAmount)->toBe(420)
-                ->and($result->remainingAmount)->toBe(0);
+            expect($result)->toBeInstanceOf(AllowanceTriggerResult::class)
+                ->and($result->allowanceAmount())->toBe(420)
+                ->and($result->remainingAmount())->toBe(0);
         });
 
         test('可以取消折讓', function () {
@@ -257,10 +260,10 @@ describe('折讓管理功能測試', function () {
             ]);
 
             $result = EzpayInvoice::allowance()
-                ->query()
+                ->triggerQuery()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
-                ->withAmount(420)
+                ->withTotalAmount(420)
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'RespondType' => 'JSON',
@@ -280,9 +283,9 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->allowanceAmount)->toBe(0)
-                ->and($result->remainingAmount)->toBe(0);
+            expect($result)->toBeInstanceOf(AllowanceTriggerResult::class)
+                ->and($result->allowanceAmount())->toBe(0)
+                ->and($result->remainingAmount())->toBe(0);
         });
     });
 
@@ -305,7 +308,7 @@ describe('折讓管理功能測試', function () {
             ]);
 
             $result = EzpayInvoice::allowance()
-                ->query()
+                ->invalidateQuery()
                 ->withAllowance('A250726001830959')
                 ->because('作廢原因')
                 ->transformOptions(function (Options $options) {
@@ -325,8 +328,8 @@ describe('折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result['AllowanceNo'])->toBe('A250726001830959');
+            expect($result)->toBeInstanceOf(AllowanceInvalidateResult::class)
+                ->and($result->allowanceNo())->toBe('A250726001830959');
         });
     });
 });

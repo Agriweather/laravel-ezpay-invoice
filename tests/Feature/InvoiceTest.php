@@ -6,8 +6,9 @@ use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Options\Options;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
+use Agriweather\EzpayInvoice\Results\InvoiceInvalidateResult;
 use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
-use Agriweather\EzpayInvoice\Results\Result;
+use Agriweather\EzpayInvoice\Results\InvoiceTriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Response;
@@ -665,7 +666,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_touch_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceTriggerResult::class)
                 ->and($result->InvoiceNumber())->toBe('GG72002017');
         });
     });
@@ -706,7 +707,7 @@ describe('發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(InvoiceInvalidateResult::class)
                 ->and($result->invoiceNumber())->toBe('GG72002017');
         });
     });

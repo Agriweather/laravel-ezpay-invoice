@@ -34,6 +34,13 @@ class Factory
         );
     }
 
+    public function allowance(): Allowance
+    {
+        return new Allowance(
+            $this, $this->crypto, $this->httpSender
+        );
+    }
+
     public function alphanumericCode(): AlphanumericCode
     {
         return new AlphanumericCode(
