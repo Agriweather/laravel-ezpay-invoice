@@ -115,13 +115,21 @@ class AlphanumericCodeQueryBuilder extends Builder
     /**
      * 查詢字軌
      *
+     * @return AlphanumericCodeQueryResult[]
+     *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      */
-    public function get(): AlphanumericCodeQueryResult
+    public function get(): array
     {
         $this->endpoint = '/Api_number_management/searchNumber';
 
-        return new AlphanumericCodeQueryResult($this->sendRequest());
+        $data = $this->sendRequest();
+
+        return array_map(function ($result) {
+            return new AlphanumericCodeQueryResult([
+                'Result' => $result,
+            ]);
+        }, $data['Result']);
     }
 
     /**

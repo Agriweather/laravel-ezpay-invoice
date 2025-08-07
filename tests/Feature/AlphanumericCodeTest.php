@@ -109,7 +109,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $alphanumericCodeResult = EzpayInvoice::alphanumericCode()
+            $alphanumericCodeResults = EzpayInvoice::alphanumericCode()
                 ->query()
                 ->withYear(113)
                 ->withTerm(InvoiceTerm::JUL_AUG)
@@ -130,15 +130,16 @@ describe('字軌管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/searchNumber';
             });
 
-            expect($alphanumericCodeResult)->toBeInstanceOf(AlphanumericCodeQueryResult::class)
-                ->and($alphanumericCodeResult->managementNo())->toBe('0t0ghr0fyv')
-                ->and($alphanumericCodeResult->year())->toBe(113)
-                ->and($alphanumericCodeResult->term())->toBe(InvoiceTerm::JUL_AUG)
-                ->and($alphanumericCodeResult->alphabeticLetter())->toBe('AA')
-                ->and($alphanumericCodeResult->startNumber())->toBe('24000100')
-                ->and($alphanumericCodeResult->endNumber())->toBe('24000199')
-                ->and($alphanumericCodeResult->type())->toBe(InvoiceType::GENERAL)
-                ->and($alphanumericCodeResult->lastNumber())->toBe(100);
+            expect($alphanumericCodeResults)->toBeArray()->toHaveCount(1)
+                ->and($alphanumericCodeResults[0])->toBeInstanceOf(AlphanumericCodeQueryResult::class)
+                ->and($alphanumericCodeResults[0]->managementNo())->toBe('0t0ghr0fyv')
+                ->and($alphanumericCodeResults[0]->year())->toBe(113)
+                ->and($alphanumericCodeResults[0]->term())->toBe(InvoiceTerm::JUL_AUG)
+                ->and($alphanumericCodeResults[0]->alphabeticLetter())->toBe('AA')
+                ->and($alphanumericCodeResults[0]->startNumber())->toBe('24000100')
+                ->and($alphanumericCodeResults[0]->endNumber())->toBe('24000199')
+                ->and($alphanumericCodeResults[0]->type())->toBe(InvoiceType::GENERAL)
+                ->and($alphanumericCodeResults[0]->lastNumber())->toBe(100);
         });
     });
 

@@ -53,10 +53,10 @@ class CheckLoveCodeBuilder extends Builder
 
         $this->options->lovecode = $lovecode;
 
-        $response = $this->sendRequest();
+        $data = $this->sendRequest();
 
-        $response['Result'] = $this->crypto->decryptPostData($response['Result']);
+        $data['Result'] = $this->crypto->decryptPostData($data['Result']);
 
-        return new CheckLoveCodeResult($response);
+        return new CheckLoveCodeResult($data);
     }
 }

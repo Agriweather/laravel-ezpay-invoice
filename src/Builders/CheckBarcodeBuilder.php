@@ -53,10 +53,10 @@ class CheckBarcodeBuilder extends Builder
 
         $this->options->barcode = $barcode;
 
-        $response = $this->sendRequest();
+        $data = $this->sendRequest();
 
-        $response['Result'] = $this->crypto->decryptPostData($response['Result']);
+        $data['Result'] = $this->crypto->decryptPostData($data['Result']);
 
-        return new CheckBarcodeResult($response);
+        return new CheckBarcodeResult($data);
     }
 }
