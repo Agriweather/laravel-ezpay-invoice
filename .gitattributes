@@ -8,3 +8,5 @@
 /.travis.yml export-ignore
 /.styleci.yml export-ignore
 /phpunit.xml.dist export-ignore
+/.claude export-ignore
+/CLAUDE.md export-ignore
