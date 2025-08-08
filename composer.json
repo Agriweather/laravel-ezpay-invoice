@@ -1,6 +1,6 @@
 {
     "name": "agriweather/laravel-ezpay-invoice",
-    "description": "適用於 Laravel 的 EZPay 電子發票套件",
+    "description": "適用於 Laravel 的 ezPay 電子發票套件",
     "type": "library",
     "license": "MIT",
     "authors": [

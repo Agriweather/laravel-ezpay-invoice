@@ -135,7 +135,7 @@ class InvoiceQueryBuilder extends Builder
     /**
      * 跳轉到 ezPay 平台顯示發票查詢結果
      */
-    public function redirectToEZPay(): Response
+    public function redirectToEzPay(): Response
     {
         $requestData = $this->toRedirectRequestData();
 

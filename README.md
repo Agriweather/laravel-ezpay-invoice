@@ -5,7 +5,7 @@
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-適用於 Laravel 的 EZPay 電子發票套件
+適用於 Laravel 的 ezPay 電子發票套件
 
 ## 實作功能
 
@@ -34,7 +34,7 @@ php artisan vendor:publish --tag=ezpay-invoice-config
 
 ## 參考
 
-[EZPay 電子發票 API 文件下載專區](https://inv.ezpay.com.tw/Invoice_index/download)
+[ezPay 電子發票 API 文件下載專區](https://inv.ezpay.com.tw/Invoice_index/download)
 
 ## License
 

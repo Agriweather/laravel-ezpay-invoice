@@ -554,7 +554,7 @@ describe('發票功能測試', function () {
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
-                ->redirectToEZPay();
+                ->redirectToEzPay();
 
             expect($response)->toBeInstanceOf(Response::class)
                 ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
