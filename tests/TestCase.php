@@ -39,6 +39,5 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('ezpay_invoice.company_hash_key', 'EXAMPLEHASHKEY110000000123456789');
         $app['config']->set('ezpay_invoice.company_hash_iv', 'EXAMPLEHASHIV456');
         $app['config']->set('ezpay_invoice.env', 'test');
-        $app['config']->set('ezpay_invoice.timeout', 30);
     }
 }
