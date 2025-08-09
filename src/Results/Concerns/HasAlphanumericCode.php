@@ -1,10 +1,10 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Results\Concerns;
+namespace Agriweather\EzPayInvoice\Results\Concerns;
 
-use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzpayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\InvoiceType;
 use Carbon\Carbon;
 
 trait HasAlphanumericCode

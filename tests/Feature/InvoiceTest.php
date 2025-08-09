@@ -1,14 +1,14 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\CarrierType;
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
-use Agriweather\EzpayInvoice\Results\InvoiceInvalidateResult;
-use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
-use Agriweather\EzpayInvoice\Results\InvoiceTriggerResult;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Enums\CarrierType;
+use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\InvoiceCreateResult;
+use Agriweather\EzPayInvoice\Results\InvoiceInvalidateResult;
+use Agriweather\EzPayInvoice\Results\InvoiceQueryResult;
+use Agriweather\EzPayInvoice\Results\InvoiceTriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Response;
@@ -43,7 +43,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->create()
                 ->withOrder('Order001')
                 ->forConsumer('John Doe')
@@ -117,7 +117,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->create()
                 ->withOrder('Order002')
                 ->forBusiness('測試公司有限公司', '12345678')
@@ -190,7 +190,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->create()
                 ->withOrder('Order003')
                 ->forConsumer('載具客戶')
@@ -257,7 +257,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->create()
                 ->withOrder('Order004')
                 ->forConsumer('等待觸發客戶')
@@ -322,7 +322,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->create()
                 ->withOrder('Order005')
                 ->forConsumer('預約客戶')
@@ -425,7 +425,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = EzpayInvoice::invoice()
+            $invoiceResult = EzPayInvoice::invoice()
                 ->query()
                 ->withInvoice('GG72002017')
                 ->withRandomNumber('1234')
@@ -514,7 +514,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = EzpayInvoice::invoice()
+            $invoiceResult = EzPayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
@@ -550,7 +550,7 @@ describe('發票功能測試', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
             $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
-            $response = EzpayInvoice::invoice()
+            $response = EzPayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
@@ -566,7 +566,7 @@ describe('發票功能測試', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
             $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
 
-            $requestData = EzpayInvoice::invoice()
+            $requestData = EzPayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
@@ -606,7 +606,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $ezpaySearchUrl = EzpayInvoice::invoice()
+            $ezpaySearchUrl = EzPayInvoice::invoice()
                 ->query()
                 ->withOrder('Order001')
                 ->withTotalAmount(1050)
@@ -643,7 +643,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->triggerQuery()
                 ->withInvoiceTransNo('25072516392250538')
                 ->withOrder('Order004')
@@ -689,7 +689,7 @@ describe('發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::invoice()
+            $result = EzPayInvoice::invoice()
                 ->invalidateQuery()
                 ->withInvoice('GG72002017')
                 ->because('客戶取消訂單')

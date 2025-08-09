@@ -1,10 +1,10 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\AllowanceTriggerStatus;
-use Agriweather\EzpayInvoice\Options\AllowanceTriggerQueryOptions;
-use Agriweather\EzpayInvoice\Results\AllowanceTriggerResult;
+use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
+use Agriweather\EzPayInvoice\Options\AllowanceTriggerQueryOptions;
+use Agriweather\EzPayInvoice\Results\AllowanceTriggerResult;
 
 class AllowanceTriggerQueryBuilder extends Builder
 {
@@ -63,7 +63,7 @@ class AllowanceTriggerQueryBuilder extends Builder
     /**
      * 觸發確認折讓
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function confirm(): AllowanceTriggerResult
     {
@@ -77,7 +77,7 @@ class AllowanceTriggerQueryBuilder extends Builder
     /**
      * 觸發取消折讓
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function cancel(): AllowanceTriggerResult
     {

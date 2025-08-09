@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Options\CodeValidationOptions;
-use Agriweather\EzpayInvoice\Results\CodeValidationResult;
+use Agriweather\EzPayInvoice\Options\CodeValidationOptions;
+use Agriweather\EzPayInvoice\Results\CodeValidationResult;
 use InvalidArgumentException;
 
 class CodeValidationBuilder extends Builder
@@ -67,8 +67,8 @@ class CodeValidationBuilder extends Builder
     /**
      * 送出驗證
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\DecryptException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\DecryptException
      */
     public function check(): CodeValidationResult
     {

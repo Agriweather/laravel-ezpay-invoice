@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\CurrencyType;
-use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\CurrencyType;
+use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
 use Carbon\Carbon;
 
 class CrossBorderInvoiceCreateOptions extends Options

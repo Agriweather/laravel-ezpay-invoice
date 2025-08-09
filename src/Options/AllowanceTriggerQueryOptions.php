@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\AllowanceTriggerStatus;
+use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
 use Carbon\Carbon;
 
 class AllowanceTriggerQueryOptions extends Options

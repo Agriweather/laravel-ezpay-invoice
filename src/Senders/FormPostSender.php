@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Senders;
+namespace Agriweather\EzPayInvoice\Senders;
 
-use Agriweather\EzpayInvoice\Contracts\FormPostSender as FormPostSenderContract;
+use Agriweather\EzPayInvoice\Contracts\FormPostSender as FormPostSenderContract;
 use Illuminate\Http\Response;
 
 class FormPostSender implements FormPostSenderContract

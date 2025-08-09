@@ -1,16 +1,16 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\CarrierType;
-use Agriweather\EzpayInvoice\Enums\CustomsClearance;
-use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
-use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzpayInvoice\Enums\ItemTaxType;
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Options\InvoiceCreateOptions;
-use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
+use Agriweather\EzPayInvoice\Enums\CarrierType;
+use Agriweather\EzPayInvoice\Enums\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\InvoicePrintFlag;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Options\InvoiceCreateOptions;
+use Agriweather\EzPayInvoice\Results\InvoiceCreateResult;
 use DateTime;
 use InvalidArgumentException;
 
@@ -120,7 +120,7 @@ class InvoiceCreateBuilder extends Builder
      * - 自然人憑證 (`CarrierType::CITIZEN_CERT`): 2碼大寫英文 + 14碼數字
      * - ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`): 提供可識別買受人之代號(例：e-mail、手機號碼、會員編號…等)，由賣方自訂即可，同一個代號則視為同一個買受人。ezPay 平台將以賣方統編加上買受人代號做為該買受人的 ezPay 電子發票載具號碼。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\CarrierType  $carrierType  載具類別
+     * @param  \Agriweather\EzPayInvoice\Enums\CarrierType  $carrierType  載具類別
      * @param  string  $carrierNumber  載具號碼
      */
     public function withCarrier(CarrierType $carrierType, string $carrierNumber): self
@@ -205,7 +205,7 @@ class InvoiceCreateBuilder extends Builder
      * - 免稅 (`TaxType::TAX_FREE`)：不需要提供稅率，稅率自動設為 0。
      * - 混合應稅與免稅或零稅率 (`TaxType::MIXED`)：當開立發票給公司時才可使用此參數，混合應稅與免稅或零稅率。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType  稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\TaxType  $taxType  稅別
      * @param  int|float|null  $taxRate  稅率，單位為百分比 (1% = 1)
      */
     public function withTax(TaxType $taxType, int|float|null $taxRate = null): self
@@ -229,7 +229,7 @@ class InvoiceCreateBuilder extends Builder
      * - 非經海關 (`CustomsClearance::NON_CUSTOMS`)：不需要提供海關清關資訊。
      * - 經海關 (`CustomsClearance::CUSTOMS`)：需要提供海關清關資訊。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\CustomsClearance  $customsClearance  海關清關方式
+     * @param  \Agriweather\EzPayInvoice\Enums\CustomsClearance  $customsClearance  海關清關方式
      */
     public function withCustomsClearance(CustomsClearance $customsClearance): self
     {
@@ -291,7 +291,7 @@ class InvoiceCreateBuilder extends Builder
      * @param  string  $unit  商品單位
      * @param  int  $price  商品單價
      * @param  int  $amount  商品小計
-     * @param  \Agriweather\EzpayInvoice\Enums\ItemTaxType|null  $taxType  商品稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\ItemTaxType|null  $taxType  商品稅別
      */
     public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, ?ItemTaxType $taxType = null): self
     {
@@ -335,7 +335,7 @@ class InvoiceCreateBuilder extends Builder
      *     unit: string,
      *     price: int,
      *     amount: int,
-     *     taxType: ?\Agriweather\EzpayInvoice\Enums\TaxType
+     *     taxType: ?\Agriweather\EzPayInvoice\Enums\TaxType
      * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self
@@ -373,8 +373,8 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 開立發票
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function issue(): InvoiceCreateResult
     {
@@ -392,8 +392,8 @@ class InvoiceCreateBuilder extends Builder
      *
      * 於確認要開立時，再手動觸發。
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function deferIssue(): InvoiceCreateResult
     {
@@ -407,8 +407,8 @@ class InvoiceCreateBuilder extends Builder
      *
      * @param  string|\DateTime  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function scheduleAt(string|DateTime $createDate): InvoiceCreateResult
     {

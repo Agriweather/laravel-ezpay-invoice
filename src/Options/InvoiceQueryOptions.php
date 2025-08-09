@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\DisplayFlag;
-use Agriweather\EzpayInvoice\Enums\SearchType;
+use Agriweather\EzPayInvoice\Enums\DisplayFlag;
+use Agriweather\EzPayInvoice\Enums\SearchType;
 use Carbon\Carbon;
 
 class InvoiceQueryOptions extends Options

@@ -1,12 +1,12 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Crypto;
+namespace Agriweather\EzPayInvoice\Crypto;
 
-use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
-use Agriweather\EzpayInvoice\Exceptions\DecryptException;
-use Agriweather\EzpayInvoice\Exceptions\EncryptException;
-use Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException;
-use Agriweather\EzpayInvoice\Results\Result;
+use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
+use Agriweather\EzPayInvoice\Exceptions\DecryptException;
+use Agriweather\EzPayInvoice\Exceptions\EncryptException;
+use Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException;
+use Agriweather\EzPayInvoice\Results\Result;
 
 class EzpayCrypto
 {
@@ -17,7 +17,7 @@ class EzpayCrypto
     /**
      * 加密 post data
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EncryptException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EncryptException
      */
     public function encryptPostData(array $postData): string
     {
@@ -43,7 +43,7 @@ class EzpayCrypto
     /**
      * 解密 post data
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\DecryptException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\DecryptException
      */
     public function decryptPostData(string $encryptedPostData): array
     {
@@ -101,7 +101,7 @@ class EzpayCrypto
     /**
      * 驗證檢查碼
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function verifyCheckCode(Result $result): void
     {

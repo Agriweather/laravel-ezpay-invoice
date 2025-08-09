@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzpayInvoice\Results\Result;
+use Agriweather\EzPayInvoice\Results\Result;
 
 describe('Result', function () {
     test('可以解析成功結果', function () {

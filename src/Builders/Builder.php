@@ -1,12 +1,12 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException;
-use Agriweather\EzpayInvoice\Factory;
-use Agriweather\EzpayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
+use Agriweather\EzPayInvoice\Factory;
+use Agriweather\EzPayInvoice\Options\Options;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
@@ -60,7 +60,7 @@ abstract class Builder
     /**
      * 發送 API 請求到 ezPay 發票平台
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     protected function sendRequest(): array
     {
@@ -74,7 +74,7 @@ abstract class Builder
         $data = $response->json();
 
         if ($data['Status'] !== 'SUCCESS') {
-            throw new EzpayInvoiceException(
+            throw new EzPayInvoiceException(
                 $requestData['url'], $requestData['formData'], $data['Status'], $data['Message']
             );
         }

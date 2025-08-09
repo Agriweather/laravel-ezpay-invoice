@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException;
+use Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException;
 
 describe('InvalidCheckCodeException', function () {
     test('可以拋出 checkCode 錯誤', function () {

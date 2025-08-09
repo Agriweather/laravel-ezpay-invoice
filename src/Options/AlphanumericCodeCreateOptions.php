@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzpayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\InvoiceType;
 use Carbon\Carbon;
 
 class AlphanumericCodeCreateOptions extends Options

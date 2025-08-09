@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
 use Illuminate\Contracts\Support\Arrayable;
 

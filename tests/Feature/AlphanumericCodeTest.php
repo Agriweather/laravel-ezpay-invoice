@@ -1,14 +1,14 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzpayInvoice\Enums\InvoiceType;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeCreateResult;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeQueryResult;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeUpdateResult;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeCreateResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeQueryResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeUpdateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -41,7 +41,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::alphanumericCode()
+            $result = EzPayInvoice::alphanumericCode()
                 ->create()
                 ->withYear(113)
                 ->withTerm(InvoiceTerm::JUL_AUG)
@@ -109,7 +109,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $alphanumericCodeResults = EzpayInvoice::alphanumericCode()
+            $alphanumericCodeResults = EzPayInvoice::alphanumericCode()
                 ->query()
                 ->withYear(113)
                 ->withTerm(InvoiceTerm::JUL_AUG)
@@ -168,7 +168,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::alphanumericCode()
+            $result = EzPayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)
@@ -219,7 +219,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::alphanumericCode()
+            $result = EzPayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)
@@ -270,7 +270,7 @@ describe('字軌管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::alphanumericCode()
+            $result = EzPayInvoice::alphanumericCode()
                 ->query()
                 ->withNo('0t0ghr0fyv')
                 ->withYear(113)

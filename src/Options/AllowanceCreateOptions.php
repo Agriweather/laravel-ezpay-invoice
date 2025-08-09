@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\AllowanceCreateStatus;
-use Agriweather\EzpayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\AllowanceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
 use Carbon\Carbon;
 
 class AllowanceCreateOptions extends Options

@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Options\InvoiceTriggerQueryOptions;
-use Agriweather\EzpayInvoice\Results\InvoiceTriggerResult;
+use Agriweather\EzPayInvoice\Options\InvoiceTriggerQueryOptions;
+use Agriweather\EzPayInvoice\Results\InvoiceTriggerResult;
 
 class InvoiceTriggerQueryBuilder extends Builder
 {
@@ -73,8 +73,8 @@ class InvoiceTriggerQueryBuilder extends Builder
     /**
      * 觸發開立發票
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function trigger(): InvoiceTriggerResult
     {

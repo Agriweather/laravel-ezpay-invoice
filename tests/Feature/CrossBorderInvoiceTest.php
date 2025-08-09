@@ -1,10 +1,10 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\CurrencyType;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\CrossBorderInvoiceCreateResult;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Enums\CurrencyType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoiceCreateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -35,7 +35,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->invoice()
                 ->create()
                 ->withOrder('CBOrder001')
@@ -128,7 +128,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $invoiceResult = EzpayInvoice::crossBorder()
+            $invoiceResult = EzPayInvoice::crossBorder()
                 ->invoice()
                 ->query()
                 ->withInvoice('CBOrder001')
@@ -185,7 +185,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->invoice()
                 ->triggerQuery()
                 ->withInvoiceTransNo('25080200501024251')
@@ -232,7 +232,7 @@ describe('境外電商發票功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->invoice()
                 ->invalidateQuery()
                 ->withInvoice('CB00000016')

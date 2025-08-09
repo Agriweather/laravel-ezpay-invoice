@@ -1,3 +1,3 @@
 <?php
 
-pest()->extend(Agriweather\EzpayInvoice\Tests\TestCase::class)->in('Feature');
+pest()->extend(Agriweather\EzPayInvoice\Tests\TestCase::class)->in('Feature');

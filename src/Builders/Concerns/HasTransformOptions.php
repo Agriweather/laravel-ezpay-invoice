@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders\Concerns;
+namespace Agriweather\EzPayInvoice\Builders\Concerns;
 
 trait HasTransformOptions
 {

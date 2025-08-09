@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Builders\Concerns\HasTransformOptions;
+use Agriweather\EzPayInvoice\Builders\Concerns\HasTransformOptions;
 
 class SubFactory
 {

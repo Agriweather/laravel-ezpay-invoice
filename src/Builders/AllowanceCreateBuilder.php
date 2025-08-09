@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\AllowanceCreateStatus;
-use Agriweather\EzpayInvoice\Enums\ItemTaxType;
-use Agriweather\EzpayInvoice\Options\AllowanceCreateOptions;
-use Agriweather\EzpayInvoice\Results\AllowanceCreateResult;
+use Agriweather\EzPayInvoice\Enums\AllowanceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Options\AllowanceCreateOptions;
+use Agriweather\EzPayInvoice\Results\AllowanceCreateResult;
 use InvalidArgumentException;
 
 class AllowanceCreateBuilder extends Builder
@@ -118,7 +118,7 @@ class AllowanceCreateBuilder extends Builder
      *
      * 當折讓的發票課稅別為混合應稅與免稅或零稅率時，需依應稅、零稅率、免稅個別開立折讓單。
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\TaxType  $taxType  稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\TaxType  $taxType  稅別
      */
     public function withTaxTypeForMixed(ItemTaxType $itemTaxType): self
     {
@@ -166,7 +166,7 @@ class AllowanceCreateBuilder extends Builder
     /**
      * 開立折讓
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function issue(): AllowanceCreateResult
     {

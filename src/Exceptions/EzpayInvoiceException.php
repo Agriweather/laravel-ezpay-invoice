@@ -1,10 +1,10 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Exceptions;
+namespace Agriweather\EzPayInvoice\Exceptions;
 
 use RuntimeException;
 
-class EzpayInvoiceException extends RuntimeException
+class EzPayInvoiceException extends RuntimeException
 {
     protected string $apiUrl;
 

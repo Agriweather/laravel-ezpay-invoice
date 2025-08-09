@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Contracts;
+namespace Agriweather\EzPayInvoice\Contracts;
 
 use Illuminate\Http\Client\Response as ClientResponse;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Senders;
+namespace Agriweather\EzPayInvoice\Senders;
 
-use Agriweather\EzpayInvoice\Contracts\HttpSender as HttpSenderContract;
+use Agriweather\EzPayInvoice\Contracts\HttpSender as HttpSenderContract;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Response as ClientResponse;
 

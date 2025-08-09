@@ -1,13 +1,13 @@
 <?php
 
-use Agriweather\EzpayInvoice\Builders\InvoiceCreateBuilder;
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\CarrierType;
-use Agriweather\EzpayInvoice\Enums\CustomsClearance;
-use Agriweather\EzpayInvoice\Enums\ItemTaxType;
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Factory;
+use Agriweather\EzPayInvoice\Builders\InvoiceCreateBuilder;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Enums\CarrierType;
+use Agriweather\EzPayInvoice\Enums\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Factory;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 
@@ -47,17 +47,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -109,17 +109,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -167,17 +167,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -211,17 +211,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -255,17 +255,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -302,17 +302,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 
@@ -351,17 +351,17 @@ describe('InvoiceCreateBuilder', function () {
         /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
         $response = mock(HttpClientResponse::class);
         $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Factory */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
         $factory = mock(Factory::class);
         $factory->expects('baseUrl')->andReturn('https://example.com/api/');
         $factory->shouldReceive('config')->andReturn('1234567890');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Crypto\EzpayCrypto */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\EzpayCrypto */
         $crypto = mock(EzpayCrypto::class);
         $crypto->expects('setHashKey');
         $crypto->expects('setHashIv');
         $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
         $crypto->expects('verifyCheckCode');
-        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzpayInvoice\Contracts\HttpSender */
+        /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
         $httpSender = mock(HttpSender::class);
         $httpSender->expects('send')->andReturn($response);
 

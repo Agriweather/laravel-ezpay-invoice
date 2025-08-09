@@ -1,14 +1,14 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\CarrierType;
-use Agriweather\EzpayInvoice\Enums\CustomsClearance;
-use Agriweather\EzpayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
-use Agriweather\EzpayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzpayInvoice\Enums\ItemTaxType;
-use Agriweather\EzpayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\CarrierType;
+use Agriweather\EzPayInvoice\Enums\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\InvoicePrintFlag;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\TaxType;
 use Carbon\Carbon;
 
 class InvoiceCreateOptions extends Options
@@ -76,7 +76,7 @@ class InvoiceCreateOptions extends Options
     /** @var int[] */
     public array $itemAmounts = [];
 
-    /** @var \Agriweather\EzpayInvoice\Enums\ItemTaxType[]|null */
+    /** @var \Agriweather\EzPayInvoice\Enums\ItemTaxType[]|null */
     public ?array $itemTaxTypes = null;
 
     public ?string $comment = null;

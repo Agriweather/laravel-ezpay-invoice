@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Tests;
+namespace Agriweather\EzPayInvoice\Tests;
 
-use Agriweather\EzpayInvoice\EzpayInvoiceServiceProvider;
+use Agriweather\EzPayInvoice\EzPayInvoiceServiceProvider;
 use Carbon\Carbon;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -25,7 +25,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
-            EzpayInvoiceServiceProvider::class,
+            EzPayInvoiceServiceProvider::class,
         ];
     }
 

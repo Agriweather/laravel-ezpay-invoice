@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Builders\CrossBorderInvoiceCreateBuilder;
-use Agriweather\EzpayInvoice\Contracts\FormPostSender;
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Builders\CrossBorderInvoiceCreateBuilder;
+use Agriweather\EzPayInvoice\Contracts\FormPostSender;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
 
 class CrossBorderInvoice extends SubFactory
 {

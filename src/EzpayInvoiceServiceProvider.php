@@ -1,16 +1,16 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Contracts\FormPostSender as FormPostSenderContract;
-use Agriweather\EzpayInvoice\Contracts\HttpSender as HttpSenderContract;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Senders\FormPostSender;
-use Agriweather\EzpayInvoice\Senders\HttpSender;
+use Agriweather\EzPayInvoice\Contracts\FormPostSender as FormPostSenderContract;
+use Agriweather\EzPayInvoice\Contracts\HttpSender as HttpSenderContract;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Senders\FormPostSender;
+use Agriweather\EzPayInvoice\Senders\HttpSender;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Support\ServiceProvider;
 
-class EzpayInvoiceServiceProvider extends ServiceProvider
+class EzPayInvoiceServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.

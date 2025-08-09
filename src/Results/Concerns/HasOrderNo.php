@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Results\Concerns;
+namespace Agriweather\EzPayInvoice\Results\Concerns;
 
 trait HasOrderNo
 {

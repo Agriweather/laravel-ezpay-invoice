@@ -1,9 +1,9 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\CodeValidationResult;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\CodeValidationResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -32,7 +32,7 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::codeValidation()
+            $result = EzPayInvoice::codeValidation()
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'TimeStamp' => Carbon::now()->timestamp,
@@ -73,7 +73,7 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::codeValidation()
+            $result = EzPayInvoice::codeValidation()
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'TimeStamp' => Carbon::now()->timestamp,
@@ -116,7 +116,7 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::codeValidation()
+            $result = EzPayInvoice::codeValidation()
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'TimeStamp' => Carbon::now()->timestamp,
@@ -157,7 +157,7 @@ describe('驗證功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::codeValidation()
+            $result = EzPayInvoice::codeValidation()
                 ->transformOptions(function (Options $options) {
                     expect($options->toArray()['PostData_'])->toBe([
                         'TimeStamp' => Carbon::now()->timestamp,

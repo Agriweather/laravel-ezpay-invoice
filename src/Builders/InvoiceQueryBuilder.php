@@ -1,13 +1,13 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Contracts\FormPostSender;
-use Agriweather\EzpayInvoice\Enums\DisplayFlag;
-use Agriweather\EzpayInvoice\Enums\SearchType;
-use Agriweather\EzpayInvoice\Options\InvoiceQueryOptions;
-use Agriweather\EzpayInvoice\Results\InvoiceQueryResult;
-use Agriweather\EzpayInvoice\Results\InvoiceQueryUrlResult;
+use Agriweather\EzPayInvoice\Contracts\FormPostSender;
+use Agriweather\EzPayInvoice\Enums\DisplayFlag;
+use Agriweather\EzPayInvoice\Enums\SearchType;
+use Agriweather\EzPayInvoice\Options\InvoiceQueryOptions;
+use Agriweather\EzPayInvoice\Results\InvoiceQueryResult;
+use Agriweather\EzPayInvoice\Results\InvoiceQueryUrlResult;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
@@ -118,8 +118,8 @@ class InvoiceQueryBuilder extends Builder
     /**
      * 查詢發票資訊
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function get(): InvoiceQueryResult
     {
@@ -160,7 +160,7 @@ class InvoiceQueryBuilder extends Builder
     /**
      * 回傳 ezPay 平台顯示發票查詢頁面的 URL
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function getEzPaySearchUrl(): string
     {

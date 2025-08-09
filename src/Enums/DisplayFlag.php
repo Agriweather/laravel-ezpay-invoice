@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Enums;
+namespace Agriweather\EzPayInvoice\Enums;
 
 enum DisplayFlag: int
 {

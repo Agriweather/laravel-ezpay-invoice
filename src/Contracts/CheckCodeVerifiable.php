@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Contracts;
+namespace Agriweather\EzPayInvoice\Contracts;
 
 interface CheckCodeVerifiable
 {

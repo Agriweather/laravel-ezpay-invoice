@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Builders\AlphanumericCodeCreateBuilder;
-use Agriweather\EzpayInvoice\Builders\AlphanumericCodeQueryBuilder;
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Builders\AlphanumericCodeCreateBuilder;
+use Agriweather\EzPayInvoice\Builders\AlphanumericCodeQueryBuilder;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
 
 class AlphanumericCode extends SubFactory
 {

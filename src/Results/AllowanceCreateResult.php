@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Results;
+namespace Agriweather\EzPayInvoice\Results;
 
 final class AllowanceCreateResult extends Result
 {

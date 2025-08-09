@@ -34,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Agriweather\\EzpayInvoice\\": "src/"
+            "Agriweather\\EzPayInvoice\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Agriweather\\EzpayInvoice\\Tests\\": "tests/"
+            "Agriweather\\EzPayInvoice\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -50,10 +50,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Agriweather\\EzpayInvoice\\EzpayInvoiceServiceProvider"
+                "Agriweather\\EzPayInvoice\\EzPayInvoiceServiceProvider"
             ],
             "aliases": {
-                "EzpayInvoice": "Agriweather\\EzpayInvoice\\Facades\\EzpayInvoice"
+                "EzPayInvoice": "Agriweather\\EzPayInvoice\\Facades\\EzPayInvoice"
             }
         }
     },

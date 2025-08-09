@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Options;
+namespace Agriweather\EzPayInvoice\Options;
 
-use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
 use Carbon\Carbon;
 
 class AlphanumericCodeQueryOptions extends Options

@@ -1,12 +1,12 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzpayInvoice\Options\AlphanumericCodeQueryOptions;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeQueryResult;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeUpdateResult;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Options\AlphanumericCodeQueryOptions;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeQueryResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeUpdateResult;
 
 class AlphanumericCodeQueryBuilder extends Builder
 {
@@ -117,7 +117,7 @@ class AlphanumericCodeQueryBuilder extends Builder
      *
      * @return AlphanumericCodeQueryResult[]
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function get(): array
     {
@@ -135,7 +135,7 @@ class AlphanumericCodeQueryBuilder extends Builder
     /**
      * 暫停字軌
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function pause(): AlphanumericCodeUpdateResult
     {
@@ -149,7 +149,7 @@ class AlphanumericCodeQueryBuilder extends Builder
     /**
      * 啟用字軌
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function enable(): AlphanumericCodeUpdateResult
     {
@@ -163,7 +163,7 @@ class AlphanumericCodeQueryBuilder extends Builder
     /**
      * 停用字軌
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function disable(): AlphanumericCodeUpdateResult
     {

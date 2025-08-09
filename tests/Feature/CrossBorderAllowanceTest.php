@@ -1,8 +1,8 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -31,7 +31,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->allowance()
                 ->create()
                 ->withInvoice('CB00000016')
@@ -96,7 +96,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->allowance()
                 ->query()
                 ->withAllowance('A250802013300379')
@@ -146,7 +146,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->allowance()
                 ->query()
                 ->withAllowance('A250802013300379')
@@ -195,7 +195,7 @@ describe('境外電商折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::crossBorder()
+            $result = EzPayInvoice::crossBorder()
                 ->allowance()
                 ->invalidateQuery()
                 ->withAllowance('A250802013300379')

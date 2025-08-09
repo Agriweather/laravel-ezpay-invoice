@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Results;
+namespace Agriweather\EzPayInvoice\Results;
 
 use Carbon\Carbon;
 

@@ -1,19 +1,19 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Facades;
+namespace Agriweather\EzPayInvoice\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Agriweather\EzpayInvoice\Invoice invoice()
- * @method static \Agriweather\EzpayInvoice\Allowance allowance()
- * @method static \Agriweather\EzpayInvoice\CrossBorder crossBorder()
- * @method static \Agriweather\EzpayInvoice\AlphanumericCode alphanumericCode()
- * @method static \Agriweather\EzpayInvoice\Builders\CodeValidationBuilder codeValidation()
+ * @method static \Agriweather\EzPayInvoice\Invoice invoice()
+ * @method static \Agriweather\EzPayInvoice\Allowance allowance()
+ * @method static \Agriweather\EzPayInvoice\CrossBorder crossBorder()
+ * @method static \Agriweather\EzPayInvoice\AlphanumericCode alphanumericCode()
+ * @method static \Agriweather\EzPayInvoice\Builders\CodeValidationBuilder codeValidation()
  *
- * @see \Agriweather\EzpayInvoice\Factory
+ * @see \Agriweather\EzPayInvoice\Factory
  */
-class EzpayInvoice extends Facade
+class EzPayInvoice extends Facade
 {
     /**
      * Get the registered name of the component.

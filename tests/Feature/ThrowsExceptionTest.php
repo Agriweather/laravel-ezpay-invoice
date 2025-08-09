@@ -1,9 +1,9 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Enums\TaxType;
-use Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Illuminate\Support\Facades\Http;
 
 use function Pest\Laravel\partialMock;
@@ -22,7 +22,7 @@ describe('拋出錯誤測試', function () {
             ], 200),
         ]);
 
-        EzpayInvoice::invoice()
+        EzPayInvoice::invoice()
             ->create()
             ->withOrder('')
             ->forConsumer('John Doe')
@@ -33,7 +33,7 @@ describe('拋出錯誤測試', function () {
             ->withAmount(1000, 50, 1050)
             ->issue();
     })->throws(
-        EzpayInvoiceException::class,
+        EzPayInvoiceException::class,
         'ezPay 發票平台 API 回應錯誤 (Code: KEY10013)：「資料不可空白MerchantOrderNo」'
     );
 });

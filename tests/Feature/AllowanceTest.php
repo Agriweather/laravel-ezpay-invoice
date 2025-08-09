@@ -1,11 +1,11 @@
 <?php
 
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
-use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
-use Agriweather\EzpayInvoice\Options\Options;
-use Agriweather\EzpayInvoice\Results\AllowanceCreateResult;
-use Agriweather\EzpayInvoice\Results\AllowanceInvalidateResult;
-use Agriweather\EzpayInvoice\Results\AllowanceTriggerResult;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\AllowanceCreateResult;
+use Agriweather\EzPayInvoice\Results\AllowanceInvalidateResult;
+use Agriweather\EzPayInvoice\Results\AllowanceTriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -34,7 +34,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -96,7 +96,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -153,7 +153,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->create()
                 ->withInvoice('GG72002018')
                 ->withOrder('Order001')
@@ -210,7 +210,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->triggerQuery()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
@@ -259,7 +259,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->triggerQuery()
                 ->withAllowance('A250726001830959')
                 ->withOrder('Order001')
@@ -307,7 +307,7 @@ describe('折讓管理功能測試', function () {
                 ], 200),
             ]);
 
-            $result = EzpayInvoice::allowance()
+            $result = EzPayInvoice::allowance()
                 ->invalidateQuery()
                 ->withAllowance('A250726001830959')
                 ->because('作廢原因')

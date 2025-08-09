@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzpayInvoice\Enums\InvoiceType;
-use Agriweather\EzpayInvoice\Options\AlphanumericCodeCreateOptions;
-use Agriweather\EzpayInvoice\Results\AlphanumericCodeCreateResult;
+use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Options\AlphanumericCodeCreateOptions;
+use Agriweather\EzPayInvoice\Results\AlphanumericCodeCreateResult;
 
 class AlphanumericCodeCreateBuilder extends Builder
 {
@@ -88,7 +88,7 @@ class AlphanumericCodeCreateBuilder extends Builder
     /**
      * 新增字軌
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function save(): AlphanumericCodeCreateResult
     {

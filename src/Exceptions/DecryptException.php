@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Exceptions;
+namespace Agriweather\EzPayInvoice\Exceptions;
 
 use RuntimeException;
 

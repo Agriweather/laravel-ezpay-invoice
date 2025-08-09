@@ -1,14 +1,14 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Builders\InvoiceCreateBuilder;
-use Agriweather\EzpayInvoice\Builders\InvoiceInvalidateQueryBuilder;
-use Agriweather\EzpayInvoice\Builders\InvoiceQueryBuilder;
-use Agriweather\EzpayInvoice\Builders\InvoiceTriggerQueryBuilder;
-use Agriweather\EzpayInvoice\Contracts\FormPostSender;
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Builders\InvoiceCreateBuilder;
+use Agriweather\EzPayInvoice\Builders\InvoiceInvalidateQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\InvoiceQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\InvoiceTriggerQueryBuilder;
+use Agriweather\EzPayInvoice\Contracts\FormPostSender;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
 
 class Invoice extends SubFactory
 {

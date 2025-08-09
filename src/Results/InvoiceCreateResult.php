@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Results;
+namespace Agriweather\EzPayInvoice\Results;
 
-use Agriweather\EzpayInvoice\Contracts\CheckCodeVerifiable;
+use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
 
 final class InvoiceCreateResult extends Result implements CheckCodeVerifiable
 {

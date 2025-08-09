@@ -1,9 +1,9 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Options\AllowanceInvalidateQueryOptions;
-use Agriweather\EzpayInvoice\Results\AllowanceInvalidateResult;
+use Agriweather\EzPayInvoice\Options\AllowanceInvalidateQueryOptions;
+use Agriweather\EzPayInvoice\Results\AllowanceInvalidateResult;
 
 class AllowanceInvalidateQueryBuilder extends Builder
 {
@@ -50,7 +50,7 @@ class AllowanceInvalidateQueryBuilder extends Builder
     /**
      * 作廢折讓
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function invalidate(): AllowanceInvalidateResult
     {

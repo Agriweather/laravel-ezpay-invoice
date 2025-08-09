@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzpayInvoice\Builders;
+namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzpayInvoice\Enums\CurrencyType;
-use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
-use Agriweather\EzpayInvoice\Options\CrossBorderInvoiceCreateOptions;
-use Agriweather\EzpayInvoice\Results\CrossBorderInvoiceCreateResult;
+use Agriweather\EzPayInvoice\Enums\CurrencyType;
+use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Options\CrossBorderInvoiceCreateOptions;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoiceCreateResult;
 use DateTime;
 use InvalidArgumentException;
 
@@ -166,7 +166,7 @@ class CrossBorderInvoiceCreateBuilder extends Builder
     /**
      * 幣別
      *
-     * @param  \Agriweather\EzpayInvoice\Enums\CurrencyType  $currency  幣別代碼
+     * @param  \Agriweather\EzPayInvoice\Enums\CurrencyType  $currency  幣別代碼
      */
     public function withCurrency(CurrencyType $currency): self
     {
@@ -198,8 +198,8 @@ class CrossBorderInvoiceCreateBuilder extends Builder
     /**
      * 開立發票
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function issue(): CrossBorderInvoiceCreateResult
     {
@@ -217,8 +217,8 @@ class CrossBorderInvoiceCreateBuilder extends Builder
      *
      * 於確認要開立時，再手動觸發。
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function deferIssue(): CrossBorderInvoiceCreateResult
     {
@@ -232,8 +232,8 @@ class CrossBorderInvoiceCreateBuilder extends Builder
      *
      * @param  string|\DateTime  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      *
-     * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
-     * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
     public function scheduleAt(string|DateTime $createDate): CrossBorderInvoiceCreateResult
     {

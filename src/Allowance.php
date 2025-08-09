@@ -1,12 +1,12 @@
 <?php
 
-namespace Agriweather\EzpayInvoice;
+namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzpayInvoice\Builders\AllowanceCreateBuilder;
-use Agriweather\EzpayInvoice\Builders\AllowanceInvalidateQueryBuilder;
-use Agriweather\EzpayInvoice\Builders\AllowanceTriggerQueryBuilder;
-use Agriweather\EzpayInvoice\Contracts\HttpSender;
-use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Builders\AllowanceCreateBuilder;
+use Agriweather\EzPayInvoice\Builders\AllowanceInvalidateQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\AllowanceTriggerQueryBuilder;
+use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
 
 class Allowance extends SubFactory
 {
