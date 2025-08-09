@@ -13,7 +13,7 @@ use function Pest\Laravel\partialMock;
 
 test('境外電商發票開立 → 可以成功開立境外電商發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -80,7 +80,7 @@ test('境外電商發票開立 → 可以成功開立境外電商發票', functi
 
 test('境外電商發票查詢 → 可以查詢境外電商發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -159,7 +159,7 @@ test('境外電商發票查詢 → 可以查詢境外電商發票', function () 
 
 test('境外電商發票觸發 → 可以觸發等待中的發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -209,7 +209,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
 
 test('境外電商發票作廢 → 可以作廢已開立的發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([

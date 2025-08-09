@@ -12,8 +12,8 @@ use function Pest\Laravel\partialMock;
 
 test('手機條碼驗證 → 可以驗證有效的手機條碼', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
-    $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->expects('decryptByAES')->with('encrypted_data')->andReturn([
         'CellphoneBarcode' => '/ABC.123',
         'IsExist' => 'Y',
     ]);
@@ -53,8 +53,8 @@ test('手機條碼驗證 → 可以驗證有效的手機條碼', function () {
 
 test('手機條碼驗證 → 可以驗證無效的手機條碼', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
-    $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->expects('decryptByAES')->with('encrypted_data')->andReturn([
         'CellphoneBarcode' => '/ABC.123',
         'IsExist' => 'N',
     ]);
@@ -94,8 +94,8 @@ test('手機條碼驗證 → 可以驗證無效的手機條碼', function () {
 
 test('捐贈碼驗證 → 可以驗證有效的捐贈碼', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
-    $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->expects('decryptByAES')->with('encrypted_data')->andReturn([
         'Lovecode' => '123',
         'IsExist' => 'Y',
     ]);
@@ -135,8 +135,8 @@ test('捐贈碼驗證 → 可以驗證有效的捐贈碼', function () {
 
 test('捐贈碼驗證 → 可以驗證無效的捐贈碼', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
-    $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->expects('decryptByAES')->with('encrypted_data')->andReturn([
         'Lovecode' => '123',
         'IsExist' => 'N',
     ]);

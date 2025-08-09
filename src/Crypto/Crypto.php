@@ -19,12 +19,12 @@ class Crypto
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\EncryptException
      */
-    public function encryptPostData(array $postData): string
+    public function encryptByAES(array $data): string
     {
-        $postDataStr = http_build_query($postData);
+        $dataStr = http_build_query($data);
 
         $value = openssl_encrypt(
-            $this->addPadding($postDataStr),
+            $this->addPadding($dataStr),
             'AES-256-CBC',
             $this->hashKey,
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
@@ -41,14 +41,14 @@ class Crypto
     }
 
     /**
-     * 解密 post data
+     * 使用 AES 解密
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\DecryptException
      */
-    public function decryptPostData(string $encryptedPostData): array
+    public function decryptByAES(string $encryptedData): array
     {
         $value = openssl_decrypt(
-            hex2bin($encryptedPostData),
+            hex2bin($encryptedData),
             'AES-256-CBC',
             $this->hashKey,
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,

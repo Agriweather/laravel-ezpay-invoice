@@ -18,7 +18,7 @@ use function Pest\Laravel\partialMock;
 
 test('發票開立 → 可以成功開立 B2C 發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -92,7 +92,7 @@ test('發票開立 → 可以成功開立 B2C 發票', function () {
 
 test('發票開立 → 可以成功開立 B2B 發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -168,7 +168,7 @@ test('發票開立 → 可以成功開立 B2B 發票', function () {
 
 test('發票開立 → 可以開立載具發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -235,7 +235,7 @@ test('發票開立 → 可以開立載具發票', function () {
 
 test('發票開立 → 可以開立發票並等待觸發', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -300,7 +300,7 @@ test('發票開立 → 可以開立發票並等待觸發', function () {
 
 test('發票開立 → 可以預約開立發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -366,7 +366,7 @@ test('發票開立 → 可以預約開立發票', function () {
 
 test('發票查詢 → 可以透過發票號碼及隨機碼查詢發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -455,7 +455,7 @@ test('發票查詢 → 可以透過發票號碼及隨機碼查詢發票', functi
 
 test('發票查詢 → 可以透過訂單編號及發票金額查詢發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -544,7 +544,7 @@ test('發票查詢 → 可以透過訂單編號及發票金額查詢發票', fun
 
 test('發票查詢 → 可以跳轉到 ezPay 平台查詢發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     $response = EzPayInvoice::invoice()
         ->query()
@@ -553,14 +553,14 @@ test('發票查詢 → 可以跳轉到 ezPay 平台查詢發票', function () {
         ->redirectToEzPay();
 
     expect($response)->toBeInstanceOf(Response::class)
-        ->content()->toContain('https://cinv.ezpay.com.tw/Api/invoice_search')
+        ->content()->toContain('action="https://cinv.ezpay.com.tw/Api/invoice_search"')
         ->content()->toContain('name="MerchantID_" value="111335678"')
         ->content()->toContain('name="PostData_" value="encrypted_data"');
 });
 
 test('發票查詢 → 可以取得請求查詢發票的 formData 資料', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     $requestData = EzPayInvoice::invoice()
         ->query()
@@ -592,7 +592,7 @@ test('發票查詢 → 可以取得請求查詢發票的 formData 資料', funct
 
 test('發票查詢 → 可以取得 ezPay 平台查詢發票的網址', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -617,7 +617,7 @@ test('發票查詢 → 可以取得 ezPay 平台查詢發票的網址', function
 
 test('發票觸發 → 可以觸發等待中的發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode')->andReturnNull();
 
     Http::fake([
@@ -666,7 +666,7 @@ test('發票觸發 → 可以觸發等待中的發票', function () {
 
 test('發票作廢 → 可以作廢已開立的發票', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([

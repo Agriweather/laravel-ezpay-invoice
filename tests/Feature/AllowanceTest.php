@@ -14,7 +14,7 @@ use function Pest\Laravel\partialMock;
 
 test('折讓開立 → 可以成功開立折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -76,7 +76,7 @@ test('折讓開立 → 可以成功開立折讓', function () {
 
 test('折讓開立 → 可以開立多品項折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -133,7 +133,7 @@ test('折讓開立 → 可以開立多品項折讓', function () {
 
 test('折讓開立 → 可以開立非立即確認的折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -188,7 +188,7 @@ test('折讓開立 → 可以開立非立即確認的折讓', function () {
 
 test('折讓觸發 → 可以確認折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -237,7 +237,7 @@ test('折讓觸發 → 可以確認折讓', function () {
 
 test('折讓觸發 → 可以取消折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -286,7 +286,7 @@ test('折讓觸發 → 可以取消折讓', function () {
 
 test('折讓作廢 → 可以作廢已開立的折讓', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([

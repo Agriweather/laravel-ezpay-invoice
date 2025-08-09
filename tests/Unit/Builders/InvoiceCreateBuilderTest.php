@@ -54,7 +54,7 @@ test('可以僅使用必須的參數', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -116,7 +116,7 @@ test('可以使用全部的參數', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -174,7 +174,7 @@ test('可以設定應稅稅率', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -218,7 +218,7 @@ test('可以設定零稅率', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -262,7 +262,7 @@ test('可以設定免稅', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -309,7 +309,7 @@ test('可以設定混合稅率，和各種混合稅率的銷售額', function ()
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);
@@ -358,7 +358,7 @@ test('可以批次設定多個商品', function () {
     $crypto = mock(Crypto::class);
     $crypto->expects('setHashKey');
     $crypto->expects('setHashIv');
-    $crypto->expects('encryptPostData')->with($expectedPostData)->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->with($expectedPostData)->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
     /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
     $httpSender = mock(HttpSender::class);

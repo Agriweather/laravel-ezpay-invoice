@@ -10,7 +10,7 @@ use function Pest\Laravel\partialMock;
 
 test('應該可以拋出 ezPay 錯誤', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->shouldNotReceive('verifyCheckCode');
 
     Http::fake([

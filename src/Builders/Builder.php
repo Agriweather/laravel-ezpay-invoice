@@ -46,7 +46,7 @@ abstract class Builder
 
         // 如果有 PostData_ 則進行加密
         if (isset($formData['PostData_'])) {
-            $formData['PostData_'] = $this->crypto->encryptPostData(
+            $formData['PostData_'] = $this->crypto->encryptByAES(
                 $formData['PostData_']
             );
         }

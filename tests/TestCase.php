@@ -22,13 +22,6 @@ class TestCase extends OrchestraTestCase
         parent::tearDown();
     }
 
-    protected function getPackageProviders($app)
-    {
-        return [
-            EzPayInvoiceServiceProvider::class,
-        ];
-    }
-
     protected function defineEnvironment($app)
     {
         // 設定測試專用的環境變數
@@ -39,5 +32,12 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('ezpay_invoice.company_hash_key', 'EXAMPLEHASHKEY110000000123456789');
         $app['config']->set('ezpay_invoice.company_hash_iv', 'EXAMPLEHASHIV456');
         $app['config']->set('ezpay_invoice.env', 'test');
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            EzPayInvoiceServiceProvider::class,
+        ];
     }
 }

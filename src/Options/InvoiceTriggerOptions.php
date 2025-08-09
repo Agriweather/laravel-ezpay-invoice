@@ -27,9 +27,7 @@ class InvoiceTriggerOptions extends Options
                 'TransNum' => $this->ezPayTransNumber,
                 'InvoiceTransNo' => $this->invoiceTransNo,
                 'MerchantOrderNo' => $this->orderNo,
-                'TotalAmt' => isset($this->totalAmount)
-                    ? (string) $this->totalAmount
-                    : null,
+                'TotalAmt' => (string) $this->totalAmount,
             ], fn ($value) => ! is_null($value)),
         ];
     }
