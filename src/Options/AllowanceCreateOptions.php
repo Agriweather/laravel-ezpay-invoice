@@ -17,21 +17,21 @@ class AllowanceCreateOptions extends Options
     /** @var string[] */
     public array $itemNames = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemQuantities = [];
 
     /** @var string[] */
     public array $itemUnits = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemPrices = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemAmounts = [];
 
     public ?ItemTaxType $taxTypeForMixed = null;
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemTaxAmounts = [];
 
     public int $totalAmount = 0;
@@ -43,22 +43,20 @@ class AllowanceCreateOptions extends Options
     /**
      * 檢查是否存在商品項目。
      */
-    public function hasItem(
-        string $name,
-        int|float|string $quantity,
-        string $unit,
-        int|float|string $price,
-        int|float|string $amount,
-        int|float|string $taxAmount
-    ): bool {
+    public function hasItem(string $name, int $quantity, string $unit, int $price, int $amount, int $taxAmount): bool
+    {
         if (in_array($name, $this->itemNames)) {
             $index = array_search($name, $this->itemNames);
 
-            if (((float) $this->itemQuantities[$index]) === ((float) $quantity) &&
+            if ($index === false) {
+                return false;
+            }
+
+            if ($this->itemQuantities[$index] === $quantity &&
                 $this->itemUnits[$index] === $unit &&
-                ((float) $this->itemPrices[$index]) === ((float) $price) &&
-                ((float) $this->itemAmounts[$index]) === ((float) $amount) &&
-                ((float) $this->itemTaxAmounts[$index]) === ((float) $taxAmount)
+                $this->itemPrices[$index] === $price &&
+                $this->itemAmounts[$index] === $amount &&
+                $this->itemTaxAmounts[$index] === $taxAmount
             ) {
                 return true;
             }

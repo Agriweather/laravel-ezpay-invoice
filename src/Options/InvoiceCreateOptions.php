@@ -64,16 +64,16 @@ class InvoiceCreateOptions extends Options
     /** @var string[] */
     public array $itemNames = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemQuantities = [];
 
     /** @var string[] */
     public array $itemUnits = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemPrices = [];
 
-    /** @var int|float|string[] */
+    /** @var int[] */
     public array $itemAmounts = [];
 
     /** @var \Agriweather\EzpayInvoice\Enums\ItemTaxType[]|null */
@@ -84,16 +84,14 @@ class InvoiceCreateOptions extends Options
     /**
      * 檢查是否存在商品項目。
      */
-    public function hasItem(
-        string $name,
-        int|float|string $quantity,
-        string $unit,
-        int|float|string $price,
-        int|float|string $amount,
-        ?TaxType $taxType = null
-    ): bool {
+    public function hasItem(string $name, int $quantity, string $unit, int $price, int $amount, ?TaxType $taxType = null): bool
+    {
         if (in_array($name, $this->itemNames)) {
             $index = array_search($name, $this->itemNames);
+
+            if ($index === false) {
+                return false;
+            }
 
             if (((float) $this->itemQuantities[$index]) === ((float) $quantity) &&
                 $this->itemUnits[$index] === $unit &&

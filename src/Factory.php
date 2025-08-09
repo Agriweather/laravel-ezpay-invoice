@@ -42,6 +42,13 @@ class Factory
         );
     }
 
+    public function crossBorder(): CrossBorder
+    {
+        return new CrossBorder(
+            $this, $this->crypto, $this->httpSender, $this->formPostSender
+        );
+    }
+
     public function alphanumericCode(): AlphanumericCode
     {
         return new AlphanumericCode(

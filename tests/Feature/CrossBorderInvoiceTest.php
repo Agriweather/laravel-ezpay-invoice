@@ -4,6 +4,7 @@ use Agriweather\EzpayInvoice\Crypto\EzpayCrypto;
 use Agriweather\EzpayInvoice\Enums\CurrencyType;
 use Agriweather\EzpayInvoice\Facades\EzpayInvoice;
 use Agriweather\EzpayInvoice\Options\Options;
+use Agriweather\EzpayInvoice\Results\CrossBorderInvoiceCreateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -15,6 +16,7 @@ describe('境外電商發票功能測試', function () {
         test('可以成功開立境外電商發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
             $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([
@@ -53,16 +55,16 @@ describe('境外電商發票功能測試', function () {
                         'Status' => '1',
                         'BuyerName' => 'John Doe',
                         'BuyerEmail' => 'customer@example.com',
-                        'Amt' => '100.00',
-                        'TaxAmt' => '5.50',
-                        'TotalAmt' => '105.50',
+                        'Amt' => '100',
+                        'TaxAmt' => '5.5',
+                        'TotalAmt' => '105.5',
                         'ItemName' => '國際商品',
                         'ItemCount' => '1',
                         'ItemUnit' => 'EA',
-                        'ItemPrice' => '105.50',
-                        'ItemAmt' => '105.50',
+                        'ItemPrice' => '105.5',
+                        'ItemAmt' => '105.5',
                         'Currency' => 'USD',
-                        'OriginalCurrencyAmount' => '100.00',
+                        'OriginalCurrencyAmount' => '100',
                         'ExchangeRate' => '30.5',
                     ]);
 
@@ -83,6 +85,7 @@ describe('境外電商發票功能測試', function () {
         test('可以查詢境外電商發票', function () {
             $ezpayCrypto = partialMock(EzpayCrypto::class);
             $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
 
             Http::fake([
                 '*' => Http::response([

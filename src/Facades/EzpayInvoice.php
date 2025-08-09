@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \Agriweather\EzpayInvoice\Invoice invoice()
  * @method static \Agriweather\EzpayInvoice\Allowance allowance()
+ * @method static \Agriweather\EzpayInvoice\CrossBorder crossBorder()
  * @method static \Agriweather\EzpayInvoice\AlphanumericCode alphanumericCode()
  * @method static \Agriweather\EzpayInvoice\Builders\CodeValidationBuilder codeValidation()
  *

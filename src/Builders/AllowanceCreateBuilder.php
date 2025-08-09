@@ -6,6 +6,7 @@ use Agriweather\EzpayInvoice\Enums\AllowanceCreateStatus;
 use Agriweather\EzpayInvoice\Enums\ItemTaxType;
 use Agriweather\EzpayInvoice\Options\AllowanceCreateOptions;
 use Agriweather\EzpayInvoice\Results\AllowanceCreateResult;
+use InvalidArgumentException;
 
 class AllowanceCreateBuilder extends Builder
 {
@@ -59,20 +60,39 @@ class AllowanceCreateBuilder extends Builder
      * @param  int  $amount  折讓商品小計
      * @param  int  $taxAmount  折讓商品稅額
      */
-    public function withItem(
-        string $name,
-        int $quantity,
-        string $unit,
-        int $price,
-        int $amount,
-        int $taxAmount
-    ): self {
+    public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, int $taxAmount): self
+    {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;
         $this->options->itemPrices[] = $price;
         $this->options->itemAmounts[] = $amount;
         $this->options->itemTaxAmounts[] = $taxAmount;
+
+        return $this;
+    }
+
+    /**
+     * 批量添加折讓商品項目
+     *
+     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`、`amount`、`taxAmount`。
+     */
+    public function withItems(array $items): self
+    {
+        foreach ($items as $item) {
+            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'], $item['taxAmount'])) {
+                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格、小計和稅額。');
+            }
+
+            $this->withItem(
+                name: $item['name'],
+                quantity: $item['quantity'],
+                unit: $item['unit'],
+                price: $item['price'],
+                amount: $item['amount'],
+                taxAmount: $item['taxAmount']
+            );
+        }
 
         return $this;
     }

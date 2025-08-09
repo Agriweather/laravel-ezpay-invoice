@@ -266,9 +266,9 @@ class InvoiceCreateBuilder extends Builder
      *
      * **銷售額計算方式，請務必與公司財會人員進行確認。**
      *
-     * @param  int|null  $amount  發票銷售額(未稅)。若為混合稅率，則需要設定為 `withMixedTaxAmount(...)` 方法3個參數的總和。
-     * @param  int|null  $taxAmount  發票稅額。
-     * @param  int|null  $totalAmount  發票總金額(含稅)，發票銷售額 + 發票稅額。
+     * @param  int  $amount  發票銷售額(未稅)。若為混合稅率，則需要設定為 `withMixedTaxAmount(...)` 方法3個參數的總和。
+     * @param  int  $taxAmount  發票稅額。
+     * @param  int  $totalAmount  發票總金額(含稅)，發票銷售額 + 發票稅額。
      */
     public function withAmount(int $amount, int $taxAmount, int $totalAmount): self
     {
@@ -292,14 +292,8 @@ class InvoiceCreateBuilder extends Builder
      * @param  int  $amount  商品小計
      * @param  \Agriweather\EzpayInvoice\Enums\ItemTaxType|null  $taxType  商品稅別
      */
-    public function withItem(
-        string $name,
-        int $quantity,
-        string $unit,
-        int $price,
-        int $amount,
-        ?ItemTaxType $taxType = null
-    ): self {
+    public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, ?ItemTaxType $taxType = null): self
+    {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;
@@ -323,13 +317,13 @@ class InvoiceCreateBuilder extends Builder
      * - 未稅：當開立發票給公司時，商品單價和小計為未稅金額。
      * - 含稅：當開立發票給消費者時，商品單價和小計為含稅金額。
      *
-     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`，參數 `amount` 和 `taxType` 為可選。
+     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`、`amount`，參數 `taxType` 為可選。
      */
     public function withItems(array $items): self
     {
         foreach ($items as $item) {
-            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'])) {
-                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位和價格。');
+            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'])) {
+                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格和小計。');
             }
 
             $this->withItem(
@@ -337,7 +331,7 @@ class InvoiceCreateBuilder extends Builder
                 quantity: $item['quantity'],
                 unit: $item['unit'],
                 price: $item['price'],
-                amount: $item['amount'] ?? null,
+                amount: $item['amount'],
                 taxType: $item['taxType'] ?? null
             );
         }

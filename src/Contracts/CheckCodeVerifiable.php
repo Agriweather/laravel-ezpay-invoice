@@ -22,7 +22,7 @@ interface CheckCodeVerifiable
     /**
      * 發票金額
      */
-    public function totalAmount(): int;
+    public function totalAmount(): int|float;
 
     /**
      * 發票防偽隨機碼
