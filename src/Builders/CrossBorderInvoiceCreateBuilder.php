@@ -6,6 +6,7 @@ use Agriweather\EzpayInvoice\Enums\CurrencyType;
 use Agriweather\EzpayInvoice\Enums\InvoiceCreateStatus;
 use Agriweather\EzpayInvoice\Options\CrossBorderInvoiceCreateOptions;
 use Agriweather\EzpayInvoice\Results\CrossBorderInvoiceCreateResult;
+use DateTime;
 use InvalidArgumentException;
 
 class CrossBorderInvoiceCreateBuilder extends Builder
@@ -229,15 +230,17 @@ class CrossBorderInvoiceCreateBuilder extends Builder
     /**
      * 預約自動開立發票
      *
-     * @param  string  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
+     * @param  string|\DateTime  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function scheduleAt(string $createDate): CrossBorderInvoiceCreateResult
+    public function scheduleAt(string|DateTime $createDate): CrossBorderInvoiceCreateResult
     {
         $this->options->status = InvoiceCreateStatus::SCHEDULED;
-        $this->options->createDate = $createDate;
+        $this->options->createDate = $createDate instanceof DateTime
+            ? $createDate->format('Y-m-d')
+            : $createDate;
 
         return $this->issue();
     }

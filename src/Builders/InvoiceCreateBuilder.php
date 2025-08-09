@@ -11,6 +11,7 @@ use Agriweather\EzpayInvoice\Enums\ItemTaxType;
 use Agriweather\EzpayInvoice\Enums\TaxType;
 use Agriweather\EzpayInvoice\Options\InvoiceCreateOptions;
 use Agriweather\EzpayInvoice\Results\InvoiceCreateResult;
+use DateTime;
 use InvalidArgumentException;
 
 class InvoiceCreateBuilder extends Builder
@@ -404,15 +405,17 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 預約自動開立發票
      *
-     * @param  string  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
+     * @param  string|\DateTime  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      *
      * @throws \Agriweather\EzpayInvoice\Exceptions\EzpayInvoiceException
      * @throws \Agriweather\EzpayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function scheduleAt(string $createDate): InvoiceCreateResult
+    public function scheduleAt(string|DateTime $createDate): InvoiceCreateResult
     {
         $this->options->status = InvoiceCreateStatus::SCHEDULED;
-        $this->options->createDate = $createDate;
+        $this->options->createDate = $createDate instanceof DateTime
+            ? $createDate->format('Y-m-d')
+            : $createDate;
 
         return $this->issue();
     }
