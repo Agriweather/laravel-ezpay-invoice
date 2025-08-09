@@ -93,10 +93,10 @@ class InvoiceCreateOptions extends Options
                 return false;
             }
 
-            if (((float) $this->itemQuantities[$index]) === ((float) $quantity) &&
+            if ($this->itemQuantities[$index] === $quantity &&
                 $this->itemUnits[$index] === $unit &&
-                ((float) $this->itemPrices[$index]) === ((float) $price) &&
-                ((float) $this->itemAmounts[$index]) === ((float) $amount) &&
+                $this->itemPrices[$index] === $price &&
+                $this->itemAmounts[$index] === $amount &&
                 (is_null($taxType) || ($this->itemTaxTypes[$index] ?? null) === $taxType)
             ) {
                 return true;

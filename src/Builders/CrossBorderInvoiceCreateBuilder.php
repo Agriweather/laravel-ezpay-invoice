@@ -115,7 +115,21 @@ class CrossBorderInvoiceCreateBuilder extends Builder
     /**
      * 批量添加商品項目
      *
-     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`、`amount`。
+     * item 陣列需包含以下鍵值：
+     *
+     * - name: 商品名稱
+     * - quantity: 商品數量
+     * - unit: 商品單位
+     * - price: 商品單價
+     * - amount: 商品金額
+     *
+     * @param  array<int, array{
+     *     name: string,
+     *     quantity: int,
+     *     unit: string,
+     *     price: int,
+     *     amount: int
+     * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self
     {

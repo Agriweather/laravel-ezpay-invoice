@@ -94,8 +94,6 @@ final class InvoiceQueryResult extends Result implements CheckCodeVerifiable
 
     /**
      * 稅率
-     *
-     * @throws \ValueError
      */
     public function taxRate(): float
     {
@@ -209,7 +207,7 @@ final class InvoiceQueryResult extends Result implements CheckCodeVerifiable
      *
      * - number: 品項序號
      * - name: 商品名稱
-     * - count: 商品數量
+     * - quantity: 商品數量
      * - unit: 商品單位
      * - price: 商品單價
      * - amount: 商品金額
@@ -218,7 +216,7 @@ final class InvoiceQueryResult extends Result implements CheckCodeVerifiable
      * @return array<int, array{
      *     number: int,
      *     name: string,
-     *     count: int,
+     *     quantity: int,
      *     unit: string,
      *     price: int,
      *     amount: int,
@@ -241,7 +239,7 @@ final class InvoiceQueryResult extends Result implements CheckCodeVerifiable
         return array_map(fn (array $item) => [
             'number' => $item['ItemNum'] ? (int) $item['ItemNum'] : 0,
             'name' => $item['ItemName'],
-            'count' => $item['ItemCount'] ? (int) $item['ItemCount'] : 0,
+            'quantity' => $item['ItemCount'] ? (int) $item['ItemCount'] : 0,
             'unit' => $item['ItemWord'],
             'price' => $item['ItemPrice'] ? (int) $item['ItemPrice'] : 0,
             'amount' => $item['ItemAmount'] ? (int) $item['ItemAmount'] : 0,

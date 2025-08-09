@@ -314,10 +314,28 @@ class InvoiceCreateBuilder extends Builder
     /**
      * 批量添加商品項目
      *
+     * item 陣列需包含以下鍵值：
+     *
+     * - name: 商品名稱
+     * - quantity: 商品數量
+     * - unit: 商品單位
+     * - price: 商品單價
+     * - amount: 商品金額
+     * - taxType: 商品課稅別 (選填，若為混合稅率則必填)
+     *
+     * 稅額設定說明：
+     *
      * - 未稅：當開立發票給公司時，商品單價和小計為未稅金額。
      * - 含稅：當開立發票給消費者時，商品單價和小計為含稅金額。
      *
-     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`、`amount`，參數 `taxType` 為可選。
+     * @param  array<int, array{
+     *     name: string,
+     *     quantity: int,
+     *     unit: string,
+     *     price: int,
+     *     amount: int,
+     *     taxType: ?\Agriweather\EzpayInvoice\Enums\TaxType
+     * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self
     {

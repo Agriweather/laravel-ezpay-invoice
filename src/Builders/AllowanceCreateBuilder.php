@@ -75,7 +75,23 @@ class AllowanceCreateBuilder extends Builder
     /**
      * 批量添加折讓商品項目
      *
-     * @param  array  $items  商品項目陣列，每個項目必須包含 `name`、`quantity`、`unit`、`price`、`amount`、`taxAmount`。
+     * item 陣列需包含以下鍵值：
+     *
+     * - name: 折讓商品名稱
+     * - quantity: 折讓商品數量
+     * - unit: 折讓商品單位
+     * - price: 折讓商品單價
+     * - amount: 折讓商品金額
+     * - taxAmount: 折讓商品稅額
+     *
+     * @param  array<int, array{
+     *     name: string,
+     *     quantity: int,
+     *     unit: string,
+     *     price: int,
+     *     amount: int,
+     *     taxAmount: int
+     * }>  $items  折讓商品項目陣列
      */
     public function withItems(array $items): self
     {

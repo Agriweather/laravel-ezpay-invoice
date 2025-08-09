@@ -29,6 +29,8 @@ trait HasAlphanumericCode
      * 發票期別
      *
      * 為該組字軌的發票期別
+     *
+     * @throws \ValueError
      */
     public function term(): InvoiceTerm
     {
@@ -63,6 +65,8 @@ trait HasAlphanumericCode
 
     /**
      * 發票類別
+     *
+     * @throws \ValueError
      */
     public function type(): InvoiceType
     {
@@ -89,6 +93,8 @@ trait HasAlphanumericCode
 
     /**
      * 字軌狀態
+     *
+     * @throws \ValueError
      */
     public function status(): AlphanumericCodeStatus
     {
