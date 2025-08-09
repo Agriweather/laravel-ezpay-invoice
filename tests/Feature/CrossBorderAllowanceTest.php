@@ -65,13 +65,13 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderAllowanceIssue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(CrossBorderAllowanceCreateResult::class)
                 ->and($result->checkCode())->toBe('123456789')
                 ->and($result->allowanceNo())->toBe('A250802013300379')
                 ->and($result->orderNo())->toBe('CBOrder001')
                 ->and($result->invoiceNumber())->toBe('CB00000022')
-                ->and($result->allowanceAmount())->toBe(630)
-                ->and($result->remainingAmount())->toBe(1050 - 630);
+                ->and($result->allowanceAmount())->toBe(105.50)
+                ->and($result->remainingAmount())->toBe(0.00);
         });
     });
 
@@ -121,9 +121,9 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->allowanceAmount)->toBe(105.50)
-                ->and($result->remainingAmount)->toBe(0);
+            expect($result)->toBeInstanceOf(CrossBorderAllowanceTriggerResult::class)
+                ->and($result->allowanceAmount())->toBe(105.50)
+                ->and($result->remainingAmount())->toBe(0);
         });
 
         test('可以取消境外電商折讓', function () {
@@ -171,9 +171,9 @@ describe('境外電商折讓管理功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result->allowanceAmount)->toBe(0)
-                ->and($result->remainingAmount)->toBe(0);
+            expect($result)->toBeInstanceOf(CrossBorderAllowanceTriggerResult::class)
+                ->and($result->allowanceAmount())->toBe(0.0)
+                ->and($result->remainingAmount())->toBe(0.0);
         });
     });
 
@@ -197,7 +197,7 @@ describe('境外電商折讓管理功能測試', function () {
 
             $result = EzpayInvoice::crossBorder()
                 ->allowance()
-                ->query()
+                ->invalidateQuery()
                 ->withAllowance('A250802013300379')
                 ->because('作廢原因')
                 ->transformOptions(function (Options $options) {
@@ -211,14 +211,14 @@ describe('境外電商折讓管理功能測試', function () {
 
                     return $options;
                 })
-                ->void();
+                ->invalidate();
 
             Http::assertSent(function (Request $request) {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
-                ->and($result['AllowanceNo'])->toBe('A250802013300379');
+            expect($result)->toBeInstanceOf(CrossBorderAllowanceInvalidateResult::class)
+                ->and($result->allowanceNo())->toBe('A250802013300379');
         });
     });
 });

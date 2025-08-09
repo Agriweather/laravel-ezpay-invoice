@@ -667,7 +667,7 @@ describe('發票功能測試', function () {
             });
 
             expect($result)->toBeInstanceOf(InvoiceTriggerResult::class)
-                ->and($result->InvoiceNumber())->toBe('GG72002017');
+                ->and($result->invoiceNumber())->toBe('GG72002017');
         });
     });
 

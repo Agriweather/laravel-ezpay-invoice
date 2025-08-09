@@ -32,7 +32,7 @@ class AllowanceCreateOptions extends Options
     public ?ItemTaxType $taxTypeForMixed = null;
 
     /** @var int|float|string[] */
-    public array $ItemTaxAmounts = [];
+    public array $itemTaxAmounts = [];
 
     public int $totalAmount = 0;
 
@@ -58,7 +58,7 @@ class AllowanceCreateOptions extends Options
                 $this->itemUnits[$index] === $unit &&
                 ((float) $this->itemPrices[$index]) === ((float) $price) &&
                 ((float) $this->itemAmounts[$index]) === ((float) $amount) &&
-                ((float) $this->ItemTaxAmounts[$index]) === ((float) $taxAmount)
+                ((float) $this->itemTaxAmounts[$index]) === ((float) $taxAmount)
             ) {
                 return true;
             }
@@ -85,7 +85,7 @@ class AllowanceCreateOptions extends Options
                 'TaxTypeForMixed' => isset($this->taxTypeForMixed)
                     ? (string) $this->taxTypeForMixed->value
                     : null,
-                'ItemTaxAmt' => implode('|', $this->ItemTaxAmounts),
+                'ItemTaxAmt' => implode('|', $this->itemTaxAmounts),
                 'TotalAmt' => (string) $this->totalAmount,
                 'BuyerEmail' => $this->buyerEmail,
                 'Status' => (string) $this->status->value,

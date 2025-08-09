@@ -72,7 +72,7 @@ class AllowanceCreateBuilder extends Builder
         $this->options->itemUnits[] = $unit;
         $this->options->itemPrices[] = $price;
         $this->options->itemAmounts[] = $amount;
-        $this->options->ItemTaxAmounts[] = $taxAmount;
+        $this->options->itemTaxAmounts[] = $taxAmount;
 
         return $this;
     }

@@ -74,7 +74,7 @@ describe('境外電商發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceIssue';
             });
 
-            expect($result)->toBeInstanceOf(Result::class)
+            expect($result)->toBeInstanceOf(CrossBorderInvoiceCreateResult::class)
                 ->and($result->invoiceNumber())->toBe('CB00000016');
         });
     });
@@ -150,12 +150,109 @@ describe('境外電商發票功能測試', function () {
                 return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
             });
 
-            expect($invoiceResult)->toBeInstanceOf(InvoiceResult::class)
-                ->and($invoiceResult->invoiceNumber)->toBe('CBOrder001')
-                ->and($invoiceResult->merchantOrderNo)->toBe('Order001')
-                ->and($invoiceResult->totalAmount)->toBe(1050)
-                ->and($invoiceResult->buyerName)->toBe('John Doe')
-                ->and($invoiceResult->buyerEmail)->toBe('customer@example.com');
+            expect($invoiceResult)->toBeInstanceOf(CrossBorderInvoiceQueryResult::class)
+                ->and($invoiceResult->invoiceNumber())->toBe('CBOrder001')
+                ->and($invoiceResult->orderNo())->toBe('Order001')
+                ->and($invoiceResult->totalAmount())->toBe(1050)
+                ->and($invoiceResult->buyerName())->toBe('John Doe')
+                ->and($invoiceResult->buyerEmail())->toBe('customer@example.com');
+        });
+    });
+
+    describe('境外電商發票觸發', function () {
+        test('可以觸發等待中的發票', function () {
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $ezpayCrypto->expects('verifyCheckCode')->andReturnNull();
+
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '觸發開立發票成功',
+                    'Result' => json_encode([
+                        'CheckCode' => '123456789',
+                        'MerchantID' => '111335678',
+                        'MerchantOrderNo' => 'CBOrder001',
+                        'InvoiceNumber' => 'CB00000016',
+                        'TotalAmt' => '105.50',
+                        'InvoiceTransNo' => '25080200501024251',
+                        'RandomNum' => '1234',
+                        'CreateTime' => '2025-01-01 00:00:00',
+                    ]),
+                ], 200),
+            ]);
+
+            $result = EzpayInvoice::crossBorder()
+                ->invoice()
+                ->triggerQuery()
+                ->withInvoiceTransNo('25080200501024251')
+                ->withOrder('CBOrder001')
+                ->withTotalAmount(105.50)
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceTransNo' => '25080200501024251',
+                        'MerchantOrderNo' => 'CBOrder001',
+                        'TotalAmt' => '105.50',
+                    ]);
+
+                    return $options;
+                })
+                ->trigger();
+
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_touch_issue';
+            });
+
+            expect($result)->toBeInstanceOf(CrossBorderInvoiceTriggerResult::class)
+                ->and($result->invoiceNumber())->toBe('CB00000016');
+        });
+    });
+
+    describe('境外電商發票作廢', function () {
+        test('可以作廢已開立的發票', function () {
+            $ezpayCrypto = partialMock(EzpayCrypto::class);
+            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+
+            Http::fake([
+                '*' => Http::response([
+                    'Status' => 'SUCCESS',
+                    'Message' => '電子發票作廢開立成功',
+                    'Result' => json_encode([
+                        'CheckCode' => '123456789',
+                        'MerchantID' => '111335678',
+                        'InvoiceNumber' => 'CB00000016',
+                        'CreateTime' => '2025-01-01 00:00:00',
+                    ]),
+                ], 200),
+            ]);
+
+            $result = EzpayInvoice::crossBorder()
+                ->invoice()
+                ->invalidateQuery()
+                ->withInvoice('CB00000016')
+                ->because('客戶取消訂單')
+                ->transformOptions(function (Options $options) {
+                    expect($options->toArray()['PostData_'])->toBe([
+                        'RespondType' => 'JSON',
+                        'Version' => '1.0',
+                        'TimeStamp' => Carbon::now()->timestamp,
+                        'InvoiceNumber' => 'CB00000016',
+                        'InvalidReason' => '客戶取消訂單',
+                    ]);
+
+                    return $options;
+                })
+                ->invalidate();
+
+            Http::assertSent(function (Request $request) {
+                return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
+            });
+
+            expect($result)->toBeInstanceOf(CrossBorderInvoiceInvalidateResult::class)
+                ->and($result->invoiceNumber())->toBe('CB00000016');
         });
     });
 });
