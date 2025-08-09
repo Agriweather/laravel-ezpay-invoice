@@ -24,6 +24,8 @@ class InvoiceQueryBuilder extends Builder
 
         $this->options = new InvoiceQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/invoice_search';
     }
 
     public function getOptions(): InvoiceQueryOptions
@@ -123,8 +125,6 @@ class InvoiceQueryBuilder extends Builder
      */
     public function get(): InvoiceQueryResult
     {
-        $this->endpoint = '/Api/invoice_search';
-
         $result = new InvoiceQueryResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);
@@ -150,8 +150,6 @@ class InvoiceQueryBuilder extends Builder
      */
     public function toRedirectRequestData(): array
     {
-        $this->endpoint = '/Api/invoice_search';
-
         $this->options->displayFlag = DisplayFlag::WEB_DISPLAY;
 
         return parent::toRequestData();
@@ -164,8 +162,6 @@ class InvoiceQueryBuilder extends Builder
      */
     public function getEzPaySearchUrl(): string
     {
-        $this->endpoint = '/Api/invoice_search';
-
         $this->options->displayFlag = DisplayFlag::RETURN_URL;
 
         return (new InvoiceQueryUrlResult($this->sendRequest()))->url();

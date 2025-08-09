@@ -16,6 +16,8 @@ class InvoiceTriggerBuilder extends Builder
 
         $this->options = new InvoiceTriggerOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/invoice_touch_issue';
     }
 
     public function getOptions(): InvoiceTriggerOptions
@@ -78,8 +80,6 @@ class InvoiceTriggerBuilder extends Builder
      */
     public function trigger(): InvoiceTriggerResult
     {
-        $this->endpoint = '/Api/invoice_touch_issue';
-
         $result = new InvoiceTriggerResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);

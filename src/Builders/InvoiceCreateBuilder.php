@@ -25,6 +25,8 @@ class InvoiceCreateBuilder extends Builder
 
         $this->options = new InvoiceCreateOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/invoice_issue';
     }
 
     public function getOptions(): InvoiceCreateOptions
@@ -378,8 +380,6 @@ class InvoiceCreateBuilder extends Builder
      */
     public function issue(): InvoiceCreateResult
     {
-        $this->endpoint = '/Api/invoice_issue';
-
         $result = new InvoiceCreateResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);

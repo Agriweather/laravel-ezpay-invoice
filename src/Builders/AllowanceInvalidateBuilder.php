@@ -16,6 +16,8 @@ class AllowanceInvalidateBuilder extends Builder
 
         $this->options = new AllowanceInvalidateQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/allowanceInvalid';
     }
 
     public function getOptions(): AllowanceInvalidateQueryOptions
@@ -54,8 +56,6 @@ class AllowanceInvalidateBuilder extends Builder
      */
     public function invalidate(): AllowanceInvalidateResult
     {
-        $this->endpoint = '/Api/allowanceInvalid';
-
         return new AllowanceInvalidateResult($this->sendRequest());
     }
 }

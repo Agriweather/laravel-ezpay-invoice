@@ -17,6 +17,8 @@ class AllowanceTriggerBuilder extends Builder
 
         $this->options = new AllowanceTriggerOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/allowance_touch_issue';
     }
 
     public function getOptions(): AllowanceTriggerOptions
@@ -67,8 +69,6 @@ class AllowanceTriggerBuilder extends Builder
      */
     public function confirm(): AllowanceTriggerResult
     {
-        $this->endpoint = '/Api/allowance_touch_issue';
-
         $this->options->status = AllowanceTriggerStatus::YES;
 
         return new AllowanceTriggerResult($this->sendRequest());
@@ -81,8 +81,6 @@ class AllowanceTriggerBuilder extends Builder
      */
     public function cancel(): AllowanceTriggerResult
     {
-        $this->endpoint = '/Api/allowance_touch_issue';
-
         $this->options->status = AllowanceTriggerStatus::NO;
 
         return new AllowanceTriggerResult($this->sendRequest());

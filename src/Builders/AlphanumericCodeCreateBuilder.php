@@ -18,6 +18,8 @@ class AlphanumericCodeCreateBuilder extends Builder
 
         $this->options = new AlphanumericCodeCreateOptions;
         $this->options->companyId = $this->factory->config('company_id');
+
+        $this->endpoint = '/Api_number_management/createNumber';
     }
 
     public function getOptions(): AlphanumericCodeCreateOptions
@@ -92,8 +94,6 @@ class AlphanumericCodeCreateBuilder extends Builder
      */
     public function save(): AlphanumericCodeCreateResult
     {
-        $this->endpoint = '/Api_number_management/createNumber';
-
         return new AlphanumericCodeCreateResult($this->sendRequest());
     }
 }

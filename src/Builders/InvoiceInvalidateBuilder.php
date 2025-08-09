@@ -16,6 +16,8 @@ class InvoiceInvalidateBuilder extends Builder
 
         $this->options = new InvoiceInvalidateQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/invoice_invalid';
     }
 
     public function getOptions(): InvoiceInvalidateQueryOptions
@@ -54,8 +56,6 @@ class InvoiceInvalidateBuilder extends Builder
      */
     public function invalidate(): InvoiceInvalidateResult
     {
-        $this->endpoint = '/Api/invoice_invalid';
-
         return new InvoiceInvalidateResult($this->sendRequest());
     }
 }

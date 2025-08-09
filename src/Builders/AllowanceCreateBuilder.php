@@ -19,6 +19,8 @@ class AllowanceCreateBuilder extends Builder
 
         $this->options = new AllowanceCreateOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/allowance_issue';
     }
 
     public function getOptions(): AllowanceCreateOptions
@@ -170,8 +172,6 @@ class AllowanceCreateBuilder extends Builder
      */
     public function issue(): AllowanceCreateResult
     {
-        $this->endpoint = '/Api/allowance_issue';
-
         return new AllowanceCreateResult($this->sendRequest());
     }
 }

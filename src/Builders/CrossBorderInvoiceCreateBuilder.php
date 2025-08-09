@@ -20,6 +20,8 @@ class CrossBorderInvoiceCreateBuilder extends Builder
 
         $this->options = new CrossBorderInvoiceCreateOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/crossBorderInvoiceIssue';
     }
 
     public function getOptions(): CrossBorderInvoiceCreateOptions
@@ -203,8 +205,6 @@ class CrossBorderInvoiceCreateBuilder extends Builder
      */
     public function issue(): CrossBorderInvoiceCreateResult
     {
-        $this->endpoint = '/Api/crossBorderInvoiceIssue';
-
         $result = new CrossBorderInvoiceCreateResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);
