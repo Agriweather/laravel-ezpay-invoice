@@ -3,9 +3,9 @@
 namespace Agriweather\EzPayInvoice;
 
 use Agriweather\EzPayInvoice\Builders\InvoiceCreateBuilder;
-use Agriweather\EzPayInvoice\Builders\InvoiceInvalidateQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\InvoiceInvalidateBuilder;
 use Agriweather\EzPayInvoice\Builders\InvoiceQueryBuilder;
-use Agriweather\EzPayInvoice\Builders\InvoiceTriggerQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\InvoiceTriggerBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormPostSender;
 use Agriweather\EzPayInvoice\Contracts\HttpSender;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
@@ -35,16 +35,16 @@ class Invoice extends SubFactory
         ))->setFormPostSender($this->formPostSender));
     }
 
-    public function triggerQuery(): InvoiceTriggerQueryBuilder
+    public function pending(): InvoiceTriggerBuilder
     {
-        return $this->prepareBuilder(new InvoiceTriggerQueryBuilder(
+        return $this->prepareBuilder(new InvoiceTriggerBuilder(
             $this->factory, $this->crypto, $this->httpSender
         ));
     }
 
-    public function invalidateQuery(): InvoiceInvalidateQueryBuilder
+    public function voidable(): InvoiceInvalidateBuilder
     {
-        return $this->prepareBuilder(new InvoiceInvalidateQueryBuilder(
+        return $this->prepareBuilder(new InvoiceInvalidateBuilder(
             $this->factory, $this->crypto, $this->httpSender
         ));
     }

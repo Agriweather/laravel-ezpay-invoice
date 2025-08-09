@@ -638,7 +638,7 @@ test('發票觸發 → 可以觸發等待中的發票', function () {
     ]);
 
     $result = EzPayInvoice::invoice()
-        ->triggerQuery()
+        ->pending()
         ->withInvoiceTransNo('25072516392250538')
         ->withOrder('Order004')
         ->withTotalAmount(210)
@@ -682,7 +682,7 @@ test('發票作廢 → 可以作廢已開立的發票', function () {
     ]);
 
     $result = EzPayInvoice::invoice()
-        ->invalidateQuery()
+        ->voidable()
         ->withInvoice('GG72002017')
         ->because('客戶取消訂單')
         ->transformOptions(function (Options $options) {

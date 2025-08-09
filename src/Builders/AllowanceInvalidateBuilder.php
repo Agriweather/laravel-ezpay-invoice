@@ -2,35 +2,35 @@
 
 namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzPayInvoice\Options\InvoiceInvalidateQueryOptions;
-use Agriweather\EzPayInvoice\Results\InvoiceInvalidateResult;
+use Agriweather\EzPayInvoice\Options\AllowanceInvalidateQueryOptions;
+use Agriweather\EzPayInvoice\Results\AllowanceInvalidateResult;
 
-class InvoiceInvalidateQueryBuilder extends Builder
+class AllowanceInvalidateBuilder extends Builder
 {
-    protected InvoiceInvalidateQueryOptions $options;
+    protected AllowanceInvalidateQueryOptions $options;
 
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new InvoiceInvalidateQueryOptions;
+        $this->options = new AllowanceInvalidateQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
-    public function getOptions(): InvoiceInvalidateQueryOptions
+    public function getOptions(): AllowanceInvalidateQueryOptions
     {
         return $this->options;
     }
 
     /**
-     * 發票號碼
+     * 折讓號
      *
-     * @param  string  $invoiceNumber  發票號碼
+     * @param  string  $allowanceNo  開立折讓時的折讓號
      */
-    public function withInvoice(string $invoiceNumber): self
+    public function withAllowance(string $allowanceNo): self
     {
-        $this->options->invoiceNumber = $invoiceNumber;
+        $this->options->allowanceNo = $allowanceNo;
 
         return $this;
     }
@@ -48,14 +48,14 @@ class InvoiceInvalidateQueryBuilder extends Builder
     }
 
     /**
-     * 作廢發票
+     * 作廢折讓
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
-    public function invalidate(): InvoiceInvalidateResult
+    public function invalidate(): AllowanceInvalidateResult
     {
-        $this->endpoint = '/Api/invoice_invalid';
+        $this->endpoint = '/Api/allowanceInvalid';
 
-        return new InvoiceInvalidateResult($this->sendRequest());
+        return new AllowanceInvalidateResult($this->sendRequest());
     }
 }

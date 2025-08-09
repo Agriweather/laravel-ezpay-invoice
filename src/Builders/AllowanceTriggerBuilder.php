@@ -3,23 +3,23 @@
 namespace Agriweather\EzPayInvoice\Builders;
 
 use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
-use Agriweather\EzPayInvoice\Options\AllowanceTriggerQueryOptions;
+use Agriweather\EzPayInvoice\Options\AllowanceTriggerOptions;
 use Agriweather\EzPayInvoice\Results\AllowanceTriggerResult;
 
-class AllowanceTriggerQueryBuilder extends Builder
+class AllowanceTriggerBuilder extends Builder
 {
-    protected AllowanceTriggerQueryOptions $options;
+    protected AllowanceTriggerOptions $options;
 
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new AllowanceTriggerQueryOptions;
+        $this->options = new AllowanceTriggerOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
-    public function getOptions(): AllowanceTriggerQueryOptions
+    public function getOptions(): AllowanceTriggerOptions
     {
         return $this->options;
     }

@@ -2,35 +2,35 @@
 
 namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzPayInvoice\Options\AllowanceInvalidateQueryOptions;
-use Agriweather\EzPayInvoice\Results\AllowanceInvalidateResult;
+use Agriweather\EzPayInvoice\Options\InvoiceInvalidateQueryOptions;
+use Agriweather\EzPayInvoice\Results\InvoiceInvalidateResult;
 
-class AllowanceInvalidateQueryBuilder extends Builder
+class InvoiceInvalidateBuilder extends Builder
 {
-    protected AllowanceInvalidateQueryOptions $options;
+    protected InvoiceInvalidateQueryOptions $options;
 
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new AllowanceInvalidateQueryOptions;
+        $this->options = new InvoiceInvalidateQueryOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
-    public function getOptions(): AllowanceInvalidateQueryOptions
+    public function getOptions(): InvoiceInvalidateQueryOptions
     {
         return $this->options;
     }
 
     /**
-     * 折讓號
+     * 發票號碼
      *
-     * @param  string  $allowanceNo  開立折讓時的折讓號
+     * @param  string  $invoiceNumber  發票號碼
      */
-    public function withAllowance(string $allowanceNo): self
+    public function withInvoice(string $invoiceNumber): self
     {
-        $this->options->allowanceNo = $allowanceNo;
+        $this->options->invoiceNumber = $invoiceNumber;
 
         return $this;
     }
@@ -48,14 +48,14 @@ class AllowanceInvalidateQueryBuilder extends Builder
     }
 
     /**
-     * 作廢折讓
+     * 作廢發票
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
-    public function invalidate(): AllowanceInvalidateResult
+    public function invalidate(): InvoiceInvalidateResult
     {
-        $this->endpoint = '/Api/allowanceInvalid';
+        $this->endpoint = '/Api/invoice_invalid';
 
-        return new AllowanceInvalidateResult($this->sendRequest());
+        return new InvoiceInvalidateResult($this->sendRequest());
     }
 }

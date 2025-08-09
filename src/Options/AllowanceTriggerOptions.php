@@ -2,17 +2,18 @@
 
 namespace Agriweather\EzPayInvoice\Options;
 
+use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
 use Carbon\Carbon;
 
-class InvoiceTriggerQueryOptions extends Options
+class AllowanceTriggerOptions extends Options
 {
     public string $merchantId = '';
 
-    public ?string $ezPayTransNumber = null;
-
-    public string $invoiceTransNo = '';
+    public string $allowanceNo = '';
 
     public string $orderNo = '';
+
+    public AllowanceTriggerStatus $status = AllowanceTriggerStatus::YES;
 
     public int $totalAmount = 0;
 
@@ -24,12 +25,10 @@ class InvoiceTriggerQueryOptions extends Options
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
-                'TransNum' => $this->ezPayTransNumber,
-                'InvoiceTransNo' => $this->invoiceTransNo,
+                'AllowanceStatus' => $this->status->value,
+                'AllowanceNo' => $this->allowanceNo,
                 'MerchantOrderNo' => $this->orderNo,
-                'TotalAmt' => isset($this->totalAmount)
-                    ? (string) $this->totalAmount
-                    : null,
+                'TotalAmt' => (string) $this->totalAmount,
             ], fn ($value) => ! is_null($value)),
         ];
     }

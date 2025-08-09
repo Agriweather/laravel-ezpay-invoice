@@ -191,7 +191,7 @@ test('境外電商折讓作廢 → 可以作廢已開立的境外電商折讓', 
 
     $result = EzPayInvoice::crossBorder()
         ->allowance()
-        ->invalidateQuery()
+        ->voidable()
         ->withAllowance('A250802013300379')
         ->because('作廢原因')
         ->transformOptions(function (Options $options) {

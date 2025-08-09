@@ -2,23 +2,23 @@
 
 namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzPayInvoice\Options\InvoiceTriggerQueryOptions;
+use Agriweather\EzPayInvoice\Options\InvoiceTriggerOptions;
 use Agriweather\EzPayInvoice\Results\InvoiceTriggerResult;
 
-class InvoiceTriggerQueryBuilder extends Builder
+class InvoiceTriggerBuilder extends Builder
 {
-    protected InvoiceTriggerQueryOptions $options;
+    protected InvoiceTriggerOptions $options;
 
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
         $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
 
-        $this->options = new InvoiceTriggerQueryOptions;
+        $this->options = new InvoiceTriggerOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
-    public function getOptions(): InvoiceTriggerQueryOptions
+    public function getOptions(): InvoiceTriggerOptions
     {
         return $this->options;
     }
