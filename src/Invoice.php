@@ -8,13 +8,13 @@ use Agriweather\EzPayInvoice\Builders\InvoiceQueryBuilder;
 use Agriweather\EzPayInvoice\Builders\InvoiceTriggerQueryBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormPostSender;
 use Agriweather\EzPayInvoice\Contracts\HttpSender;
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 
 class Invoice extends SubFactory
 {
     public function __construct(
         protected Factory $factory,
-        protected EzpayCrypto $crypto,
+        protected Crypto $crypto,
         protected HttpSender $httpSender,
         protected FormPostSender $formPostSender
     ) {

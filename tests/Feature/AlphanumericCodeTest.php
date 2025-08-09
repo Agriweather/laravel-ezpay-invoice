@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
 use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzPayInvoice\Enums\InvoiceType;
@@ -18,8 +18,8 @@ use function Pest\Laravel\partialMock;
 describe('字軌管理功能測試', function () {
     describe('字軌申請功能', function () {
         test('可以成功申請新字軌', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -84,8 +84,8 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌查詢功能', function () {
         test('可以查詢字軌資訊', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -145,8 +145,8 @@ describe('字軌管理功能測試', function () {
 
     describe('字軌管理功能', function () {
         test('可以暫停字軌', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -196,8 +196,8 @@ describe('字軌管理功能測試', function () {
         });
 
         test('可以啟用字軌', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -247,8 +247,8 @@ describe('字軌管理功能測試', function () {
         });
 
         test('可以停用字軌', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([

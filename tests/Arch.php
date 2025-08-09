@@ -13,7 +13,7 @@ if (function_exists('arch')) {
             'Illuminate\Support\Traits\Conditionable',
             'Illuminate\Support\Traits\Tappable',
             'Agriweather\EzpayInvoice\Factory',
-            'Agriweather\EzpayInvoice\Crypto\EzpayCrypto',
+            'Agriweather\EzpayInvoice\Crypto\Crypto',
             'Agriweather\EzpayInvoice\Options',
         ]);
 

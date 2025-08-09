@@ -3,7 +3,7 @@
 namespace Agriweather\EzPayInvoice\Builders;
 
 use Agriweather\EzPayInvoice\Contracts\HttpSender;
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 use Agriweather\EzPayInvoice\Factory;
 use Agriweather\EzPayInvoice\Options\Options;
@@ -20,7 +20,7 @@ abstract class Builder
 
     public function __construct(
         protected Factory $factory,
-        protected EzpayCrypto $crypto,
+        protected Crypto $crypto,
         protected HttpSender $httpSender
     ) {
         $this->boot();

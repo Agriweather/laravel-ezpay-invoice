@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\TaxType;
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
@@ -10,9 +10,9 @@ use function Pest\Laravel\partialMock;
 
 describe('拋出錯誤測試', function () {
     test('應該拋出 ezPay 錯誤', function () {
-        $ezpayCrypto = partialMock(EzpayCrypto::class);
-        $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
-        $ezpayCrypto->shouldNotReceive('verifyCheckCode');
+        $crypto = partialMock(Crypto::class);
+        $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+        $crypto->shouldNotReceive('verifyCheckCode');
 
         Http::fake([
             '*' => Http::response([

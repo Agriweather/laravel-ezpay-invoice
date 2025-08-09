@@ -8,7 +8,7 @@ use Agriweather\EzPayInvoice\Exceptions\EncryptException;
 use Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException;
 use Agriweather\EzPayInvoice\Results\Result;
 
-class EzpayCrypto
+class Crypto
 {
     protected string $hashKey;
 

@@ -5,7 +5,7 @@ namespace Agriweather\EzPayInvoice;
 use Agriweather\EzPayInvoice\Builders\CodeValidationBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormPostSender;
 use Agriweather\EzPayInvoice\Contracts\HttpSender;
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 
 class Factory
 {
@@ -20,7 +20,7 @@ class Factory
     protected string $testingBaseUrl = 'https://cinv.ezpay.com.tw';
 
     public function __construct(
-        protected EzpayCrypto $crypto,
+        protected Crypto $crypto,
         protected HttpSender $httpSender,
         protected FormPostSender $formPostSender,
         protected array $config

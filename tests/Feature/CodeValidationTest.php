@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\CodeValidationResult;
@@ -13,9 +13,9 @@ use function Pest\Laravel\partialMock;
 describe('驗證功能測試', function () {
     describe('手機條碼驗證功能', function () {
         test('可以驗證有效的手機條碼', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
-            $ezpayCrypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
                 'CellphoneBarcode' => '/ABC.123',
                 'IsExist' => 'Y',
             ]);
@@ -54,9 +54,9 @@ describe('驗證功能測試', function () {
         });
 
         test('可以驗證無效的手機條碼', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
-            $ezpayCrypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
                 'CellphoneBarcode' => '/ABC.123',
                 'IsExist' => 'N',
             ]);
@@ -97,9 +97,9 @@ describe('驗證功能測試', function () {
 
     describe('捐贈碼驗證功能', function () {
         test('可以驗證有效的捐贈碼', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
-            $ezpayCrypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
                 'Lovecode' => '123',
                 'IsExist' => 'Y',
             ]);
@@ -138,9 +138,9 @@ describe('驗證功能測試', function () {
         });
 
         test('可以驗證無效的捐贈碼', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
-            $ezpayCrypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto->expects('decryptPostData')->with('encrypted_data')->andReturn([
                 'Lovecode' => '123',
                 'IsExist' => 'N',
             ]);

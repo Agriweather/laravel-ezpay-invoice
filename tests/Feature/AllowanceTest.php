@@ -1,6 +1,6 @@
 <?php
 
-use Agriweather\EzPayInvoice\Crypto\EzpayCrypto;
+use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\AllowanceCreateResult;
@@ -15,8 +15,8 @@ use function Pest\Laravel\partialMock;
 describe('折讓管理功能測試', function () {
     describe('折讓開立流程', function () {
         test('可以成功開立折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -77,8 +77,8 @@ describe('折讓管理功能測試', function () {
         });
 
         test('可以開立多品項折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -134,8 +134,8 @@ describe('折讓管理功能測試', function () {
         });
 
         test('可以開立非立即確認的折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -191,8 +191,8 @@ describe('折讓管理功能測試', function () {
 
     describe('折讓觸發功能', function () {
         test('可以確認折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -240,8 +240,8 @@ describe('折讓管理功能測試', function () {
         });
 
         test('可以取消折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
@@ -291,8 +291,8 @@ describe('折讓管理功能測試', function () {
 
     describe('折讓作廢功能', function () {
         test('可以作廢已開立的折讓', function () {
-            $ezpayCrypto = partialMock(EzpayCrypto::class);
-            $ezpayCrypto->expects('encryptPostData')->andReturn('encrypted_data');
+            $crypto = partialMock(Crypto::class);
+            $crypto->expects('encryptPostData')->andReturn('encrypted_data');
 
             Http::fake([
                 '*' => Http::response([
