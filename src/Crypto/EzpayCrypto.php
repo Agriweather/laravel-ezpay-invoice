@@ -48,7 +48,7 @@ class EzpayCrypto
     public function decryptPostData(string $encryptedPostData): array
     {
         $value = openssl_decrypt(
-            hex2bin(trim($encryptedPostData)),
+            hex2bin($encryptedPostData),
             'AES-256-CBC',
             $this->hashKey,
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
@@ -79,7 +79,7 @@ class EzpayCrypto
 
     protected function removePadding(string $string): string
     {
-        $pad = ord($string[strlen($string) - 1]);
+        $pad = ord(substr($string, -1));
 
         if ($pad < 1 || $pad > 32) {
             return $string; // No padding
