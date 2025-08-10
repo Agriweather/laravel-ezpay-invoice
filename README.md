@@ -259,12 +259,14 @@ EzPayInvoice::invoice()
 套件同時也提供了條件式的語法，可以在開立發票時根據需要選擇性地添加參數：
 
 ```php
+use Agriweather\EzPayInvoice\Builders\InvoiceQueryBuilder;
+
 EzPayInvoice::invoice()
     ->create()
-    ->when($mobileCarrier, function (InvoiceQueryBuilder $builder) use ($mobileCarrier) {
+    ->when($request->input('carrier_type') === 'mobile', function (InvoiceQueryBuilder $builder) use ($mobileCarrier) {
         $builder->withCarrier(CarrierType::MOBILE, $mobileCarrier);
     })
-    ->when($loveCode, function (InvoiceQueryBuilder $builder) use ($loveCode) {
+    ->when($request->input('carrier_type') === 'lovecode', function (InvoiceQueryBuilder $builder) use ($loveCode) {
         $builder->withLoveCode($loveCode);
     })
 ```
