@@ -1,14 +1,17 @@
 <?php
 
-namespace Agriweather\EzPayInvoice;
+namespace Agriweather\EzPayInvoice\Resources;
 
 use Agriweather\EzPayInvoice\Builders\CrossBorderInvoice\CreateBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Factory;
 
-class CrossBorderInvoice extends SubFactory
+class CrossBorderInvoice
 {
+    use Concerns\PrepareBuilder;
+
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,

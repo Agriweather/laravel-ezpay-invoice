@@ -1,22 +1,22 @@
 <?php
 
-namespace Agriweather\EzPayInvoice;
+namespace Agriweather\EzPayInvoice\Resources;
 
-use Agriweather\EzPayInvoice\Builders\Invoice\CreateBuilder;
-use Agriweather\EzPayInvoice\Builders\Invoice\InvalidateBuilder;
-use Agriweather\EzPayInvoice\Builders\Invoice\QueryBuilder;
-use Agriweather\EzPayInvoice\Builders\Invoice\TriggerBuilder;
-use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
+use Agriweather\EzPayInvoice\Builders\Allowance\CreateBuilder;
+use Agriweather\EzPayInvoice\Builders\Allowance\InvalidateBuilder;
+use Agriweather\EzPayInvoice\Builders\Allowance\TriggerBuilder;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Factory;
 
-class Invoice extends SubFactory
+class Allowance
 {
+    use Concerns\PrepareBuilder;
+
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,
-        protected HttpTransporter $httpTransporter,
-        protected FormRedirectTransporter $formRedirectTransporter
+        protected HttpTransporter $httpTransporter
     ) {
         //
     }
@@ -26,13 +26,6 @@ class Invoice extends SubFactory
         return $this->prepareBuilder(new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
-    }
-
-    public function query(): QueryBuilder
-    {
-        return $this->prepareBuilder((new QueryBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
-        ))->setFormRedirectTransporter($this->formRedirectTransporter));
     }
 
     public function pending(): TriggerBuilder

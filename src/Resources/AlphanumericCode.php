@@ -1,14 +1,17 @@
 <?php
 
-namespace Agriweather\EzPayInvoice;
+namespace Agriweather\EzPayInvoice\Resources;
 
 use Agriweather\EzPayInvoice\Builders\AlphanumericCode\CreateBuilder;
 use Agriweather\EzPayInvoice\Builders\AlphanumericCode\QueryBuilder;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Factory;
 
-class AlphanumericCode extends SubFactory
+class AlphanumericCode
 {
+    use Concerns\PrepareBuilder;
+
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,

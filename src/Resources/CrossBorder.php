@@ -1,10 +1,11 @@
 <?php
 
-namespace Agriweather\EzPayInvoice;
+namespace Agriweather\EzPayInvoice\Resources;
 
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Factory;
 
 class CrossBorder
 {

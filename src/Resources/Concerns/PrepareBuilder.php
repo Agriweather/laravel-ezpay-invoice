@@ -1,10 +1,10 @@
 <?php
 
-namespace Agriweather\EzPayInvoice;
+namespace Agriweather\EzPayInvoice\Resources\Concerns;
 
 use Agriweather\EzPayInvoice\Builders\Concerns\HasTransformOptions;
 
-class SubFactory
+trait PrepareBuilder
 {
     use HasTransformOptions;
 

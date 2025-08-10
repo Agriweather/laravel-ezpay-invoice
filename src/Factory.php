@@ -6,6 +6,10 @@ use Agriweather\EzPayInvoice\Builders\CodeValidation\CodeValidationBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Resources\Allowance;
+use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
+use Agriweather\EzPayInvoice\Resources\CrossBorder;
+use Agriweather\EzPayInvoice\Resources\Invoice;
 
 class Factory
 {
