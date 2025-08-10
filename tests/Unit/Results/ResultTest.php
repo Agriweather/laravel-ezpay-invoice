@@ -3,7 +3,7 @@
 use Agriweather\EzPayInvoice\Results\Result;
 
 test('可以解析成功結果', function () {
-    $result = new UnitTestResult([
+    $result = new TestResult([
         'Status' => 'SUCCESS',
         'Message' => '發票開立成功',
         'Result' => json_encode([
@@ -22,7 +22,7 @@ test('可以解析成功結果', function () {
     ]);
 });
 
-class UnitTestResult extends Result
+class TestResult extends Result
 {
     //
 }

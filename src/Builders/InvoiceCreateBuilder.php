@@ -388,7 +388,7 @@ class InvoiceCreateBuilder extends Builder
     }
 
     /**
-     * 延遲開立發票
+     * 等待觸發開立發票
      *
      * 於確認要開立時，再手動觸發。
      *
