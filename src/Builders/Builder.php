@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 use Agriweather\EzPayInvoice\Factory;
@@ -21,7 +21,7 @@ abstract class Builder
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,
-        protected HttpSender $httpSender
+        protected HttpTransporter $httpTransporter
     ) {
         $this->boot();
     }
@@ -66,7 +66,7 @@ abstract class Builder
     {
         $requestData = $this->toRequestData();
 
-        $response = $this->httpSender->send(
+        $response = $this->httpTransporter->send(
             $requestData['url'],
             $requestData['formData']
         );

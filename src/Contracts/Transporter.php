@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Contracts;
 
-interface Sender
+interface Transporter
 {
     public function send(string $url, array $data): mixed;
 }

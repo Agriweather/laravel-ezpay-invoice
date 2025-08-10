@@ -1,7 +1,7 @@
 <?php
 
 use Agriweather\EzPayInvoice\Builders\InvoiceCreateBuilder;
-use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\CarrierType;
 use Agriweather\EzPayInvoice\Enums\CustomsClearance;
@@ -57,11 +57,11 @@ test('可以僅使用必須的參數', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withOrder('Order123')
         ->forConsumer('John Doe')
         ->withTax(TaxType::TAXABLE, 5)
@@ -124,11 +124,11 @@ test('可以使用全部的參數', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withEzPayTransNumber('1234567890')
         ->withOrder('Order123')
         ->forBusiness('測試公司有限公司', '12345678')
@@ -187,11 +187,11 @@ test('可以設定應稅稅率', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withTax(TaxType::TAXABLE, 5)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -236,11 +236,11 @@ test('可以設定零稅率', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withTax(TaxType::ZERO_RATE)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -285,11 +285,11 @@ test('可以設定免稅', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withTax(TaxType::TAX_FREE)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -337,11 +337,11 @@ test('可以設定混合稅率，和各種混合稅率的銷售額', function ()
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withTax(TaxType::MIXED, 5)
         ->withItem('商品名稱1', quantity: 2, unit: '個', price: 100, amount: 200, taxType: ItemTaxType::TAXABLE)
         ->withItem('商品名稱2', quantity: 1, unit: '個', price: 80, amount: 80, taxType: ItemTaxType::ZERO_RATE)
@@ -391,11 +391,11 @@ test('可以批次設定多個商品', function () {
     $crypto->expects('setHashIv');
     $crypto->expects('encryptByAES')->andReturn('encrypted_data');
     $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpSender */
-    $httpSender = mock(HttpSender::class);
-    $httpSender->expects('send')->andReturn($response);
+    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
+    $httpTransporter = mock(HttpTransporter::class);
+    $httpTransporter->expects('send')->andReturn($response);
 
-    (new InvoiceCreateBuilder($factory, $crypto, $httpSender))
+    (new InvoiceCreateBuilder($factory, $crypto, $httpTransporter))
         ->withItems([
             ['name' => '商品名稱1', 'quantity' => 2, 'unit' => '個', 'price' => 100, 'amount' => 200],
             ['name' => '商品名稱2', 'quantity' => 1, 'unit' => '個', 'price' => 80, 'amount' => 80],

@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Builders;
 
-use Agriweather\EzPayInvoice\Contracts\FormPostSender;
+use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Enums\DisplayFlag;
 use Agriweather\EzPayInvoice\Enums\SearchType;
 use Agriweather\EzPayInvoice\Options\InvoiceQueryOptions;
@@ -15,7 +15,7 @@ class InvoiceQueryBuilder extends Builder
 {
     protected InvoiceQueryOptions $options;
 
-    protected FormPostSender $formPostSender;
+    protected FormRedirectTransporter $formRedirectTransporter;
 
     protected function boot(): void
     {
@@ -139,7 +139,7 @@ class InvoiceQueryBuilder extends Builder
     {
         $requestData = $this->toRedirectRequestData();
 
-        return $this->formPostSender->send(
+        return $this->formRedirectTransporter->send(
             $requestData['url'],
             $requestData['formData']
         );
@@ -167,9 +167,9 @@ class InvoiceQueryBuilder extends Builder
         return (new InvoiceQueryUrlResult($this->sendRequest()))->url();
     }
 
-    public function setFormPostSender(FormPostSender $formPostSender): self
+    public function setFormRedirectTransporter(FormRedirectTransporter $formRedirectTransporter): self
     {
-        $this->formPostSender = $formPostSender;
+        $this->formRedirectTransporter = $formRedirectTransporter;
 
         return $this;
     }

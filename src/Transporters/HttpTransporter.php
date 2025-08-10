@@ -1,12 +1,12 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Senders;
+namespace Agriweather\EzPayInvoice\Transporters;
 
-use Agriweather\EzPayInvoice\Contracts\HttpSender as HttpSenderContract;
+use Agriweather\EzPayInvoice\Contracts\HttpTransporter as HttpTransporterContract;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Response as ClientResponse;
 
-class HttpSender implements HttpSenderContract
+class HttpTransporter implements HttpTransporterContract
 {
     public function __construct(
         protected Factory $client

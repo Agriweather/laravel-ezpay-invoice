@@ -3,8 +3,8 @@
 namespace Agriweather\EzPayInvoice;
 
 use Agriweather\EzPayInvoice\Builders\CodeValidationBuilder;
-use Agriweather\EzPayInvoice\Contracts\FormPostSender;
-use Agriweather\EzPayInvoice\Contracts\HttpSender;
+use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
+use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 
 class Factory
@@ -21,8 +21,8 @@ class Factory
 
     public function __construct(
         protected Crypto $crypto,
-        protected HttpSender $httpSender,
-        protected FormPostSender $formPostSender,
+        protected HttpTransporter $httpTransporter,
+        protected FormRedirectTransporter $formRedirectTransporter,
         protected array $config
     ) {
         //
@@ -31,35 +31,35 @@ class Factory
     public function invoice(): Invoice
     {
         return new Invoice(
-            $this, $this->crypto, $this->httpSender, $this->formPostSender
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
         );
     }
 
     public function allowance(): Allowance
     {
         return new Allowance(
-            $this, $this->crypto, $this->httpSender
+            $this, $this->crypto, $this->httpTransporter
         );
     }
 
     public function crossBorder(): CrossBorder
     {
         return new CrossBorder(
-            $this, $this->crypto, $this->httpSender, $this->formPostSender
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
         );
     }
 
     public function alphanumericCode(): AlphanumericCode
     {
         return new AlphanumericCode(
-            $this, $this->crypto, $this->httpSender
+            $this, $this->crypto, $this->httpTransporter
         );
     }
 
     public function codeValidation(): CodeValidationBuilder
     {
         return new CodeValidationBuilder(
-            $this, $this->crypto, $this->httpSender
+            $this, $this->crypto, $this->httpTransporter
         );
     }
 

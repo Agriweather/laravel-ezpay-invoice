@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Senders;
+namespace Agriweather\EzPayInvoice\Transporters;
 
-use Agriweather\EzPayInvoice\Contracts\FormPostSender as FormPostSenderContract;
+use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter as FormRedirectTransporterContract;
 use Illuminate\Http\Response;
 
-class FormPostSender implements FormPostSenderContract
+class FormRedirectTransporter implements FormRedirectTransporterContract
 {
     public function send(string $url, array $data): Response
     {
