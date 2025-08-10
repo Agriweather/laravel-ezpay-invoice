@@ -1,0 +1,31 @@
+<?php
+
+namespace Agriweather\EzPayInvoice\Results\Allowance;
+
+use Agriweather\EzPayInvoice\Results\Concerns;
+use Agriweather\EzPayInvoice\Results\Result;
+use Carbon\Carbon;
+
+final class InvalidateResult extends Result
+{
+    use Concerns\HasCheckCode;
+    use Concerns\HasMerchantID;
+
+    /**
+     * 折讓號
+     */
+    public function allowanceNo(): string
+    {
+        return $this->result['AllowanceNo'];
+    }
+
+    /**
+     * 作廢折讓時間
+     *
+     * @throws \Carbon\Exceptions\InvalidFormatException
+     */
+    public function createTime(): Carbon
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->result['CreateTime']);
+    }
+}

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Agriweather\EzPayInvoice\Allowance allowance()
  * @method static \Agriweather\EzPayInvoice\CrossBorder crossBorder()
  * @method static \Agriweather\EzPayInvoice\AlphanumericCode alphanumericCode()
- * @method static \Agriweather\EzPayInvoice\Builders\CodeValidationBuilder codeValidation()
+ * @method static \Agriweather\EzPayInvoice\Builders\CodeValidation\CodeValidationBuilder codeValidation()
  *
  * @see \Agriweather\EzPayInvoice\Factory
  */

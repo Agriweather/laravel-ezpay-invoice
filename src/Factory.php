@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzPayInvoice\Builders\CodeValidationBuilder;
+use Agriweather\EzPayInvoice\Builders\CodeValidation\CodeValidationBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;

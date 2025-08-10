@@ -2,9 +2,9 @@
 
 namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzPayInvoice\Builders\AllowanceCreateBuilder;
-use Agriweather\EzPayInvoice\Builders\AllowanceInvalidateBuilder;
-use Agriweather\EzPayInvoice\Builders\AllowanceTriggerBuilder;
+use Agriweather\EzPayInvoice\Builders\Allowance\CreateBuilder;
+use Agriweather\EzPayInvoice\Builders\Allowance\InvalidateBuilder;
+use Agriweather\EzPayInvoice\Builders\Allowance\TriggerBuilder;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 
@@ -18,23 +18,23 @@ class Allowance extends SubFactory
         //
     }
 
-    public function create(): AllowanceCreateBuilder
+    public function create(): CreateBuilder
     {
-        return $this->prepareBuilder(new AllowanceCreateBuilder(
+        return $this->prepareBuilder(new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }
 
-    public function pending(): AllowanceTriggerBuilder
+    public function pending(): TriggerBuilder
     {
-        return $this->prepareBuilder(new AllowanceTriggerBuilder(
+        return $this->prepareBuilder(new TriggerBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }
 
-    public function voidable(): AllowanceInvalidateBuilder
+    public function voidable(): InvalidateBuilder
     {
-        return $this->prepareBuilder(new AllowanceInvalidateBuilder(
+        return $this->prepareBuilder(new InvalidateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }

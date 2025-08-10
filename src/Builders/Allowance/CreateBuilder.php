@@ -1,0 +1,178 @@
+<?php
+
+namespace Agriweather\EzPayInvoice\Builders\Allowance;
+
+use Agriweather\EzPayInvoice\Builders\Builder;
+use Agriweather\EzPayInvoice\Enums\AllowanceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
+use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
+use InvalidArgumentException;
+
+class CreateBuilder extends Builder
+{
+    protected CreateOptions $options;
+
+    protected function boot(): void
+    {
+        $this->crypto->setHashKey($this->factory->config('merchant_hash_key'));
+        $this->crypto->setHashIv($this->factory->config('merchant_hash_iv'));
+
+        $this->options = new CreateOptions;
+        $this->options->merchantId = $this->factory->config('merchant_id');
+
+        $this->endpoint = '/Api/allowance_issue';
+    }
+
+    protected function options(): CreateOptions
+    {
+        return $this->options;
+    }
+
+    /**
+     * 發票號碼
+     *
+     * @param  string  $invoiceNo  此次開立折讓的發票號碼
+     */
+    public function withInvoice(string $invoiceNo): self
+    {
+        $this->options->invoiceNo = $invoiceNo;
+
+        return $this;
+    }
+
+    /**
+     * 商店自訂訂單編號
+     *
+     * @param  string  $orderNo  此次開立折讓的發票，於開立發票時，提供之自訂編號。
+     */
+    public function withOrder(string $orderNo): self
+    {
+        $this->options->orderNo = $orderNo;
+
+        return $this;
+    }
+
+    /**
+     * 折讓商品項目
+     *
+     * @param  string  $name  折讓商品名稱
+     * @param  int  $quantity  折讓商品數量
+     * @param  string  $unit  折讓商品單位
+     * @param  int  $price  折讓商品單價
+     * @param  int  $amount  折讓商品小計
+     * @param  int  $taxAmount  折讓商品稅額
+     */
+    public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, int $taxAmount): self
+    {
+        $this->options->itemNames[] = $name;
+        $this->options->itemQuantities[] = $quantity;
+        $this->options->itemUnits[] = $unit;
+        $this->options->itemPrices[] = $price;
+        $this->options->itemAmounts[] = $amount;
+        $this->options->itemTaxAmounts[] = $taxAmount;
+
+        return $this;
+    }
+
+    /**
+     * 批量添加折讓商品項目
+     *
+     * item 陣列需包含以下鍵值：
+     *
+     * - name: 折讓商品名稱
+     * - quantity: 折讓商品數量
+     * - unit: 折讓商品單位
+     * - price: 折讓商品單價
+     * - amount: 折讓商品金額
+     * - taxAmount: 折讓商品稅額
+     *
+     * @param  array<int, array{
+     *     name: string,
+     *     quantity: int,
+     *     unit: string,
+     *     price: int,
+     *     amount: int,
+     *     taxAmount: int
+     * }>  $items  折讓商品項目陣列
+     */
+    public function withItems(array $items): self
+    {
+        foreach ($items as $item) {
+            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'], $item['taxAmount'])) {
+                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格、小計和稅額。');
+            }
+
+            $this->withItem(
+                name: $item['name'],
+                quantity: $item['quantity'],
+                unit: $item['unit'],
+                price: $item['price'],
+                amount: $item['amount'],
+                taxAmount: $item['taxAmount']
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * 折讓課稅別
+     *
+     * 當折讓的發票課稅別為混合應稅與免稅或零稅率時，需依應稅、零稅率、免稅個別開立折讓單。
+     *
+     * @param  \Agriweather\EzPayInvoice\Enums\TaxType  $taxType  稅別
+     */
+    public function withTaxTypeForMixed(ItemTaxType $itemTaxType): self
+    {
+        $this->options->taxTypeForMixed = $itemTaxType;
+
+        return $this;
+    }
+
+    /**
+     * 折讓總金額
+     *
+     * @param  int  $totalAmount  此次開立折讓加總金額。
+     */
+    public function withTotalAmount(int $totalAmount): self
+    {
+        $this->options->totalAmount = $totalAmount;
+
+        return $this;
+    }
+
+    /**
+     * 買受人電子信箱
+     *
+     * 當折讓開立時，寄送折讓相關查詢資訊至買受人的電子信箱。
+     */
+    public function withNotification(string $email): self
+    {
+        $this->options->buyerEmail = $email;
+
+        return $this;
+    }
+
+    /**
+     * 延遲確認折讓
+     *
+     * 待買受人確認折讓後，再向 ezPay 平台發動確認折讓。
+     */
+    public function delayCheck()
+    {
+        $this->options->status = AllowanceCreateStatus::DEFERRED;
+
+        return $this;
+    }
+
+    /**
+     * 開立折讓
+     *
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     */
+    public function issue(): CreateResult
+    {
+        return new CreateResult($this->sendRequest());
+    }
+}

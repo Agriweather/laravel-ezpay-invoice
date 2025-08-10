@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzPayInvoice\Builders\AlphanumericCodeCreateBuilder;
-use Agriweather\EzPayInvoice\Builders\AlphanumericCodeQueryBuilder;
+use Agriweather\EzPayInvoice\Builders\AlphanumericCode\CreateBuilder;
+use Agriweather\EzPayInvoice\Builders\AlphanumericCode\QueryBuilder;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 
@@ -17,16 +17,16 @@ class AlphanumericCode extends SubFactory
         //
     }
 
-    public function create(): AlphanumericCodeCreateBuilder
+    public function create(): CreateBuilder
     {
-        return $this->prepareBuilder(new AlphanumericCodeCreateBuilder(
+        return $this->prepareBuilder(new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }
 
-    public function query(): AlphanumericCodeQueryBuilder
+    public function query(): QueryBuilder
     {
-        return $this->prepareBuilder(new AlphanumericCodeQueryBuilder(
+        return $this->prepareBuilder(new QueryBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }

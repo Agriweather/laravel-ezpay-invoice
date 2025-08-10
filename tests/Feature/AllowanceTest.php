@@ -3,9 +3,9 @@
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\AllowanceCreateResult;
-use Agriweather\EzPayInvoice\Results\AllowanceInvalidateResult;
-use Agriweather\EzPayInvoice\Results\AllowanceTriggerResult;
+use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
+use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
+use Agriweather\EzPayInvoice\Results\Allowance\TriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -65,7 +65,7 @@ test('折讓開立 → 可以成功開立折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->checkCode())->toBe('123456789')
         ->and($result->allowanceNo())->toBe('A250725235346456')
         ->and($result->orderNo())->toBe('Order001')
@@ -128,7 +128,7 @@ test('折讓開立 → 可以開立多品項折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceCreateResult::class);
+    expect($result)->toBeInstanceOf(CreateResult::class);
 });
 
 test('折讓開立 → 可以開立非立即確認的折讓', function () {
@@ -183,7 +183,7 @@ test('折讓開立 → 可以開立非立即確認的折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceCreateResult::class);
+    expect($result)->toBeInstanceOf(CreateResult::class);
 });
 
 test('折讓觸發 → 可以確認折讓', function () {
@@ -230,7 +230,7 @@ test('折讓觸發 → 可以確認折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->allowanceAmount())->toBe(420)
         ->and($result->remainingAmount())->toBe(0);
 });
@@ -279,7 +279,7 @@ test('折讓觸發 → 可以取消折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->allowanceAmount())->toBe(0)
         ->and($result->remainingAmount())->toBe(0);
 });
@@ -322,6 +322,6 @@ test('折讓作廢 → 可以作廢已開立的折讓', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
     });
 
-    expect($result)->toBeInstanceOf(AllowanceInvalidateResult::class)
+    expect($result)->toBeInstanceOf(InvalidateResult::class)
         ->and($result->allowanceNo())->toBe('A250726001830959');
 });

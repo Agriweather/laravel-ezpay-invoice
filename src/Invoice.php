@@ -2,10 +2,10 @@
 
 namespace Agriweather\EzPayInvoice;
 
-use Agriweather\EzPayInvoice\Builders\InvoiceCreateBuilder;
-use Agriweather\EzPayInvoice\Builders\InvoiceInvalidateBuilder;
-use Agriweather\EzPayInvoice\Builders\InvoiceQueryBuilder;
-use Agriweather\EzPayInvoice\Builders\InvoiceTriggerBuilder;
+use Agriweather\EzPayInvoice\Builders\Invoice\CreateBuilder;
+use Agriweather\EzPayInvoice\Builders\Invoice\InvalidateBuilder;
+use Agriweather\EzPayInvoice\Builders\Invoice\QueryBuilder;
+use Agriweather\EzPayInvoice\Builders\Invoice\TriggerBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
@@ -21,30 +21,30 @@ class Invoice extends SubFactory
         //
     }
 
-    public function create(): InvoiceCreateBuilder
+    public function create(): CreateBuilder
     {
-        return $this->prepareBuilder(new InvoiceCreateBuilder(
+        return $this->prepareBuilder(new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }
 
-    public function query(): InvoiceQueryBuilder
+    public function query(): QueryBuilder
     {
-        return $this->prepareBuilder((new InvoiceQueryBuilder(
+        return $this->prepareBuilder((new QueryBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ))->setFormRedirectTransporter($this->formRedirectTransporter));
     }
 
-    public function pending(): InvoiceTriggerBuilder
+    public function pending(): TriggerBuilder
     {
-        return $this->prepareBuilder(new InvoiceTriggerBuilder(
+        return $this->prepareBuilder(new TriggerBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }
 
-    public function voidable(): InvoiceInvalidateBuilder
+    public function voidable(): InvalidateBuilder
     {
-        return $this->prepareBuilder(new InvoiceInvalidateBuilder(
+        return $this->prepareBuilder(new InvalidateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ));
     }

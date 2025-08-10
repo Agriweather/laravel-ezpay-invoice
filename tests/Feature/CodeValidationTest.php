@@ -3,7 +3,7 @@
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\CodeValidationResult;
+use Agriweather\EzPayInvoice\Results\CodeValidation\CodeValidationResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;

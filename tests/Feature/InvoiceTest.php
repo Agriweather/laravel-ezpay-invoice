@@ -5,10 +5,10 @@ use Agriweather\EzPayInvoice\Enums\CarrierType;
 use Agriweather\EzPayInvoice\Enums\TaxType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\InvoiceCreateResult;
-use Agriweather\EzPayInvoice\Results\InvoiceInvalidateResult;
-use Agriweather\EzPayInvoice\Results\InvoiceQueryResult;
-use Agriweather\EzPayInvoice\Results\InvoiceTriggerResult;
+use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
+use Agriweather\EzPayInvoice\Results\Invoice\InvalidateResult;
+use Agriweather\EzPayInvoice\Results\Invoice\QueryResult;
+use Agriweather\EzPayInvoice\Results\Invoice\TriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Response;
@@ -82,7 +82,7 @@ test('發票開立 → 可以成功開立 B2C 發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->checkCode())->toBe('123456789')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->invoiceNumber())->toBe('GG72002017')
@@ -158,7 +158,7 @@ test('發票開立 → 可以成功開立 B2B 發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->checkCode())->toBe('123456789')
         ->and($result->orderNo())->toBe('Order002')
         ->and($result->invoiceNumber())->toBe('GG72002018')
@@ -229,7 +229,7 @@ test('發票開立 → 可以開立載具發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->orderNo())->toBe('Order003');
 });
 
@@ -292,7 +292,7 @@ test('發票開立 → 可以開立發票並等待觸發', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->orderNo())->toBe('Order004')
         ->and($result->invoiceNumber())->toBeNull()
         ->and($result->createTime())->toBeNull();
@@ -358,7 +358,7 @@ test('發票開立 → 可以預約開立發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->orderNo())->toBe('Order005')
         ->and($result->invoiceNumber())->toBeNull()
         ->and($result->createTime())->toBeNull();
@@ -445,7 +445,7 @@ test('發票查詢 → 可以透過發票號碼及隨機碼查詢發票', functi
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
     });
 
-    expect($invoiceResult)->toBeInstanceOf(InvoiceQueryResult::class)
+    expect($invoiceResult)->toBeInstanceOf(QueryResult::class)
         ->and($invoiceResult->invoiceNumber())->toBe('GG72002017')
         ->and($invoiceResult->orderNo())->toBe('Order001')
         ->and($invoiceResult->totalAmount())->toBe(1050)
@@ -534,7 +534,7 @@ test('發票查詢 → 可以透過訂單編號及發票金額查詢發票', fun
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
     });
 
-    expect($invoiceResult)->toBeInstanceOf(InvoiceQueryResult::class)
+    expect($invoiceResult)->toBeInstanceOf(QueryResult::class)
         ->and($invoiceResult->invoiceNumber())->toBe('GG72002017')
         ->and($invoiceResult->orderNo())->toBe('Order001')
         ->and($invoiceResult->totalAmount())->toBe(1050)
@@ -660,7 +660,7 @@ test('發票觸發 → 可以觸發等待中的發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->invoiceNumber())->toBe('GG72002017');
 });
 
@@ -702,6 +702,6 @@ test('發票作廢 → 可以作廢已開立的發票', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
     });
 
-    expect($result)->toBeInstanceOf(InvoiceInvalidateResult::class)
+    expect($result)->toBeInstanceOf(InvalidateResult::class)
         ->and($result->invoiceNumber())->toBe('GG72002017');
 });

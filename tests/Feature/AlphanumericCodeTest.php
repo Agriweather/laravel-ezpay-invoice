@@ -6,9 +6,9 @@ use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
 use Agriweather\EzPayInvoice\Enums\InvoiceType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\AlphanumericCodeCreateResult;
-use Agriweather\EzPayInvoice\Results\AlphanumericCodeQueryResult;
-use Agriweather\EzPayInvoice\Results\AlphanumericCodeUpdateResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCode\UpdateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -67,7 +67,7 @@ test('字軌管理 → 可以成功申請新字軌', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/createNumber';
     });
 
-    expect($result)->toBeInstanceOf(AlphanumericCodeCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->managementNo())->toBe('0t0ghr0fyv')
         ->and($result->year())->toBe(113)
         ->and($result->term())->toBe(InvoiceTerm::JUL_AUG)
@@ -127,7 +127,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
     });
 
     expect($alphanumericCodeResults)->toBeArray()->toHaveCount(1)
-        ->and($alphanumericCodeResults[0])->toBeInstanceOf(AlphanumericCodeQueryResult::class)
+        ->and($alphanumericCodeResults[0])->toBeInstanceOf(QueryResult::class)
         ->and($alphanumericCodeResults[0]->managementNo())->toBe('0t0ghr0fyv')
         ->and($alphanumericCodeResults[0]->year())->toBe(113)
         ->and($alphanumericCodeResults[0]->term())->toBe(InvoiceTerm::JUL_AUG)
@@ -184,7 +184,7 @@ test('字軌管理 → 可以暫停字軌', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
     });
 
-    expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+    expect($result)->toBeInstanceOf(UpdateResult::class)
         ->and($result->managementNo())->toBe('0t0ghr0fyv')
         ->and($result->status())->toBe(AlphanumericCodeStatus::PAUSED);
 });
@@ -235,7 +235,7 @@ test('字軌管理 → 可以啟用字軌', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
     });
 
-    expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+    expect($result)->toBeInstanceOf(UpdateResult::class)
         ->and($result->managementNo())->toBe('0t0ghr0fyv')
         ->and($result->status())->toBe(AlphanumericCodeStatus::ENABLED);
 });
@@ -286,7 +286,7 @@ test('字軌管理 → 可以停用字軌', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/manageNumber';
     });
 
-    expect($result)->toBeInstanceOf(AlphanumericCodeUpdateResult::class)
+    expect($result)->toBeInstanceOf(UpdateResult::class)
         ->and($result->managementNo())->toBe('0t0ghr0fyv')
         ->and($result->status())->toBe(AlphanumericCodeStatus::DISABLED);
 });

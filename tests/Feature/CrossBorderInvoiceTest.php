@@ -4,7 +4,7 @@ use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\CurrencyType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\CrossBorderInvoiceCreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CrossBorderInvoiceCreateResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
