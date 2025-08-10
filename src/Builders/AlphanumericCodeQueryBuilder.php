@@ -21,7 +21,7 @@ class AlphanumericCodeQueryBuilder extends Builder
         $this->options->companyId = $this->factory->config('company_id');
     }
 
-    public function getOptions(): AlphanumericCodeQueryOptions
+    protected function options(): AlphanumericCodeQueryOptions
     {
         return $this->options;
     }

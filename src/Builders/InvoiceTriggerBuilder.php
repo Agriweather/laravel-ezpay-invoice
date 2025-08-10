@@ -20,7 +20,7 @@ class InvoiceTriggerBuilder extends Builder
         $this->endpoint = '/Api/invoice_touch_issue';
     }
 
-    public function getOptions(): InvoiceTriggerOptions
+    protected function options(): InvoiceTriggerOptions
     {
         return $this->options;
     }

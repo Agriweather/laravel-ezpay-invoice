@@ -20,7 +20,7 @@ class AllowanceInvalidateBuilder extends Builder
         $this->endpoint = '/Api/allowanceInvalid';
     }
 
-    public function getOptions(): AllowanceInvalidateQueryOptions
+    protected function options(): AllowanceInvalidateQueryOptions
     {
         return $this->options;
     }

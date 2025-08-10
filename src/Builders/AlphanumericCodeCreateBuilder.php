@@ -22,7 +22,7 @@ class AlphanumericCodeCreateBuilder extends Builder
         $this->endpoint = '/Api_number_management/createNumber';
     }
 
-    public function getOptions(): AlphanumericCodeCreateOptions
+    protected function options(): AlphanumericCodeCreateOptions
     {
         return $this->options;
     }

@@ -19,7 +19,7 @@ class CodeValidationBuilder extends Builder
         $this->options->merchantId = $this->factory->config('merchant_id');
     }
 
-    public function getOptions(): CodeValidationOptions
+    protected function options(): CodeValidationOptions
     {
         return $this->options;
     }

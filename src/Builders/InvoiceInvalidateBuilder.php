@@ -20,7 +20,7 @@ class InvoiceInvalidateBuilder extends Builder
         $this->endpoint = '/Api/invoice_invalid';
     }
 
-    public function getOptions(): InvoiceInvalidateQueryOptions
+    protected function options(): InvoiceInvalidateQueryOptions
     {
         return $this->options;
     }

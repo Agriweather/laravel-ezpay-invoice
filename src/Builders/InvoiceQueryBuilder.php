@@ -28,7 +28,7 @@ class InvoiceQueryBuilder extends Builder
         $this->endpoint = '/Api/invoice_search';
     }
 
-    public function getOptions(): InvoiceQueryOptions
+    protected function options(): InvoiceQueryOptions
     {
         return $this->options;
     }

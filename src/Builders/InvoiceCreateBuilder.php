@@ -29,7 +29,7 @@ class InvoiceCreateBuilder extends Builder
         $this->endpoint = '/Api/invoice_issue';
     }
 
-    public function getOptions(): InvoiceCreateOptions
+    protected function options(): InvoiceCreateOptions
     {
         return $this->options;
     }

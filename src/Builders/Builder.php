@@ -28,7 +28,7 @@ abstract class Builder
 
     abstract protected function boot(): void;
 
-    abstract public function getOptions(): Options;
+    abstract protected function options(): Options;
 
     /**
      * 取得 HTTP 請求數據
@@ -36,7 +36,7 @@ abstract class Builder
     public function toRequestData(): array
     {
         $url = $this->factory->baseUrl().$this->endpoint;
-        $options = $this->getOptions();
+        $options = $this->options();
 
         if ($this->transformOptionsCallback) {
             $options = call_user_func($this->transformOptionsCallback, $options);

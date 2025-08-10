@@ -23,7 +23,7 @@ class AllowanceCreateBuilder extends Builder
         $this->endpoint = '/Api/allowance_issue';
     }
 
-    public function getOptions(): AllowanceCreateOptions
+    protected function options(): AllowanceCreateOptions
     {
         return $this->options;
     }

@@ -21,7 +21,7 @@ class AllowanceTriggerBuilder extends Builder
         $this->endpoint = '/Api/allowance_touch_issue';
     }
 
-    public function getOptions(): AllowanceTriggerOptions
+    protected function options(): AllowanceTriggerOptions
     {
         return $this->options;
     }

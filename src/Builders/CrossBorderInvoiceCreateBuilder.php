@@ -24,7 +24,7 @@ class CrossBorderInvoiceCreateBuilder extends Builder
         $this->endpoint = '/Api/crossBorderInvoiceIssue';
     }
 
-    public function getOptions(): CrossBorderInvoiceCreateOptions
+    protected function options(): CrossBorderInvoiceCreateOptions
     {
         return $this->options;
     }
