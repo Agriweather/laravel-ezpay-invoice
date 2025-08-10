@@ -73,7 +73,7 @@ EZPAY_INVOICE_MERCHANT_HASH_IV=your-merchant-hash-iv
 現在就可以測試開立電子發票了：
 
 ```php
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 
 $result = EzPayInvoice::invoice()
@@ -113,7 +113,7 @@ $result = EzPayInvoice::invoice()
 開立 B2C 電子發票時，可以選擇使用不同的載具：
 
 ```php
-use Agriweather\EzPayInvoice\Enums\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
 
 EzPayInvoice::invoice()
     ->create()
@@ -163,8 +163,8 @@ $result = EzPayInvoice::invoice()
 設定電子發票稅別和稅率：
 
 ```php
-use Agriweather\EzPayInvoice\Enums\CustomsClearance;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 
 EzPayInvoice::invoice()
     ->create()
@@ -227,8 +227,8 @@ EzPayInvoice::invoice()
 > 銷售額計算方式，請務必與公司財會人員進行確認。
 
 ```php
-use Agriweather\EzPayInvoice\Enums\ItemTaxType;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 
 EzPayInvoice::invoice()
     ->create()

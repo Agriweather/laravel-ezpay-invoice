@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Enums;
+namespace Agriweather\EzPayInvoice\Enums\AlphanumericCode;
 
 enum AlphanumericCodeStatus: int
 {

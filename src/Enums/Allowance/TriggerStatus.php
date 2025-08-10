@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Enums;
+namespace Agriweather\EzPayInvoice\Enums\Allowance;
 
-enum AllowanceTriggerStatus: string
+enum TriggerStatus: string
 {
     /** 確認折讓 */
     case YES = 'C';

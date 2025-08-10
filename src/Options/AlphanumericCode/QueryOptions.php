@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzPayInvoice\Options\AlphanumericCode;
 
-use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCode\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 

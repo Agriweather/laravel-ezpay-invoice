@@ -3,13 +3,13 @@
 namespace Agriweather\EzPayInvoice\Results\Invoice;
 
 use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
-use Agriweather\EzPayInvoice\Enums\CarrierType;
-use Agriweather\EzPayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzPayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzPayInvoice\Enums\InvoiceStatus;
-use Agriweather\EzPayInvoice\Enums\InvoiceType;
-use Agriweather\EzPayInvoice\Enums\InvoiceUploadStatus;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoicePrintFlag;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceUploadStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Results\Concerns;
 use Agriweather\EzPayInvoice\Results\Result;
 
@@ -222,7 +222,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      *     unit: string,
      *     price: int,
      *     amount: int,
-     *     taxType: ?\Agriweather\EzPayInvoice\Enums\TaxType
+     *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\TaxType
      * }>
      *
      * @throws \JsonException

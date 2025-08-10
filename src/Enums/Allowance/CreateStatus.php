@@ -1,8 +1,8 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Enums;
+namespace Agriweather\EzPayInvoice\Enums\Allowance;
 
-enum AllowanceCreateStatus: int
+enum CreateStatus: int
 {
     /** 即時開立 */
     case IMMEDIATE = 1;

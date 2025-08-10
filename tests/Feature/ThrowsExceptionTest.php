@@ -1,7 +1,7 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Illuminate\Support\Facades\Http;

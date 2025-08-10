@@ -2,13 +2,13 @@
 
 namespace Agriweather\EzPayInvoice\Options\Invoice;
 
-use Agriweather\EzPayInvoice\Enums\CarrierType;
-use Agriweather\EzPayInvoice\Enums\CustomsClearance;
-use Agriweather\EzPayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
-use Agriweather\EzPayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzPayInvoice\Enums\ItemTaxType;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoicePrintFlag;
+use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
@@ -77,7 +77,7 @@ class CreateOptions extends Options
     /** @var int[] */
     public array $itemAmounts = [];
 
-    /** @var \Agriweather\EzPayInvoice\Enums\ItemTaxType[]|null */
+    /** @var \Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType[]|null */
     public ?array $itemTaxTypes = null;
 
     public ?string $comment = null;

@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzPayInvoice\Options\CrossBorderInvoice;
 
-use Agriweather\EzPayInvoice\Enums\CurrencyType;
-use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 

@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Options\Allowance;
 
-use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
+use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
@@ -14,7 +14,7 @@ class TriggerOptions extends Options
 
     public string $orderNo = '';
 
-    public AllowanceTriggerStatus $status = AllowanceTriggerStatus::YES;
+    public TriggerStatus $status = TriggerStatus::YES;
 
     public int $totalAmount = 0;
 

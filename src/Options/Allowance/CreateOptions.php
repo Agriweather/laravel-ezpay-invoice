@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzPayInvoice\Options\Allowance;
 
-use Agriweather\EzPayInvoice\Enums\AllowanceCreateStatus;
-use Agriweather\EzPayInvoice\Enums\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
@@ -39,7 +39,7 @@ class CreateOptions extends Options
 
     public ?string $buyerEmail = null;
 
-    public AllowanceCreateStatus $status = AllowanceCreateStatus::IMMEDIATE;
+    public CreateStatus $status = CreateStatus::IMMEDIATE;
 
     /**
      * 檢查是否存在商品項目。

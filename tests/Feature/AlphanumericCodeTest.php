@@ -1,9 +1,9 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
-use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzPayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCode\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;

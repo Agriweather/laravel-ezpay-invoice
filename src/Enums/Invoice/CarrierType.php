@@ -1,6 +1,6 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Enums;
+namespace Agriweather\EzPayInvoice\Enums\Invoice;
 
 enum CarrierType: int
 {

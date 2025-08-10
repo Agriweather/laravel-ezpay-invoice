@@ -3,7 +3,7 @@
 namespace Agriweather\EzPayInvoice\Builders\Allowance;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Enums\AllowanceTriggerStatus;
+use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Options\Allowance\TriggerOptions;
 use Agriweather\EzPayInvoice\Results\Allowance\TriggerResult;
 
@@ -70,7 +70,7 @@ class TriggerBuilder extends Builder
      */
     public function confirm(): TriggerResult
     {
-        $this->options->status = AllowanceTriggerStatus::YES;
+        $this->options->status = TriggerStatus::YES;
 
         return new TriggerResult($this->sendRequest());
     }
@@ -82,7 +82,7 @@ class TriggerBuilder extends Builder
      */
     public function cancel(): TriggerResult
     {
-        $this->options->status = AllowanceTriggerStatus::NO;
+        $this->options->status = TriggerStatus::NO;
 
         return new TriggerResult($this->sendRequest());
     }

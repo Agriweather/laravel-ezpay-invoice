@@ -1,8 +1,8 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
-use Agriweather\EzPayInvoice\Enums\CarrierType;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;

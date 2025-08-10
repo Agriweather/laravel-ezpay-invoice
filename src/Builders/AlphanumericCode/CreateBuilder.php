@@ -3,8 +3,8 @@
 namespace Agriweather\EzPayInvoice\Builders\AlphanumericCode;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzPayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Options\AlphanumericCode\CreateOptions;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;
 

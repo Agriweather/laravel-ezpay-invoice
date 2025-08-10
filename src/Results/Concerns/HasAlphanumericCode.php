@@ -2,9 +2,9 @@
 
 namespace Agriweather\EzPayInvoice\Results\Concerns;
 
-use Agriweather\EzPayInvoice\Enums\AlphanumericCodeStatus;
-use Agriweather\EzPayInvoice\Enums\InvoiceTerm;
-use Agriweather\EzPayInvoice\Enums\InvoiceType;
+use Agriweather\EzPayInvoice\Enums\AlphanumericCode\AlphanumericCodeStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Carbon\Carbon;
 
 trait HasAlphanumericCode

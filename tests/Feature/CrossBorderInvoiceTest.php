@@ -1,7 +1,7 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
-use Agriweather\EzPayInvoice\Enums\CurrencyType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CrossBorderInvoiceCreateResult;

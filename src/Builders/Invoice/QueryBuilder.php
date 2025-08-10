@@ -4,8 +4,8 @@ namespace Agriweather\EzPayInvoice\Builders\Invoice;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
-use Agriweather\EzPayInvoice\Enums\DisplayFlag;
-use Agriweather\EzPayInvoice\Enums\SearchType;
+use Agriweather\EzPayInvoice\Enums\Invoice\DisplayFlag;
+use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Options\Invoice\QueryOptions;
 use Agriweather\EzPayInvoice\Results\Invoice\QueryResult;
 use Agriweather\EzPayInvoice\Results\Invoice\UrlQueryResult;

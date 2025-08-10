@@ -3,13 +3,13 @@
 namespace Agriweather\EzPayInvoice\Builders\Invoice;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Enums\CarrierType;
-use Agriweather\EzPayInvoice\Enums\CustomsClearance;
-use Agriweather\EzPayInvoice\Enums\InvoiceCategory;
-use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
-use Agriweather\EzPayInvoice\Enums\InvoicePrintFlag;
-use Agriweather\EzPayInvoice\Enums\ItemTaxType;
-use Agriweather\EzPayInvoice\Enums\TaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\CustomsClearance;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoicePrintFlag;
+use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Options\Invoice\CreateOptions;
 use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
 use DateTime;
@@ -123,7 +123,7 @@ class CreateBuilder extends Builder
      * - 自然人憑證 (`CarrierType::CITIZEN_CERT`): 2碼大寫英文 + 14碼數字
      * - ezPay 電子發票載具 (`CarrierType::EZPAY_CARRIER`): 提供可識別買受人之代號(例：e-mail、手機號碼、會員編號…等)，由賣方自訂即可，同一個代號則視為同一個買受人。ezPay 平台將以賣方統編加上買受人代號做為該買受人的 ezPay 電子發票載具號碼。
      *
-     * @param  \Agriweather\EzPayInvoice\Enums\CarrierType  $carrierType  載具類別
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\CarrierType  $carrierType  載具類別
      * @param  string  $carrierNumber  載具號碼
      */
     public function withCarrier(CarrierType $carrierType, string $carrierNumber): self
@@ -208,7 +208,7 @@ class CreateBuilder extends Builder
      * - 免稅 (`TaxType::TAX_FREE`)：不需要提供稅率，稅率自動設為 0。
      * - 混合應稅與免稅或零稅率 (`TaxType::MIXED`)：當開立發票給公司時才可使用此參數，混合應稅與免稅或零稅率。
      *
-     * @param  \Agriweather\EzPayInvoice\Enums\TaxType  $taxType  稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\TaxType  $taxType  稅別
      * @param  int|float|null  $taxRate  稅率，單位為百分比 (1% = 1)
      */
     public function withTax(TaxType $taxType, int|float|null $taxRate = null): self
@@ -232,7 +232,7 @@ class CreateBuilder extends Builder
      * - 非經海關 (`CustomsClearance::NON_CUSTOMS`)：不需要提供海關清關資訊。
      * - 經海關 (`CustomsClearance::CUSTOMS`)：需要提供海關清關資訊。
      *
-     * @param  \Agriweather\EzPayInvoice\Enums\CustomsClearance  $customsClearance  海關清關方式
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\CustomsClearance  $customsClearance  海關清關方式
      */
     public function withCustomsClearance(CustomsClearance $customsClearance): self
     {
@@ -294,7 +294,7 @@ class CreateBuilder extends Builder
      * @param  string  $unit  商品單位
      * @param  int  $price  商品單價
      * @param  int  $amount  商品小計
-     * @param  \Agriweather\EzPayInvoice\Enums\ItemTaxType|null  $taxType  商品稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType|null  $taxType  商品稅別
      */
     public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, ?ItemTaxType $taxType = null): self
     {
@@ -338,7 +338,7 @@ class CreateBuilder extends Builder
      *     unit: string,
      *     price: int,
      *     amount: int,
-     *     taxType: ?\Agriweather\EzPayInvoice\Enums\TaxType
+     *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\TaxType
      * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self

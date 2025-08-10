@@ -2,8 +2,8 @@
 
 namespace Agriweather\EzPayInvoice\Options\Invoice;
 
-use Agriweather\EzPayInvoice\Enums\DisplayFlag;
-use Agriweather\EzPayInvoice\Enums\SearchType;
+use Agriweather\EzPayInvoice\Enums\Invoice\DisplayFlag;
+use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 

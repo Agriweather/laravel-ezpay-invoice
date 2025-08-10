@@ -3,8 +3,8 @@
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Enums\CurrencyType;
-use Agriweather\EzPayInvoice\Enums\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\CreateOptions;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CrossBorderInvoiceCreateResult;
 use DateTime;
@@ -169,7 +169,7 @@ class CreateBuilder extends Builder
     /**
      * 幣別
      *
-     * @param  \Agriweather\EzPayInvoice\Enums\CurrencyType  $currency  幣別代碼
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType  $currency  幣別代碼
      */
     public function withCurrency(CurrencyType $currency): self
     {
