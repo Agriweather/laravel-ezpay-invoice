@@ -2,49 +2,49 @@
 
 if (function_exists('arch')) {
     arch()
-        ->expect('Agriweather\EzpayInvoice')
+        ->expect('Agriweather\EzPayInvoice')
         ->not->toUse(['die', 'dd', 'dump']);
 
     arch('builders')
-        ->expect('Agriweather\EzpayInvoice\Builders')
+        ->expect('Agriweather\EzPayInvoice\Builders')
         ->toOnlyUse([
             'Illuminate\Http\Client\Factory',
             'Illuminate\Http\Client\Response',
             'Illuminate\Support\Traits\Conditionable',
             'Illuminate\Support\Traits\Tappable',
-            'Agriweather\EzpayInvoice\Factory',
-            'Agriweather\EzpayInvoice\Crypto\Crypto',
-            'Agriweather\EzpayInvoice\Options',
+            'Agriweather\EzPayInvoice\Factory',
+            'Agriweather\EzPayInvoice\Crypto\Crypto',
+            'Agriweather\EzPayInvoice\Options',
         ]);
 
     arch('contracts')
-        ->expect('Agriweather\EzpayInvoice\Contracts')
+        ->expect('Agriweather\EzPayInvoice\Contracts')
         ->toBeInterfaces()
         ->toUseNothing();
 
     arch('enums')
-        ->expect('Agriweather\EzpayInvoice\Enums')
+        ->expect('Agriweather\EzPayInvoice\Enums')
         ->toBeEnums();
 
     arch('exceptions')
-        ->expect('Agriweather\EzpayInvoice\Exceptions')
+        ->expect('Agriweather\EzPayInvoice\Exceptions')
         ->toUseNothing();
 
     arch('facades')
-        ->expect('Agriweather\EzpayInvoice\Facades')
+        ->expect('Agriweather\EzPayInvoice\Facades')
         ->toOnlyUse([
             'Illuminate\Support\Facades\Facade',
         ]);
 
     arch('options')
-        ->expect('Agriweather\EzpayInvoice\Options')
+        ->expect('Agriweather\EzPayInvoice\Options')
         ->toOnlyUse([
-            'Agriweather\EzpayInvoice\Enums',
+            'Agriweather\EzPayInvoice\Enums',
             'Carbon\Carbon',
         ]);
 
     arch('results')
-        ->expect('Agriweather\EzpayInvoice\Results')
+        ->expect('Agriweather\EzPayInvoice\Results')
         ->toOnlyUse([
             'Carbon\Carbon',
         ]);
