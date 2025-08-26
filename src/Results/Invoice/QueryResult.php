@@ -189,9 +189,9 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      *
      * @throws \ValueError
      */
-    public function printFlag(): InvoicePrintFlag
+    public function printFlag(): bool
     {
-        return InvoicePrintFlag::from($this->result['PrintFlag']);
+        return $this->result['PrintFlag'] === InvoicePrintFlag::YES->value;
     }
 
     /**
@@ -199,7 +199,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      *
      * 該張發票是否開放買受人可至本平台合作之超商 Kiosk 進行列印。
      */
-    public function KioskPrintFlag(): bool
+    public function kioskPrintFlag(): bool
     {
         return $this->result['KioskPrintFlag'] === '1';
     }

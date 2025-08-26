@@ -322,7 +322,83 @@ $result = EzPayInvoice::invoice()
 
 ### 查詢電子發票
 
-//
+透過發票號碼和隨機碼查詢電子發票：
+
+```php
+$invoiceResult = EzPayInvoice::invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->get();
+```
+
+或者也可以透過訂單編號及發票金額查詢電子發票：
+
+```php
+$invoiceResult = EzPayInvoice::invoice()
+    ->query()
+    ->withOrder('Order001')
+    ->withTotalAmount(1050)
+    ->get();
+```
+
+電子發票查詢結果包含以下資訊：
+
+```php
+$invoiceResult->invoiceNumber() // 發票號碼：'GG72002017'
+$invoiceResult->randomNumber() // 發票隨機碼：'1234'
+$invoiceResult->orderNo() // 訂單編號：'Order001'
+$invoiceResult->invoiceTransNo() // ezPay 電子發票開立序號：'25072515224376654'
+
+$invoiceResult->invoiceStatus() // 發票狀態：`InvoiceStatus::ISSUED` (已開立)
+$invoiceResult->invoiceUploadStatus() // 發票上傳財政部之狀態：`InvoiceUploadStatus::UPLOADED` (已上傳)
+
+$invoiceResult->buyerName() // 買受人名稱：'John Doe'
+$invoiceResult->buyerTaxIdNumber() // 買受人統一編號：'12345678'
+$invoiceResult->buyerAddress() // 買受人地址：'台北市信義區信義路五段7號'
+$invoiceResult->buyerPhone() // 買受人電話：'02-12345678'
+$invoiceResult->buyerEmail() // 買受人電子信箱：'customer@example.com'
+
+$invoiceResult->invoiceType() // 發票字軌類型：`InvoiceType::GENERAL` (07: 一般稅額計算)
+$invoiceResult->category() // 發票種類：`InvoiceCategory::B2C` (B2C電子發票)
+$invoiceResult->taxType() // 課稅別：`TaxType::TAXABLE` (應稅)
+$invoiceResult->taxRate() // 稅率：5.0 (5%)
+
+$invoiceResult->amount() // 發票銷售額合計 (未稅)：1000
+$invoiceResult->salesAmount() // 銷售額 (課稅別應稅的未稅金額)：300
+$invoiceResult->zeroAmount() // 銷售額 (課稅別零稅率的未稅金額)：350
+$invoiceResult->freeAmount() // 銷售額 (課稅別免稅的未稅金額)：300
+$invoiceResult->taxAmount() // 稅額：50
+$invoiceResult->totalAmount() // 含稅銷售額：1050
+
+$invoiceResult->carrierType() // 載具類型：`CarrierType::MOBILE` (手機條碼載具)
+$invoiceResult->carrierNumber() // 載具編號：'/ABC.123'
+$invoiceResult->loveCode() // 捐贈碼：'1234567'
+$invoiceResult->printFlag() // 是否索取紙本發票：true (索取紙本發票)
+$invoiceResult->kioskPrintFlag() // 是否開放至合作超商 Kiosk 列印：true (開放列印)
+
+$items = $invoiceResult->items() // 商品項目陣列
+// [
+//     [
+//         'number' => 1,
+//         'name' => '測試商品',
+//         'quantity' => 1,
+//         'unit' => '個',
+//         'price' => 1000,
+//         'amount' => 1000,
+//         'taxType' => TaxType::TAXABLE, // 應稅
+//     ],
+//     [
+//         'number' => 2,
+//         'name' => 'Test Product',
+//         'quantity' => 2,
+//         'unit' => 'EA',
+//         'price' => 600,
+//         'amount' => 1200,
+//         'taxType' => TaxType::ZERO_RATE, // 零稅率
+//     ],
+// ]
+```
 
 ### 作廢電子發票
 
