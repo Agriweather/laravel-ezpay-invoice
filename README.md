@@ -612,6 +612,13 @@ $result->isValid() // 捐證碼是否有效：true
 
 [ezPay 電子發票 API 文件下載專區](https://inv.ezpay.com.tw/Invoice_index/download)
 
+當前參考文件版本：
+
+- 電子發票API v1.2.2 (2024/05/09)
+- 電子發票API_境外電商版 v1.0.0 (2021/02/02)
+- 字軌管理API v1.0.0 (2018/10/08)
+- 手機條碼與捐證碼驗證技術串接手冊 v1.0.0 (2021/03/03)
+
 ## License
 
 基於 [MIT LICENSE](LICENSE) 釋出
