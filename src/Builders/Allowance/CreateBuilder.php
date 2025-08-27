@@ -155,18 +155,6 @@ class CreateBuilder extends Builder
     }
 
     /**
-     * 延遲確認折讓
-     *
-     * 待買受人確認折讓後，再向 ezPay 平台發動確認折讓。
-     */
-    public function delayCheck()
-    {
-        $this->options->status = CreateStatus::DEFERRED;
-
-        return $this;
-    }
-
-    /**
      * 開立折讓
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
@@ -174,5 +162,19 @@ class CreateBuilder extends Builder
     public function issue(): CreateResult
     {
         return new CreateResult($this->sendRequest());
+    }
+
+    /**
+     * 開立折讓並延遲確認折讓
+     *
+     * 待買受人確認折讓後，再向 ezPay 平台發動確認折讓。
+     *
+     * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
+     */
+    public function issuePendingConfirmation(): CreateResult
+    {
+        $this->options->status = CreateStatus::DEFERRED;
+
+        return $this->issue();
     }
 }

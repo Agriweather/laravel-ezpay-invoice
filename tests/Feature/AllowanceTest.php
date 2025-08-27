@@ -176,8 +176,7 @@ test('折讓開立 → 可以開立非立即確認的折讓', function () {
 
             return $options;
         })
-        ->delayCheck()
-        ->issue();
+        ->issuePendingConfirmation();
 
     Http::assertSent(function (Request $request) {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_issue';
