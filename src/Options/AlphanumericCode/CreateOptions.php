@@ -15,7 +15,7 @@ class CreateOptions extends Options
 
     public InvoiceTerm $term = InvoiceTerm::JAN_FEB;
 
-    public string $alphabeticLetter = '';
+    public string $alphanumericCode = '';
 
     public string $startNumber = '';
 
@@ -33,7 +33,7 @@ class CreateOptions extends Options
                 'TimeStamp' => Carbon::now()->timestamp,
                 'Year' => (string) $this->year,
                 'Term' => (string) $this->term->value,
-                'AphabeticLetter' => $this->alphabeticLetter,
+                'AphabeticLetter' => $this->alphanumericCode,
                 'StartNumber' => $this->startNumber,
                 'EndNumber' => $this->endNumber,
                 'Type' => (string) $this->type->value,

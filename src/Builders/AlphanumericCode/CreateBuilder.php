@@ -55,9 +55,9 @@ class CreateBuilder extends Builder
      *
      * 兩碼大寫英文
      */
-    public function withCode(string $aphabeticLetter): self
+    public function withCode(string $alphanumericCode): self
     {
-        $this->options->alphabeticLetter = $aphabeticLetter;
+        $this->options->alphanumericCode = $alphanumericCode;
 
         return $this;
     }
@@ -79,7 +79,7 @@ class CreateBuilder extends Builder
     /**
      * 發票類別
      *
-     * 為該組字軌的發票期別
+     * 為該組字軌的發票類別
      */
     public function withType(InvoiceType $invoiceType): self
     {

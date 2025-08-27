@@ -42,7 +42,7 @@ trait HasAlphanumericCode
      *
      * 兩碼大寫英文
      */
-    public function alphabeticLetter(): string
+    public function alphanumericCode(): string
     {
         return $this->result['AphabeticLetter'];
     }
