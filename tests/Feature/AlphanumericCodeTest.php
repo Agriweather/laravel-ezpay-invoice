@@ -98,7 +98,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
                     'Type' => '07',
                     'CreateDatetime' => '2025-01-01 00:00:00',
                     'LastNumber' => '100',
-                    'Flag' => '0',
+                    'Flag' => '1',
                     'CheckCode' => '123456789',
                 ],
             ],
@@ -135,7 +135,8 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
         ->and($alphanumericCodeResults[0]->startNumber())->toBe('24000100')
         ->and($alphanumericCodeResults[0]->endNumber())->toBe('24000199')
         ->and($alphanumericCodeResults[0]->type())->toBe(InvoiceType::GENERAL)
-        ->and($alphanumericCodeResults[0]->lastNumber())->toBe(100);
+        ->and($alphanumericCodeResults[0]->lastNumber())->toBe(100)
+        ->and($alphanumericCodeResults[0]->status())->toBe(AlphanumericCodeStatus::ENABLED);
 });
 
 test('字軌管理 → 可以暫停字軌', function () {

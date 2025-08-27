@@ -23,7 +23,7 @@ final class CodeValidationResult extends Result
     }
 
     /**
-     * 手機條碼是否存在於財政部電子發票整合服務平台
+     * 手機條碼/捐贈碼 是否存在於財政部電子發票整合服務平台
      */
     public function isValid(): bool
     {

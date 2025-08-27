@@ -23,13 +23,17 @@
   - [觸發電子發票](#觸發電子發票)
   - [查詢電子發票](#查詢電子發票)
   - [作廢電子發票](#作廢電子發票)
-  - [開立折讓](#開立折讓)
-  - [觸發折讓](#觸發折讓)
+  - [立即開立折讓](#立即開立折讓)
+  - [延遲開立折讓](#延遲開立折讓)
   - [作廢折讓](#作廢折讓)
 - [電子發票 API (境外電商版)](#電子發票-api-境外電商版)
 - [字軌管理 API](#字軌管理-api)
   - [準備帳號代號和金鑰](#準備帳號代號和金鑰)
-  - [新增字軌](#新增字軌)
+  - [申請新字軌](#申請新字軌)
+  - [查詢字軌](#查詢字軌)
+  - [啟用字軌](#啟用字軌)
+  - [暫停字軌](#暫停字軌)
+  - [停用字軌](#停用字軌)
 - [手機條碼與捐證碼驗證 API](#手機條碼與捐證碼驗證-api)
   - [驗證手機條碼](#驗證手機條碼)
   - [驗證捐證碼](#驗證捐證碼)
@@ -311,6 +315,8 @@ $result->totalAmount() // 含稅銷售額：1050
 
 ### 觸發電子發票
 
+如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以呼叫觸發 API 來提前開立發票：
+
 ```php
 $result = EzPayInvoice::invoice()
     ->pending()
@@ -402,25 +408,90 @@ $items = $invoiceResult->items() // 商品項目陣列
 
 ### 作廢電子發票
 
-//
+作廢電子發票需要傳入發票號碼和作廢原因：
 
-### 開立折讓
+```php
+EzPayInvoice::invoice()
+    ->voidable()
+    ->withInvoice('GG72002017')
+    ->because('客戶取消訂單')
+    ->invalidate();
+```
 
-//
+### 立即開立折讓
 
-### 觸發折讓
+當需要對已開立的電子發票進行部分或全部退貨時，可以立即開立發票折讓：
 
-//
+```php
+$result = EzPayInvoice::allowance()
+    ->create()
+    ->withInvoice('GG72002018')
+    ->withOrder('Order001')
+    ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+    ->withTotalAmount(630)
+    ->withNotification('customer@example.com')
+    ->issue();
+
+$result->allowanceNo() // 折讓號：'A250725235346456'
+$result->orderNo() // 訂單編號：'Order001'
+$result->invoiceNumber() // 發票號碼：'GG72002018'
+$result->allowanceAmount() // 折讓金額：630
+$result->remainingAmount() // 折讓後剩餘發票金額：420
+```
+
+### 延遲開立折讓
+
+會先開立折讓，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
+
+```php
+$result = EzPayInvoice::allowance()
+    ->create()
+    ...
+    ->delayCheck()
+    ->issue();
+```
+
+買受人發動確認折讓：
+
+```php
+EzPayInvoice::allowance()
+    ->pending()
+    ->withAllowance('A250726001830959')
+    ->withOrder('Order001')
+    ->withTotalAmount(420)
+    ->confirm();
+```
+
+買受人發動取消折讓：
+
+```php
+EzPayInvoice::allowance()
+    ->pending()
+    ->withAllowance('A250726001830959')
+    ->withOrder('Order001')
+    ->withTotalAmount(420)
+    ->cancel();
+```
 
 ### 作廢折讓
 
-//
+作廢已開立的折讓，需傳入折讓號和作廢原因：
+
+```php
+EzPayInvoice::allowance()
+    ->voidable()
+    ->withAllowance('A250726001830959')
+    ->because('作廢原因')
+    ->invalidate();
+```
 
 ## 電子發票 API (境外電商版)
 
+//
+
 ## 字軌管理 API
 
-## 準備帳號代號和金鑰
+### 準備帳號代號和金鑰
 
 字軌管理和開立電子發票需要不同的帳號代號和金鑰。首先到 ezPay 電子發票的網站上的「會員管理」頁面，找到並複製會員編號、會員API串接金鑰的 `HashKey` 和 `HashIV`，然後貼到 `.env` 檔案中的 `EZPAY_INVOICE_COMPANY_ID` 等參數：
 
@@ -430,19 +501,113 @@ EZPAY_INVOICE_COMPANY_HASH_KEY=your-company-hash-key
 EZPAY_INVOICE_COMPANY_HASH_IV=your-company-hash-iv
 ```
 
-### 新增字軌
+### 申請新字軌
 
-//
+使用新增字軌 API 來申請新字軌：
+
+```php
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
+
+$result = EzPayInvoice::alphanumericCode()
+    ->create()
+    ->withYear(113) // 民國年，只可輸入今年與明年。
+    ->withTerm(InvoiceTerm::JUL_AUG) // 發票期別：07-08月
+    ->withCode('AA') // 字軌英文代碼
+    ->withRange('24000100', '24000199') // 發票號碼範圍
+    ->withType(InvoiceType::GENERAL) // 發票類別：`InvoiceType::GENERAL` (07: 一般稅額計算)
+    ->save();
+
+$result->managementNo() // 字軌管理編號：'0t0ghr0fyv'
+$result->lastNumber() // 該組字軌剩餘張數：100
+$result->status() // 字軌狀態： `AlphanumericCodeStatus::ACTIVE` (啟用)
+```
+
+### 查詢字軌
+
+使用發票年度和期別來查詢字軌資訊：
+
+```php
+$alphanumericCodeResults = EzPayInvoice::alphanumericCode()
+    ->query()
+    ->withYear(113)
+    ->withTerm(InvoiceTerm::JUL_AUG)
+    ->get();
+
+foreach ($alphanumericCodeResults as $result) {
+    $result->managementNo() // 字軌管理編號：'0t0ghr0fyv'
+    $result->year() // 發票年度：113
+    $result->term() // 發票期別：`InvoiceTerm::JUL_AUG` (07-08月)
+    $result->alphanumericCode() // 字軌英文代碼：'AA'
+    $result->startNumber() // 字軌起號：'24000100'
+    $result->endNumber() // 字軌迄號：'24000199'
+    $result->lastNumber() // 該組字軌剩餘張數：100
+    $result->type() // 發票類別：`InvoiceType::GENERAL` (07: 一般稅額計算)
+    $result->status() // 字軌狀態： `AlphanumericCodeStatus::ACTIVE` (啟用)
+}
+```
+
+### 啟用字軌
+
+如果字軌是暫停狀態，可以啟用字軌。需要傳入字軌管理編號和發票年度：
+
+```php
+EzPayInvoice::alphanumericCode()
+    ->query()
+    ->withNo('0t0ghr0fyv')
+    ->withYear(113)
+    ->enable();
+```
+
+### 暫停字軌
+
+如果字軌是啟用狀態，可以暫停字軌。需要傳入字軌管理編號和發票年度：
+
+```php
+$result = EzPayInvoice::alphanumericCode()
+    ->query()
+    ->withNo('0t0ghr0fyv')
+    ->withYear(113)
+    ->pause();
+```
+
+### 停用字軌
+
+可以停用字軌，但需要注意的是，停用後就無法再啟用該字軌。需要傳入字軌管理編號和發票年度：
+
+```php
+EzPayInvoice::alphanumericCode()
+    ->query()
+    ->withNo('0t0ghr0fyv')
+    ->withYear(113)
+    ->disable();
+```
 
 ## 手機條碼與捐證碼驗證 API
 
 ### 驗證手機條碼
 
-//
+驗證手機條碼是否存在於財政部電子發票整合服務平台：
+
+```php
+$result = EzPayInvoice::codeValidation()
+    ->withBarcode('/ABC.123')
+    ->check();
+
+$result->isValid() // 手機條碼是否有效：true
+```
 
 ### 驗證捐證碼
 
-//
+驗證捐證碼是否存在於財政部電子發票整合服務平台：
+
+```php
+$result = EzPayInvoice::codeValidation()
+    ->withLoveCode('123')
+    ->check();
+
+$result->isValid() // 捐證碼是否有效：true
+```
 
 ## 參考
 
