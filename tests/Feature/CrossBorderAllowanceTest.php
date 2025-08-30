@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Http;
 
 use function Pest\Laravel\partialMock;
 
-test('境外電商折讓開立 → 可以開立境外電商折讓', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+beforeEach(function () {
+    $this->crypto = partialMock(Crypto::class);
+    $this->crypto->expects('encryptByAES')->andReturn('encrypted_data');
+});
 
+test('境外電商折讓開立 → 可以開立境外電商折讓', function () {
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -73,9 +75,6 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
 });
 
 test('境外電商折讓觸發 → 可以確認境外電商折讓', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -123,9 +122,6 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
 });
 
 test('境外電商折讓觸發 → 可以取消境外電商折讓', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -173,9 +169,6 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
 });
 
 test('境外電商折讓作廢 → 可以作廢已開立的境外電商折讓', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',

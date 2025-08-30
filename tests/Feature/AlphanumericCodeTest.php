@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Http;
 
 use function Pest\Laravel\partialMock;
 
-test('字軌管理 → 可以成功申請新字軌', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+beforeEach(function () {
+    $this->crypto = partialMock(Crypto::class);
+    $this->crypto->expects('encryptByAES')->andReturn('encrypted_data');
+});
 
+test('字軌管理 → 可以成功申請新字軌', function () {
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -80,9 +82,6 @@ test('字軌管理 → 可以成功申請新字軌', function () {
 });
 
 test('字軌管理 → 可以查詢字軌資訊', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -140,9 +139,6 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
 });
 
 test('字軌管理 → 可以暫停字軌', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -191,9 +187,6 @@ test('字軌管理 → 可以暫停字軌', function () {
 });
 
 test('字軌管理 → 可以啟用字軌', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',
@@ -242,9 +235,6 @@ test('字軌管理 → 可以啟用字軌', function () {
 });
 
 test('字軌管理 → 可以停用字軌', function () {
-    $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-
     Http::fake([
         '*' => Http::response([
             'Status' => 'SUCCESS',

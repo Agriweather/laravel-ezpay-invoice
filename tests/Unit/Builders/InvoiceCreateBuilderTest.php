@@ -12,10 +12,24 @@ use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 
-use function Pest\Laravel\mock;
-
 beforeEach(function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
+
+    $this->response = mock(HttpClientResponse::class);
+    $this->response->expects('json')->andReturn(['Status' => 'SUCCESS']);
+
+    $this->factory = mock(Factory::class);
+    $this->factory->expects('baseUrl')->andReturn('https://example.com/api/');
+    $this->factory->shouldReceive('config')->andReturn('1234567890');
+
+    $this->crypto = mock(Crypto::class);
+    $this->crypto->expects('setHashKey');
+    $this->crypto->expects('setHashIv');
+    $this->crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $this->crypto->expects('verifyCheckCode');
+
+    $this->httpTransporter = mock(HttpTransporter::class);
+    $this->httpTransporter->expects('send')->andReturn($this->response);
 });
 
 afterEach(function () {
@@ -44,24 +58,7 @@ test('可以僅使用必須的參數', function () {
         'ItemAmt' => '200',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withOrder('Order123')
         ->forConsumer('John Doe')
         ->withTax(TaxType::TAXABLE, 5)
@@ -111,24 +108,7 @@ test('可以使用全部的參數', function () {
         'Comment' => '這是一個測試發票',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withEzPayTransNumber('1234567890')
         ->withOrder('Order123')
         ->forBusiness('測試公司有限公司', '12345678')
@@ -174,24 +154,7 @@ test('可以設定應稅稅率', function () {
         'ItemAmt' => '',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::TAXABLE, 5)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -223,24 +186,7 @@ test('可以設定零稅率', function () {
         'ItemAmt' => '',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::ZERO_RATE)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -272,24 +218,7 @@ test('可以設定免稅', function () {
         'ItemAmt' => '',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::TAX_FREE)
         ->transformOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
@@ -324,24 +253,7 @@ test('可以設定混合稅率，和各種混合稅率的銷售額', function ()
         'ItemTaxType' => '1|2|3',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::MIXED, 5)
         ->withItem('商品名稱1', quantity: 2, unit: '個', price: 100, amount: 200, taxType: ItemTaxType::TAXABLE)
         ->withItem('商品名稱2', quantity: 1, unit: '個', price: 80, amount: 80, taxType: ItemTaxType::ZERO_RATE)
@@ -378,24 +290,7 @@ test('可以批次設定多個商品', function () {
         'ItemAmt' => '200|80|90',
     ];
 
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Illuminate\Http\Client\Response */
-    $response = mock(HttpClientResponse::class);
-    $response->expects('json')->andReturn(['Status' => 'SUCCESS']);
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Factory */
-    $factory = mock(Factory::class);
-    $factory->expects('baseUrl')->andReturn('https://example.com/api/');
-    $factory->shouldReceive('config')->andReturn('1234567890');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Crypto\Crypto */
-    $crypto = mock(Crypto::class);
-    $crypto->expects('setHashKey');
-    $crypto->expects('setHashIv');
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
-    /** @var \Mockery\LegacyMockInterface&\Mockery\MockInterface&\Agriweather\EzPayInvoice\Contracts\HttpTransporter */
-    $httpTransporter = mock(HttpTransporter::class);
-    $httpTransporter->expects('send')->andReturn($response);
-
-    (new CreateBuilder($factory, $crypto, $httpTransporter))
+    (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withItems([
             ['name' => '商品名稱1', 'quantity' => 2, 'unit' => '個', 'price' => 100, 'amount' => 200],
             ['name' => '商品名稱2', 'quantity' => 1, 'unit' => '個', 'price' => 80, 'amount' => 80],
