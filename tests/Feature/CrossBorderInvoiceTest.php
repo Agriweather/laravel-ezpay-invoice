@@ -4,7 +4,8 @@ use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
-use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CrossBorderInvoiceCreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\QueryResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -74,7 +75,7 @@ test('境外電商發票開立 → 可以成功開立境外電商發票', functi
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceIssue';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderInvoiceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->invoiceNumber())->toBe('CB00000016');
 });
 
@@ -127,7 +128,7 @@ test('境外電商發票查詢 → 可以查詢境外電商發票', function () 
     $invoiceResult = EzPayInvoice::crossBorder()
         ->invoice()
         ->query()
-        ->withInvoice('CBOrder001')
+        ->withInvoice('CB00000020')
         ->withRandomNumber('1234')
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
@@ -136,8 +137,8 @@ test('境外電商發票查詢 → 可以查詢境外電商發票', function () 
                 'TimeStamp' => Carbon::now()->timestamp,
                 'SearchType' => '0',
                 'MerchantOrderNo' => '',
-                'TotalAmt' => '',
-                'InvoiceNumber' => 'CBOrder001',
+                'TotalAmt' => '0',
+                'InvoiceNumber' => 'CB00000020',
                 'RandomNum' => '1234',
             ]);
 
@@ -146,13 +147,13 @@ test('境外電商發票查詢 → 可以查詢境外電商發票', function () 
         ->get();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_search';
+        return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderInvoiceSearch';
     });
 
-    expect($invoiceResult)->toBeInstanceOf(CrossBorderInvoiceQueryResult::class)
-        ->and($invoiceResult->invoiceNumber())->toBe('CBOrder001')
-        ->and($invoiceResult->orderNo())->toBe('Order001')
-        ->and($invoiceResult->totalAmount())->toBe(1050)
+    expect($invoiceResult)->toBeInstanceOf(QueryResult::class)
+        ->and($invoiceResult->invoiceNumber())->toBe('CB00000020')
+        ->and($invoiceResult->orderNo())->toBe('CBOrder1754068094')
+        ->and($invoiceResult->totalAmount())->toBe(105.5)
         ->and($invoiceResult->buyerName())->toBe('John Doe')
         ->and($invoiceResult->buyerEmail())->toBe('customer@example.com');
 });
@@ -203,7 +204,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderInvoiceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->invoiceNumber())->toBe('CB00000016');
 });
 
@@ -246,6 +247,6 @@ test('境外電商發票作廢 → 可以作廢已開立的發票', function () 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_invalid';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderInvoiceInvalidateResult::class)
+    expect($result)->toBeInstanceOf(InvalidateResult::class)
         ->and($result->invoiceNumber())->toBe('CB00000016');
 });

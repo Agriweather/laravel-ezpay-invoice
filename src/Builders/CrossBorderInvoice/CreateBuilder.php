@@ -6,7 +6,7 @@ use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\CreateOptions;
-use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CrossBorderInvoiceCreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CreateResult;
 use DateTime;
 use InvalidArgumentException;
 
@@ -169,6 +169,8 @@ class CreateBuilder extends Builder
     /**
      * 幣別
      *
+     * 該張發票的幣別代碼
+     *
      * @param  \Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType  $currency  幣別代碼
      */
     public function withCurrency(CurrencyType $currency): self
@@ -180,6 +182,8 @@ class CreateBuilder extends Builder
 
     /**
      * 原幣金額
+     *
+     * 營業人備註之原幣金額
      */
     public function withOriginalCurrencyAmount(int|float $amount): self
     {
@@ -190,6 +194,8 @@ class CreateBuilder extends Builder
 
     /**
      * 匯率
+     *
+     * 營業人備註之匯率
      */
     public function withExchangeRate(float $exchangeRate): self
     {
@@ -204,9 +210,9 @@ class CreateBuilder extends Builder
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function issue(): CrossBorderInvoiceCreateResult
+    public function issue(): CreateResult
     {
-        $result = new CrossBorderInvoiceCreateResult($this->sendRequest());
+        $result = new CreateResult($this->sendRequest());
 
         $this->crypto->verifyCheckCode($result);
 
@@ -221,7 +227,7 @@ class CreateBuilder extends Builder
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function deferIssue(): CrossBorderInvoiceCreateResult
+    public function deferIssue(): CreateResult
     {
         $this->options->status = InvoiceCreateStatus::DEFERRED;
 
@@ -236,7 +242,7 @@ class CreateBuilder extends Builder
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function scheduleAt(string|DateTime $createDate): CrossBorderInvoiceCreateResult
+    public function scheduleAt(string|DateTime $createDate): CreateResult
     {
         $this->options->status = InvoiceCreateStatus::SCHEDULED;
         $this->options->createDate = $createDate instanceof DateTime

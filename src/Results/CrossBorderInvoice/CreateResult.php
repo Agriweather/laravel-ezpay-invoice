@@ -6,7 +6,7 @@ use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
 use Agriweather\EzPayInvoice\Results\Concerns;
 use Agriweather\EzPayInvoice\Results\Result;
 
-final class CrossBorderInvoiceCreateResult extends Result implements CheckCodeVerifiable
+final class CreateResult extends Result implements CheckCodeVerifiable
 {
     use Concerns\HasCheckCode;
     use Concerns\HasCreateTime;
