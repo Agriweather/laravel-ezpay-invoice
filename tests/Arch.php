@@ -8,19 +8,25 @@ if (function_exists('arch')) {
     arch('builders')
         ->expect('Agriweather\EzPayInvoice\Builders')
         ->toOnlyUse([
-            'Illuminate\Http\Client\Factory',
-            'Illuminate\Http\Client\Response',
+            'Agriweather\EzPayInvoice\Contracts',
+            'Agriweather\EzPayInvoice\Crypto\Crypto',
+            'Agriweather\EzPayInvoice\Enums',
+            'Agriweather\EzPayInvoice\Exceptions',
+            'Agriweather\EzPayInvoice\Factory',
+            'Agriweather\EzPayInvoice\Options',
+            'Agriweather\EzPayInvoice\Results',
+            'Illuminate\Http\Response',
             'Illuminate\Support\Traits\Conditionable',
             'Illuminate\Support\Traits\Tappable',
-            'Agriweather\EzPayInvoice\Factory',
-            'Agriweather\EzPayInvoice\Crypto\Crypto',
-            'Agriweather\EzPayInvoice\Options',
         ]);
 
     arch('contracts')
         ->expect('Agriweather\EzPayInvoice\Contracts')
         ->toBeInterfaces()
-        ->toUseNothing();
+        ->toOnlyUse([
+            'Illuminate\Http\Client\Response',
+            'Illuminate\Http\Response',
+        ]);
 
     arch('enums')
         ->expect('Agriweather\EzPayInvoice\Enums')
@@ -41,11 +47,14 @@ if (function_exists('arch')) {
         ->toOnlyUse([
             'Agriweather\EzPayInvoice\Enums',
             'Carbon\Carbon',
+            'Illuminate\Contracts\Support\Arrayable',
         ]);
 
     arch('results')
         ->expect('Agriweather\EzPayInvoice\Results')
         ->toOnlyUse([
+            'Agriweather\EzPayInvoice\Enums',
+            'Agriweather\EzPayInvoice\Contracts',
             'Carbon\Carbon',
         ]);
 }
