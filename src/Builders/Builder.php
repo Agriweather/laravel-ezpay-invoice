@@ -81,4 +81,14 @@ abstract class Builder
 
         return $data;
     }
+
+    /**
+     * Die and dump the current options.
+     *
+     * @return never
+     */
+    public function dd()
+    {
+        dd($this->options()->toArray());
+    }
 }
