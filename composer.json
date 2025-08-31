@@ -43,6 +43,13 @@
         }
     },
     "scripts": {
+        "lint": "pint --parallel",
+        "test:lint": "pint --parallel --test",
+        "test:unit": "php vendor/bin/pest --compact",
+        "test": [
+            "@test:lint",
+            "@test:unit"
+        ],
         "post-autoload-dump": [
             "@php vendor/bin/testbench package:discover --ansi"
         ]
