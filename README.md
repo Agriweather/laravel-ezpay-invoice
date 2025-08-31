@@ -441,7 +441,7 @@ $result->remainingAmount() // 折讓後剩餘發票金額：420
 
 ### 延遲確認折讓
 
-開立折讓後，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
+開立延遲確認的折讓，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
 
 ```php
 $result = EzPayInvoice::allowance()
