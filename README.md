@@ -5,7 +5,7 @@
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。
+**Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。由 [Lucas Yang](https://github.com/ycs77) 建立，並由 [阿龜微氣候天眼通](https://github.com/Agriweather) 團隊維護。
 
 實作功能：
 
@@ -61,7 +61,7 @@ php artisan vendor:publish --tag=ezpay-invoice-config
 
 到 ezPay 電子發票的網站上註冊帳號 (測試時需在測試環境註冊測試帳號) 和建立商店。
 
-在 ezPay 電子發票上開立發票需要有額度，如果剛開立沒有額度等情況，可以到 ezPay 電子發票的「發票管理」>「管理設定」>「使用狀況」中購買，包含測試環境也是 (測試環境依然需要點擊，但不會收費)。
+在 ezPay 電子發票上開立發票需要有額度，如果剛開立沒有額度等情況，可以到 ezPay 電子發票的「發票管理」>「管理設定」>「使用狀況」中購買，包含測試環境也是。 (測試環境依然需要點擊，但不會收費)
 
 開啟 ezPay 電子發票的「商店管理」中找到該商店，並複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`，然後貼到 `.env` 檔案中 `EZPAY_INVOICE_MERCHANT_ID` 等參數設定：
 
@@ -313,9 +313,9 @@ $result->orderNo() // 訂單編號：'Order001'
 $result->totalAmount() // 含稅銷售額：1050
 ```
 
-### 觸發電子發票
+### 觸發開立電子發票
 
-如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以呼叫觸發 API 來提前開立發票：
+如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以透過呼叫觸發 API 來提前開立發票：
 
 ```php
 $result = EzPayInvoice::invoice()
