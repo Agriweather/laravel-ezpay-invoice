@@ -1,0 +1,90 @@
+name: 錯誤回報
+description: 回報 Laravel EzPay Invoice 的問題或錯誤
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        很抱歉您遇到了問題。請提供以下詳細資訊，這將幫助我們解決問題。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 發生了什麼問題
+      description: 您期望發生什麼？實際上發生了什麼？
+      placeholder: 當我使用發票開立功能時，出現了非此套件拋出的錯誤訊息
+    validations:
+      required: true
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: 如何重現問題
+      description: 問題是如何發生的？請提供相關的設定值和可靠的重現步驟。
+      placeholder: 安裝 Laravel 專案，加入 EzPay Invoice 套件，執行發票開立功能
+    validations:
+      required: true
+  - type: textarea
+    id: expected-api-request
+    attributes:
+      label: 預期的 API 請求資料
+      description: 如果問題與 API 請求有關，請提供您預期的 API 請求資料 (JSON)。
+      placeholder: 請在此輸入您預期的 API 請求資料
+  - type: textarea
+    id: expected-api-response
+    attributes:
+      label: 預期的 API 回應資料
+      description: 如果問題與 API 回應有關，請提供您預期的 API 回應資料 (JSON)。
+      placeholder: 請在此輸入您預期的 API 回應資料
+  - type: textarea
+    id: actual-api-request
+    attributes:
+      label: 實際的 API 請求資料
+      description: 如果問題與 API 請求有關，請提供您實際送出的 API 請求資料 (JSON)。
+      placeholder: 請在此輸入您實際送出的 API 請求資料
+  - type: textarea
+    id: actual-api-response
+    attributes:
+      label: 實際的 API 回應資料
+      description: 如果問題與 API 回應有關，請提供您實際收到的 API 回應資料 (JSON)。
+      placeholder: 請在此輸入您實際收到的 API 回應資料
+  - type: input
+    id: repository-sample
+    attributes:
+      label: 範例程式庫
+      description: 如果可能，請提供能重現此問題的範例程式庫。
+      placeholder: https://github.com/your-username/your-repository
+  - type: input
+    id: package-version
+    attributes:
+      label: Laravel EzPay Invoice 版本
+      description: 您使用的套件版本為何？請盡可能提供具體版本。
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP 版本
+      description: 您使用的 PHP 版本為何？請盡可能提供具體版本。
+      placeholder: 8.3.0
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-systems
+    attributes:
+      label: 作業系統
+      description: 問題在哪些作業系統上發生？您可以選擇多個選項。
+      multiple: true
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備註
+      description: 請使用此欄位提供您認為與此問題相關的其他資訊。
+    validations:
+      required: false
