@@ -1,5 +1,6 @@
 <?php
 
+// Architecture testing is available in PestPHP v2.0+
 if (function_exists('arch')) {
     arch()
         ->expect('Agriweather\EzPayInvoice')
