@@ -6,11 +6,12 @@ use Agriweather\EzPayInvoice\Results\Result;
 
 final class UrlQueryResult extends Result
 {
-    protected string $url;
+    private string $url;
 
     public function __construct(array $data)
     {
         $this->url = $data['Result'];
+        $this->result = ['Url' => $this->url];
     }
 
     public function url(): string

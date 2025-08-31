@@ -2,7 +2,9 @@
 
 namespace Agriweather\EzPayInvoice\Results;
 
-abstract class Result
+use Illuminate\Contracts\Support\Arrayable;
+
+abstract class Result implements Arrayable
 {
     protected array $result;
 
@@ -16,5 +18,10 @@ abstract class Result
     public function result(): array
     {
         return $this->result;
+    }
+
+    public function toArray(): array
+    {
+        return $this->result();
     }
 }
