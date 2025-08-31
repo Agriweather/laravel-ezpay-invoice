@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        很抱歉您遇到了問題。請提供以下詳細資訊，這將幫助我們解決問題。
+        很抱歉您遇到了問題。請提供以下詳細資訊，以幫助我們解決問題。
   - type: textarea
     id: what-happened
     attributes:
@@ -20,7 +20,7 @@ body:
     attributes:
       label: 如何重現問題
       description: 問題是如何發生的？請提供相關的設定值和可靠的重現步驟。
-      placeholder: 安裝 Laravel 專案，加入 EzPay Invoice 套件，執行發票開立功能
+      placeholder: 安裝 Laravel 專案，加入 EzPay Invoice 套件，執行發票開立功能 API
     validations:
       required: true
   - type: textarea
