@@ -3,7 +3,9 @@
 namespace Agriweather\EzPayInvoice\Resources;
 
 use Agriweather\EzPayInvoice\Builders\CrossBorderInvoice\CreateBuilder;
+use Agriweather\EzPayInvoice\Builders\CrossBorderInvoice\InvalidateBuilder;
 use Agriweather\EzPayInvoice\Builders\CrossBorderInvoice\QueryBuilder;
+use Agriweather\EzPayInvoice\Builders\CrossBorderInvoice\TriggerBuilder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
@@ -34,5 +36,19 @@ class CrossBorderInvoice
         return $this->prepareBuilder((new QueryBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
         ))->setFormRedirectTransporter($this->formRedirectTransporter));
+    }
+
+    public function pending(): TriggerBuilder
+    {
+        return $this->prepareBuilder(new TriggerBuilder(
+            $this->factory, $this->crypto, $this->httpTransporter
+        ));
+    }
+
+    public function voidable(): InvalidateBuilder
+    {
+        return $this->prepareBuilder(new InvalidateBuilder(
+            $this->factory, $this->crypto, $this->httpTransporter
+        ));
     }
 }

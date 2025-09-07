@@ -3,8 +3,6 @@
 namespace Agriweather\EzPayInvoice\Results\CrossBorderInvoice;
 
 use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
-use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
-use Agriweather\EzPayInvoice\Enums\Invoice\InvoicePrintFlag;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceStatus;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceUploadStatus;
@@ -57,60 +55,12 @@ final class QueryResult extends Result implements CheckCodeVerifiable
     }
 
     /**
-     * 課稅別
-     *
-     * @throws \ValueError
-     */
-    // public function taxType(): TaxType
-    // {
-    //     return TaxType::from((int) $this->result['TaxType']);
-    // }
-
-    /**
-     * 稅率
-     */
-    // public function taxRate(): float
-    // {
-    //     return (float) $this->result['TaxRate'];
-    // }
-
-    /**
      * 發票銷售額合計 (未稅)
      */
     public function amount(): float
     {
         return (float) $this->result['Amt'];
     }
-
-    /**
-     * 銷售額 (課稅別應稅的未稅金額)
-     */
-    // public function salesAmount(): ?int
-    // {
-    //     return isset($this->result['AmtSales'])
-    //         ? (int) $this->result['AmtSales']
-    //         : null;
-    // }
-
-    /**
-     * 銷售額 (課稅別零稅率的未稅金額)
-     */
-    // public function zeroAmount(): ?int
-    // {
-    //     return isset($this->result['AmtZero'])
-    //         ? (int) $this->result['AmtZero']
-    //         : null;
-    // }
-
-    /**
-     * 銷售額 (課稅別免稅的未稅金額)
-     */
-    // public function freeAmount(): ?int
-    // {
-    //     return isset($this->result['AmtFree'])
-    //         ? (int) $this->result['AmtFree']
-    //         : null;
-    // }
 
     /**
      * 稅額
@@ -129,54 +79,6 @@ final class QueryResult extends Result implements CheckCodeVerifiable
     }
 
     /**
-     * 載具類別
-     *
-     * @throws \ValueError
-     */
-    // public function carrierType(): ?CarrierType
-    // {
-    //     return isset($this->result['CarrierType']) && $this->result['CarrierType'] !== ''
-    //         ? CarrierType::from((int) $this->result['CarrierType'])
-    //         : null;
-    // }
-
-    /**
-     * 載具編號
-     */
-    // public function carrierNumber(): ?string
-    // {
-    //     return $this->result['CarrierNum'] ?: null;
-    // }
-
-    /**
-     * 捐贈碼
-     */
-    // public function loveCode(): ?string
-    // {
-    //     return $this->result['LoveCode'] ?: null;
-    // }
-
-    /**
-     * 是否索取紙本發票
-     *
-     * @throws \ValueError
-     */
-    // public function printFlag(): bool
-    // {
-    //     return $this->result['PrintFlag'] === InvoicePrintFlag::YES->value;
-    // }
-
-    /**
-     * 是否開放至合作超商 Kiosk 列印
-     *
-     * 該張發票是否開放買受人可至本平台合作之超商 Kiosk 進行列印。
-     */
-    // public function kioskPrintFlag(): bool
-    // {
-    //     return $this->result['KioskPrintFlag'] === '1';
-    // }
-
-    /**
      * 商品明細
      *
      * - number: 品項序號
@@ -192,8 +94,8 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      *     name: string,
      *     quantity: int,
      *     unit: string,
-     *     price: int,
-     *     amount: int,
+     *     price: float,
+     *     amount: float,
      *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\TaxType
      * }>
      *

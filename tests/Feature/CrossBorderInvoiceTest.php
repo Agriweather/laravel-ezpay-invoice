@@ -5,7 +5,9 @@ use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\InvalidateResult;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\QueryResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\TriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -182,7 +184,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
 
     $result = EzPayInvoice::crossBorder()
         ->invoice()
-        ->triggerQuery()
+        ->pending()
         ->withInvoiceTransNo('25080200501024251')
         ->withOrder('CBOrder001')
         ->withTotalAmount(105.50)
@@ -193,7 +195,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
                 'TimeStamp' => Carbon::now()->timestamp,
                 'InvoiceTransNo' => '25080200501024251',
                 'MerchantOrderNo' => 'CBOrder001',
-                'TotalAmt' => '105.50',
+                'TotalAmt' => '105.5',
             ]);
 
             return $options;
