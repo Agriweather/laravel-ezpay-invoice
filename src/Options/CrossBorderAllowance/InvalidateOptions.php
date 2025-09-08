@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Options\Allowance;
+namespace Agriweather\EzPayInvoice\Options\CrossBorderAllowance;
 
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class InvalidateQueryOptions extends Options
+class InvalidateOptions extends Options
 {
     public string $merchantId = '';
 

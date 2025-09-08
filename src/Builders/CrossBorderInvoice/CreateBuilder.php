@@ -100,12 +100,12 @@ class CreateBuilder extends Builder
      * 商品項目
      *
      * @param  string  $name  商品名稱
-     * @param  int|float  $quantity  商品數量
+     * @param  int  $quantity  商品數量
      * @param  string  $unit  商品單位
      * @param  int|float  $price  商品單價
      * @param  int|float  $amount  商品小計
      */
-    public function withItem(string $name, int|float $quantity, string $unit, int|float $price, int|float $amount): self
+    public function withItem(string $name, int $quantity, string $unit, int|float $price, int|float $amount): self
     {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
@@ -131,8 +131,8 @@ class CreateBuilder extends Builder
      *     name: string,
      *     quantity: int,
      *     unit: string,
-     *     price: int,
-     *     amount: int
+     *     price: int|float,
+     *     amount: int|float
      * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self

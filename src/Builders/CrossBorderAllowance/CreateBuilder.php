@@ -1,12 +1,11 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Builders\Allowance;
+namespace Agriweather\EzPayInvoice\Builders\CrossBorderAllowance;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
-use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
-use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
-use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
+use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\CreateOptions;
+use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
 use InvalidArgumentException;
 
 class CreateBuilder extends Builder
@@ -21,7 +20,7 @@ class CreateBuilder extends Builder
         $this->options = new CreateOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
 
-        $this->endpoint = '/Api/allowance_issue';
+        $this->endpoint = '/Api/crossBorderAllowanceIssue';
     }
 
     protected function options(): CreateOptions
@@ -59,18 +58,19 @@ class CreateBuilder extends Builder
      * @param  string  $name  折讓商品名稱
      * @param  int  $quantity  折讓商品數量
      * @param  string  $unit  折讓商品單位
-     * @param  int  $price  折讓商品單價
-     * @param  int  $amount  折讓商品小計
-     * @param  int  $taxAmount  折讓商品稅額
+     * @param  int|float  $price  折讓商品單價
+     * @param  int|float  $amount  折讓商品小計
      */
-    public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, int $taxAmount): self
+    public function withItem(string $name, int $quantity, string $unit, int|float $price, int|float $amount): self
     {
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;
         $this->options->itemPrices[] = $price;
         $this->options->itemAmounts[] = $amount;
-        $this->options->itemTaxAmounts[] = $taxAmount;
+
+        // 境外電商折讓商品稅額參數為 0
+        $this->options->itemTaxAmounts[] = 0;
 
         return $this;
     }
@@ -85,22 +85,20 @@ class CreateBuilder extends Builder
      * - unit: 折讓商品單位
      * - price: 折讓商品單價
      * - amount: 折讓商品金額
-     * - taxAmount: 折讓商品稅額
      *
      * @param  array<int, array{
      *     name: string,
      *     quantity: int,
      *     unit: string,
-     *     price: int,
-     *     amount: int,
-     *     taxAmount: int
+     *     price: int|float,
+     *     amount: int|float
      * }>  $items  折讓商品項目陣列
      */
     public function withItems(array $items): self
     {
         foreach ($items as $item) {
-            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'], $item['taxAmount'])) {
-                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格、小計和稅額。');
+            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'])) {
+                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格和小計。');
             }
 
             $this->withItem(
@@ -108,8 +106,7 @@ class CreateBuilder extends Builder
                 quantity: $item['quantity'],
                 unit: $item['unit'],
                 price: $item['price'],
-                amount: $item['amount'],
-                taxAmount: $item['taxAmount']
+                amount: $item['amount']
             );
         }
 
@@ -117,25 +114,11 @@ class CreateBuilder extends Builder
     }
 
     /**
-     * 折讓課稅別
-     *
-     * 當折讓的發票課稅別為混合應稅與免稅或零稅率時，需依應稅、零稅率、免稅個別開立折讓單。
-     *
-     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\TaxType  $taxType  稅別
-     */
-    public function withTaxTypeForMixed(ItemTaxType $itemTaxType): self
-    {
-        $this->options->taxTypeForMixed = $itemTaxType;
-
-        return $this;
-    }
-
-    /**
      * 折讓總金額
      *
-     * @param  int  $totalAmount  此次開立折讓加總金額。
+     * @param  int|float  $totalAmount  此次開立折讓加總金額。
      */
-    public function withTotalAmount(int $totalAmount): self
+    public function withTotalAmount(int|float $totalAmount): self
     {
         $this->options->totalAmount = $totalAmount;
 

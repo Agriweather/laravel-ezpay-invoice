@@ -1,10 +1,10 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Builders\Allowance;
+namespace Agriweather\EzPayInvoice\Builders\CrossBorderAllowance;
 
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Options\Allowance\InvalidateOptions;
-use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
+use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\InvalidateOptions;
+use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\InvalidateResult;
 
 class InvalidateBuilder extends Builder
 {

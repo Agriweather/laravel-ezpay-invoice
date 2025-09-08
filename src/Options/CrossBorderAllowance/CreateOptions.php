@@ -1,9 +1,8 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Options\CrossBorderInvoice;
+namespace Agriweather\EzPayInvoice\Options\CrossBorderAllowance;
 
-use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
-use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
+use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
@@ -11,23 +10,9 @@ class CreateOptions extends Options
 {
     public string $merchantId = '';
 
+    public string $invoiceNo = '';
+
     public string $orderNo = '';
-
-    public InvoiceCreateStatus $status = InvoiceCreateStatus::IMMEDIATE;
-
-    public ?string $createDate = null;
-
-    public string $buyerName = '';
-
-    public ?string $buyerAddress = null;
-
-    public string $buyerEmail = '';
-
-    public int|float $amount = 0;
-
-    public int|float $taxAmount = 0;
-
-    public int|float $totalAmount = 0;
 
     /** @var string[] */
     public array $itemNames = [];
@@ -44,13 +29,14 @@ class CreateOptions extends Options
     /** @var int|float[] */
     public array $itemAmounts = [];
 
-    public ?string $comment = null;
+    /** @var int|float[] */
+    public array $itemTaxAmounts = [];
 
-    public CurrencyType $currency = CurrencyType::TWD;
+    public int|float $totalAmount = 0;
 
-    public int|float $originalCurrencyAmount = 0;
+    public ?string $buyerEmail = null;
 
-    public float $exchangeRate = 1.0;
+    public CreateStatus $status = CreateStatus::IMMEDIATE;
 
     /**
      * 檢查是否存在商品項目。
@@ -84,15 +70,8 @@ class CreateOptions extends Options
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
+                'InvoiceNo' => $this->invoiceNo,
                 'MerchantOrderNo' => $this->orderNo,
-                'Status' => (string) $this->status->value,
-                'CreateStatusTime' => $this->createDate,
-                'BuyerName' => $this->buyerName,
-                'BuyerAddress' => $this->buyerAddress,
-                'BuyerEmail' => $this->buyerEmail,
-                'Amt' => (string) round($this->amount, 2),
-                'TaxAmt' => (string) round($this->taxAmount, 2),
-                'TotalAmt' => (string) round($this->totalAmount, 2),
                 'ItemName' => implode('|', $this->itemNames),
                 'ItemCount' => implode('|', $this->itemQuantities),
                 'ItemUnit' => implode('|', $this->itemUnits),
@@ -102,10 +81,12 @@ class CreateOptions extends Options
                 'ItemAmt' => implode('|', array_map(function (int|float $amount) {
                     return (string) round($amount, 2);
                 }, $this->itemAmounts)),
-                'Comment' => $this->comment,
-                'Currency' => $this->currency->value,
-                'OriginalCurrencyAmount' => (string) round($this->originalCurrencyAmount, 2),
-                'ExchangeRate' => (string) round($this->exchangeRate, 5),
+                'ItemTaxAmt' => implode('|', array_map(function (int|float $taxAmount) {
+                    return (string) round($taxAmount, 2);
+                }, $this->itemTaxAmounts)),
+                'TotalAmt' => (string) round($this->totalAmount, 2),
+                'BuyerEmail' => $this->buyerEmail,
+                'Status' => (string) $this->status->value,
             ], fn ($value) => ! is_null($value)),
         ];
     }

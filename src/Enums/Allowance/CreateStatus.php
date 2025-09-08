@@ -4,8 +4,8 @@ namespace Agriweather\EzPayInvoice\Enums\Allowance;
 
 enum CreateStatus: int
 {
-    /** 即時開立 */
+    /** 開立折讓後，立即確認折讓 */
     case IMMEDIATE = 1;
-    /** 延遲開立 */
-    case DEFERRED = 0;
+    /** 開立折讓後，不立即確認折讓，需等待買受人確認折讓 */
+    case PENDING = 0;
 }

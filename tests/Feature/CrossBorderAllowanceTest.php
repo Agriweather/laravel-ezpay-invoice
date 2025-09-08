@@ -3,6 +3,9 @@
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\InvalidateResult;
+use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\TriggerResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -34,10 +37,10 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
     $result = EzPayInvoice::crossBorder()
         ->allowance()
         ->create()
-        ->withInvoice('CB00000016')
+        ->withInvoice('CB00000022')
         ->withOrder('CBOrder001')
-        ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50, tax: 0)
-        ->withAmount(105.50)
+        ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50)
+        ->withTotalAmount(105.50)
         ->withNotification('customer@example.com')
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
@@ -49,10 +52,10 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
                 'ItemName' => '退貨商品',
                 'ItemCount' => '1',
                 'ItemUnit' => 'EA',
-                'ItemPrice' => '105.50',
-                'ItemAmt' => '105.50',
+                'ItemPrice' => '105.5',
+                'ItemAmt' => '105.5',
                 'ItemTaxAmt' => '0',
-                'TotalAmt' => '105.50',
+                'TotalAmt' => '105.5',
                 'BuyerEmail' => 'customer@example.com',
                 'Status' => '1',
             ]);
@@ -65,7 +68,7 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/crossBorderAllowanceIssue';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderAllowanceCreateResult::class)
+    expect($result)->toBeInstanceOf(CreateResult::class)
         ->and($result->checkCode())->toBe('123456789')
         ->and($result->allowanceNo())->toBe('A250802013300379')
         ->and($result->orderNo())->toBe('CBOrder001')
@@ -93,10 +96,10 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
 
     $result = EzPayInvoice::crossBorder()
         ->allowance()
-        ->query()
+        ->pending()
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
-        ->withAmount(105.50)
+        ->withTotalAmount(105.50)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
@@ -105,7 +108,7 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
                 'AllowanceStatus' => 'C',
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
-                'TotalAmt' => '105.50',
+                'TotalAmt' => '105.5',
             ]);
 
             return $options;
@@ -116,9 +119,9 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderAllowanceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->allowanceAmount())->toBe(105.50)
-        ->and($result->remainingAmount())->toBe(0);
+        ->and($result->remainingAmount())->toBe(0.0);
 });
 
 test('境外電商折讓觸發 → 可以取消境外電商折讓', function () {
@@ -140,10 +143,10 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
 
     $result = EzPayInvoice::crossBorder()
         ->allowance()
-        ->query()
+        ->pending()
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
-        ->withAmount(105.50)
+        ->withTotalAmount(105.50)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
@@ -152,7 +155,7 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
                 'AllowanceStatus' => 'D',
                 'AllowanceNo' => 'A250802013300379',
                 'MerchantOrderNo' => 'CBOrder001',
-                'TotalAmt' => '105.50',
+                'TotalAmt' => '105.5',
             ]);
 
             return $options;
@@ -163,7 +166,7 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowance_touch_issue';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderAllowanceTriggerResult::class)
+    expect($result)->toBeInstanceOf(TriggerResult::class)
         ->and($result->allowanceAmount())->toBe(0.0)
         ->and($result->remainingAmount())->toBe(0.0);
 });
@@ -204,6 +207,6 @@ test('境外電商折讓作廢 → 可以作廢已開立的境外電商折讓', 
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
     });
 
-    expect($result)->toBeInstanceOf(CrossBorderAllowanceInvalidateResult::class)
+    expect($result)->toBeInstanceOf(InvalidateResult::class)
         ->and($result->allowanceNo())->toBe('A250802013300379');
 });

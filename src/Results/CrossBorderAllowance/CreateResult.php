@@ -1,11 +1,11 @@
 <?php
 
-namespace Agriweather\EzPayInvoice\Results\Allowance;
+namespace Agriweather\EzPayInvoice\Results\CrossBorderAllowance;
 
 use Agriweather\EzPayInvoice\Results\Concerns;
 use Agriweather\EzPayInvoice\Results\Result;
 
-final class TriggerResult extends Result
+final class CreateResult extends Result
 {
     use Concerns\HasCheckCode;
     use Concerns\HasInvoiceNumber;
@@ -23,16 +23,16 @@ final class TriggerResult extends Result
     /**
      * 折讓金額
      */
-    public function allowanceAmount(): int
+    public function allowanceAmount(): float
     {
-        return (int) $this->result['AllowanceAmt'];
+        return (float) $this->result['AllowanceAmt'];
     }
 
     /**
      * 折讓後剩餘發票金額
      */
-    public function remainingAmount(): int
+    public function remainingAmount(): float
     {
-        return (int) $this->result['RemainAmt'];
+        return (float) $this->result['RemainAmt'];
     }
 }

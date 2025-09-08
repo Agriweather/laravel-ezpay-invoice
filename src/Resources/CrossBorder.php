@@ -24,4 +24,11 @@ class CrossBorder
             $this->factory, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
         );
     }
+
+    public function allowance(): CrossBorderAllowance
+    {
+        return new CrossBorderAllowance(
+            $this->factory, $this->crypto, $this->httpTransporter
+        );
+    }
 }

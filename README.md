@@ -7,12 +7,12 @@
 
 **Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。由 [Lucas Yang](https://github.com/ycs77) 建立，並由 [阿龜微氣候天眼通](https://github.com/Agriweather) 團隊維護。
 
-實作功能：
+套件功能：
 
-- [x] 電子發票 API
-- [ ] 電子發票 API (境外電商版)
-- [x] 字軌管理 API
-- [x] 手機條碼與捐證碼驗證 API
+- 電子發票 API
+- 電子發票 API (境外電商版)
+- 字軌管理 API
+- 手機條碼與捐證碼驗證 API
 
 ## 目錄
 
