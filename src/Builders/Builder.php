@@ -12,6 +12,7 @@ use Illuminate\Support\Traits\Tappable;
 
 abstract class Builder
 {
+    use Concerns\Dumpable;
     use Concerns\HasTransformOptions;
     use Conditionable;
     use Tappable;
@@ -80,15 +81,5 @@ abstract class Builder
         }
 
         return $data;
-    }
-
-    /**
-     * Die and dump the current options.
-     *
-     * @return never
-     */
-    public function dd()
-    {
-        dd($this->options()->toArray());
     }
 }

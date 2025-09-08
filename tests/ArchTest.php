@@ -2,9 +2,14 @@
 
 // Architecture testing is available in PestPHP v2.0+
 if (function_exists('arch')) {
+    $ignore = [
+        'Agriweather\EzPayInvoice\Builders\Concerns\Dumpable',
+    ];
+
     arch()
         ->expect('Agriweather\EzPayInvoice')
-        ->not->toUse(['die', 'dd', 'dump']);
+        ->not->toUse(['die', 'dd', 'dump'])
+        ->ignoring($ignore);
 
     arch('builders')
         ->expect('Agriweather\EzPayInvoice\Builders')
@@ -19,7 +24,8 @@ if (function_exists('arch')) {
             'Illuminate\Http\Response',
             'Illuminate\Support\Traits\Conditionable',
             'Illuminate\Support\Traits\Tappable',
-        ]);
+        ])
+        ->ignoring($ignore);
 
     arch('contracts')
         ->expect('Agriweather\EzPayInvoice\Contracts')
@@ -57,5 +63,6 @@ if (function_exists('arch')) {
             'Agriweather\EzPayInvoice\Enums',
             'Agriweather\EzPayInvoice\Contracts',
             'Carbon\Carbon',
+            'Illuminate\Contracts\Support\Arrayable',
         ]);
 }
