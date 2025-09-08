@@ -6,7 +6,6 @@ use Agriweather\EzPayInvoice\Contracts\CheckCodeVerifiable;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceStatus;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceUploadStatus;
-use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Results\Concerns;
 use Agriweather\EzPayInvoice\Results\Result;
 
@@ -45,7 +44,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
     }
 
     /**
-     * 發票字軌類型
+     * 發票類別
      *
      * @throws \ValueError
      */
@@ -87,7 +86,6 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      * - unit: 商品單位
      * - price: 商品單價
      * - amount: 商品金額
-     * - taxType: 商品課稅別 (`null` 代表不適用)
      *
      * @return array<int, array{
      *     number: int,
@@ -95,8 +93,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
      *     quantity: int,
      *     unit: string,
      *     price: float,
-     *     amount: float,
-     *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\TaxType
+     *     amount: float
      * }>
      *
      * @throws \JsonException
@@ -119,7 +116,6 @@ final class QueryResult extends Result implements CheckCodeVerifiable
             'unit' => $item['ItemWord'],
             'price' => $item['ItemPrice'] ? (float) $item['ItemPrice'] : 0,
             'amount' => $item['ItemAmount'] ? (float) $item['ItemAmount'] : 0,
-            'taxType' => $item['ItemTaxType'] ? TaxType::from((int) $item['TaxType']) : null,
         ], $items);
     }
 

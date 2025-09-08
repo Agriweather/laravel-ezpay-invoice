@@ -65,7 +65,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
     }
 
     /**
-     * 發票字軌類型
+     * 發票類別
      *
      * @throws \ValueError
      */

@@ -39,8 +39,8 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
         ->create()
         ->withInvoice('CB00000022')
         ->withOrder('CBOrder001')
-        ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50)
-        ->withTotalAmount(105.50)
+        ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 105.5, amount: 105.5)
+        ->withTotalAmount(105.5)
         ->withNotification('customer@example.com')
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
@@ -73,8 +73,8 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
         ->and($result->allowanceNo())->toBe('A250802013300379')
         ->and($result->orderNo())->toBe('CBOrder001')
         ->and($result->invoiceNumber())->toBe('CB00000022')
-        ->and($result->allowanceAmount())->toBe(105.50)
-        ->and($result->remainingAmount())->toBe(0.00);
+        ->and($result->allowanceAmount())->toBe(105.5)
+        ->and($result->remainingAmount())->toBe(0.0);
 });
 
 test('境外電商折讓觸發 → 可以確認境外電商折讓', function () {
@@ -99,7 +99,7 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
         ->pending()
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
-        ->withTotalAmount(105.50)
+        ->withTotalAmount(105.5)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
@@ -120,7 +120,7 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
     });
 
     expect($result)->toBeInstanceOf(TriggerResult::class)
-        ->and($result->allowanceAmount())->toBe(105.50)
+        ->and($result->allowanceAmount())->toBe(105.5)
         ->and($result->remainingAmount())->toBe(0.0);
 });
 
@@ -146,7 +146,7 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
         ->pending()
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
-        ->withTotalAmount(105.50)
+        ->withTotalAmount(105.5)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',

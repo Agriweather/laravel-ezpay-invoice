@@ -43,9 +43,9 @@ test('境外電商發票開立 → 可以成功開立境外電商發票', functi
         ->withCustomer('John Doe')
         ->withEmail('customer@example.com')
         ->withCurrency(CurrencyType::USD)
-        ->withItem('國際商品', quantity: 1, unit: 'EA', price: 105.50, amount: 105.50)
-        ->withAmount(100.00, 5.50, 105.50)
-        ->withOriginalCurrencyAmount(100.00)
+        ->withItem('國際商品', quantity: 1, unit: 'EA', price: 105.5, amount: 105.5)
+        ->withAmount(100.0, 5.5, 105.5)
+        ->withOriginalCurrencyAmount(100.0)
         ->withExchangeRate(30.5)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
@@ -187,7 +187,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
         ->pending()
         ->withInvoiceTransNo('25080200501024251')
         ->withOrder('CBOrder001')
-        ->withTotalAmount(105.50)
+        ->withTotalAmount(105.5)
         ->transformOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',

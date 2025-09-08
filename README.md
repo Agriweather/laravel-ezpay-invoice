@@ -27,6 +27,13 @@
   - [延遲確認折讓](#延遲確認折讓)
   - [作廢折讓](#作廢折讓)
 - [電子發票 API (境外電商版)](#電子發票-api-境外電商版)
+  - [境外電商開立電子發票](#境外電商開立電子發票)
+  - [境外電商觸發電子發票](#境外電商觸發電子發票)
+  - [境外電商查詢電子發票](#境外電商查詢電子發票)
+  - [境外電商作廢電子發票](#境外電商作廢電子發票)
+  - [境外電商開立折讓](#境外電商開立折讓)
+  - [境外電商延遲確認折讓](#境外電商延遲確認折讓)
+  - [境外電商作廢折讓](#境外電商作廢折讓)
 - [字軌管理 API](#字軌管理-api)
   - [準備帳號代號和金鑰](#準備帳號代號和金鑰)
   - [申請新字軌](#申請新字軌)
@@ -37,7 +44,10 @@
 - [手機條碼與捐證碼驗證 API](#手機條碼與捐證碼驗證-api)
   - [驗證手機條碼](#驗證手機條碼)
   - [驗證捐證碼](#驗證捐證碼)
-- [參考](#參考)
+- [除錯與測試](#除錯與測試)
+- [API 參考文件](#api-參考文件)
+- [貢獻專案](#貢獻專案)
+- [License](#license)
 
 ## 版本需求
 
@@ -102,6 +112,8 @@ $result->randomNumber() // 發票隨機碼：'1234'
 開立 B2C 電子發票的基本範例：
 
 ```php
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+
 $result = EzPayInvoice::invoice()
     ->create()
     ->withOrder('Order001') // 訂單編號
@@ -365,7 +377,7 @@ $invoiceResult->buyerAddress() // 買受人地址：'台北市信義區信義路
 $invoiceResult->buyerPhone() // 買受人電話：'02-12345678'
 $invoiceResult->buyerEmail() // 買受人電子信箱：'customer@example.com'
 
-$invoiceResult->invoiceType() // 發票字軌類型：`InvoiceType::GENERAL` (07: 一般稅額計算)
+$invoiceResult->invoiceType() // 發票類別：`InvoiceType::GENERAL` (07: 一般稅額計算)
 $invoiceResult->category() // 發票種類：`InvoiceCategory::B2C` (B2C電子發票)
 $invoiceResult->taxType() // 課稅別：`TaxType::TAXABLE` (應稅)
 $invoiceResult->taxRate() // 稅率：5.0 (5%)
@@ -486,7 +498,321 @@ EzPayInvoice::allowance()
 
 ## 電子發票 API (境外電商版)
 
-//
+境外電商版的電子發票 API 主要差異在於部分欄位不同，不支援載具和捐贈碼。且多了外幣、匯率等欄位，因此可以在金額中輸入最多兩位小數。
+
+### 境外電商開立電子發票
+
+開立 B2C 電子發票的基本範例：
+
+```php
+use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+    ->withOrder('Order001') // 訂單編號
+    ->withCustomer('John Doe') // 買受人姓名
+    ->withEmail('customer@example.com') // 買受人電子信箱
+    ->withAddress('台北市信義區信義路五段7號') // 買受人地址
+    ->withCurrency(CurrencyType::USD) // 幣別：USD 美元
+    ->withItem('國際商品', quantity: 1, unit: 'EA', price: 105.5, amount: 105.5) // 商品名稱、數量、單位、單價和金額
+    ->withAmount(100.0, 5.5, 105.5) // 未稅銷售額、稅額、含稅銷售額
+    ->withOriginalCurrencyAmount(100.0) // 營業人備註之原幣金額
+    ->withExchangeRate(30.5) // 營業人備註之匯率
+    ->issue();
+```
+
+設定電子發票使用幣別、原幣金額和匯率：
+
+```php
+use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
+
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+
+    ->withCurrency(CurrencyType::USD) // 幣別：USD 美元
+    ->withOriginalCurrencyAmount(100.0) // 營業人備註之原幣金額
+    ->withExchangeRate(30.5) // 營業人備註之匯率
+```
+
+ezPay 電子發票的幣別支援：
+
+- USD
+- HKD
+- GBP
+- AUD
+- CAD
+- SGD
+- CHF
+- JPY
+- ZAR
+- SEK
+- NZD
+- THB
+- PHP
+- IDR
+- EUR
+- KRW
+- VND
+- MYR
+- CNY
+- TWD
+
+設定電子發票的商品項目和銷售額：
+
+> [!IMPORTANT]
+> 銷售額計算方式，請務必與公司財會人員進行確認。
+
+```php
+EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+
+    // 增加商品項目
+    ->withItem('測試商品', quantity: 1, unit: '個', price: 105.5, amount: 105.5)
+    ->withItem('Test Product', quantity: 2, unit: 'EA', price: 217.5, amount: 435)
+
+    // 批次增加商品項目
+    ->withItems([
+        [
+            'name' => '測試商品',
+            'quantity' => 1,
+            'unit' => '個',
+            'price' => 105.5,
+            'amount' => 105.5,
+        ],
+        [
+            'name' => 'Test Product',
+            'quantity' => 2,
+            'unit' => 'EA',
+            'price' => 217.5,
+            'amount' => 435,
+        ],
+    ])
+
+    // 未稅銷售額、稅額、含稅銷售額
+    ->withAmount(520.0, 20.5, 540.5)
+```
+
+設定發票備註：
+
+```php
+EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+    ->withComment('發票備註'); // 發票備註，字數限 200 字，如有難字則再縮短
+```
+
+立即開立發票：
+
+```php
+// 立即開立發票
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+    ...
+    ->issue();
+
+$result->invoiceNumber() // 發票號碼：'AB12345678'
+$result->randomNumber() // 發票隨機碼：'1234'
+$result->orderNo() // 訂單編號：'Order001'
+$result->totalAmount() // 含稅銷售額：105.5
+```
+
+等待觸發開立發票：
+
+```php
+// 等待觸發開立發票
+// 當選擇此開立發票方式時，發票資料僅暫存於本平台，若確認要開立，則需手動呼叫 觸發電子發票 API 來開立發票。
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+    ...
+    ->deferIssue();
+
+// 預約自動開立發票
+// 當選擇此開立發票方式時，發票會於設定時間執行開立發票，若確認要提前開立，則需手動呼叫 觸發電子發票 API 來提前開立發票。
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->create()
+    ...
+    ->scheduleAt('2025-03-01'); // 設定開立發票的時間
+
+// 保存這些資料用於觸發開立發票
+$result->invoiceTransNo() // ezPay 電子發票開立序號：'25072515224376654'
+$result->orderNo() // 訂單編號：'Order001'
+$result->totalAmount() // 含稅銷售額：105.5
+```
+
+### 境外電商觸發開立電子發票
+
+如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以透過呼叫觸發 API 來提前開立發票：
+
+```php
+$result = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->pending()
+    ->withInvoiceTransNo('25072515224376654')
+    ->withOrder('Order004')
+    ->withTotalAmount(217.5)
+    ->trigger();
+```
+
+### 境外電商查詢電子發票
+
+透過發票號碼和隨機碼查詢電子發票：
+
+```php
+$invoiceResult = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->get();
+```
+
+或者也可以透過訂單編號及發票金額查詢電子發票：
+
+```php
+$invoiceResult = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->query()
+    ->withOrder('Order001')
+    ->withTotalAmount(105.5)
+    ->get();
+```
+
+電子發票查詢結果包含以下資訊：
+
+```php
+$invoiceResult->invoiceNumber() // 發票號碼：'GG72002017'
+$invoiceResult->randomNumber() // 發票隨機碼：'1234'
+$invoiceResult->orderNo() // 訂單編號：'Order001'
+$invoiceResult->invoiceTransNo() // ezPay 電子發票開立序號：'25072515224376654'
+
+$invoiceResult->invoiceStatus() // 發票狀態：`InvoiceStatus::ISSUED` (已開立)
+$invoiceResult->invoiceUploadStatus() // 發票上傳財政部之狀態：`InvoiceUploadStatus::UPLOADED` (已上傳)
+
+$invoiceResult->buyerName() // 買受人名稱：'John Doe'
+$invoiceResult->buyerAddress() // 買受人地址：'台北市信義區信義路五段7號'
+$invoiceResult->buyerEmail() // 買受人電子信箱：'customer@example.com'
+
+$invoiceResult->invoiceType() // 發票類別：`InvoiceType::GENERAL` (07: 一般稅額計算)
+
+$invoiceResult->currency() // 幣別：`CurrencyType::USD` (USD 美元)
+$invoiceResult->originalCurrencyAmount() // 營業人備註之原幣金額：100.0
+$invoiceResult->exchangeRate() // 營業人備註之匯率：30.5
+
+$invoiceResult->amount() // 發票銷售額合計 (未稅)：100.0
+$invoiceResult->taxAmount() // 稅額：5.5
+$invoiceResult->totalAmount() // 含稅銷售額：105.5
+
+$items = $invoiceResult->items() // 商品項目陣列
+// [
+//     [
+//         'number' => 1,
+//         'name' => '測試商品',
+//         'quantity' => 1,
+//         'unit' => '個',
+//         'price' => 105.5,
+//         'amount' => 105.5,
+//     ],
+//     [
+//         'number' => 2,
+//         'name' => 'Test Product',
+//         'quantity' => 2,
+//         'unit' => 'EA',
+//         'price' => 217.5,
+//         'amount' => 435,
+//     ],
+// ]
+```
+
+### 境外電商作廢電子發票
+
+作廢電子發票需要傳入發票號碼和作廢原因：
+
+```php
+EzPayInvoice::crossBorder()
+    ->invoice()
+    ->voidable()
+    ->withInvoice('GG72002017')
+    ->because('客戶取消訂單')
+    ->invalidate();
+```
+
+### 境外電商開立折讓
+
+當需要對已開立的電子發票進行部分或全部退貨時，可以立即開立發票折讓 (同時會立即確認折讓)：
+
+```php
+$result = EzPayInvoice::crossBorder()
+    ->allowance()
+    ->create()
+    ->withInvoice('GG72002018')
+    ->withOrder('Order001')
+    ->withItem('退貨商品', quantity: 2, unit: '個', price: 217.5, amount: 435)
+    ->withTotalAmount(435)
+    ->withNotification('customer@example.com')
+    ->issue();
+
+$result->allowanceNo() // 折讓號：'A250725235346456'
+$result->orderNo() // 訂單編號：'Order001'
+$result->invoiceNumber() // 發票號碼：'GG72002018'
+$result->allowanceAmount() // 折讓金額：435
+$result->remainingAmount() // 折讓後剩餘發票金額：105.5
+```
+
+### 境外電商延遲確認折讓
+
+開立延遲確認的折讓，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
+
+```php
+$result = EzPayInvoice::crossBorder()
+    ->allowance()
+    ->create()
+    ...
+    ->issuePendingConfirmation();
+```
+
+買受人發動確認折讓：
+
+```php
+EzPayInvoice::crossBorder()
+    ->allowance()
+    ->pending()
+    ->withAllowance('A250726001830959')
+    ->withOrder('Order001')
+    ->withTotalAmount(435)
+    ->confirm();
+```
+
+買受人發動取消折讓：
+
+```php
+EzPayInvoice::crossBorder()
+    ->allowance()
+    ->pending()
+    ->withAllowance('A250726001830959')
+    ->withOrder('Order001')
+    ->withTotalAmount(435)
+    ->cancel();
+```
+
+### 境外電商作廢折讓
+
+作廢已開立的折讓，需傳入折讓號和作廢原因：
+
+```php
+EzPayInvoice::crossBorder()
+    ->allowance()
+    ->voidable()
+    ->withAllowance('A250726001830959')
+    ->because('作廢原因')
+    ->invalidate();
+```
 
 ## 字軌管理 API
 
@@ -507,6 +833,7 @@ EZPAY_INVOICE_COMPANY_HASH_IV=your-company-hash-iv
 ```php
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 
 $result = EzPayInvoice::alphanumericCode()
     ->create()
@@ -589,6 +916,8 @@ EzPayInvoice::alphanumericCode()
 驗證手機條碼是否存在於財政部電子發票整合服務平台：
 
 ```php
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+
 $result = EzPayInvoice::codeValidation()
     ->withBarcode('/ABC.123')
     ->check();
@@ -601,6 +930,8 @@ $result->isValid() // 手機條碼是否有效：true
 驗證捐證碼是否存在於財政部電子發票整合服務平台：
 
 ```php
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+
 $result = EzPayInvoice::codeValidation()
     ->withLoveCode('123')
     ->check();
