@@ -6,7 +6,7 @@ if (function_exists('arch')) {
         'Agriweather\EzPayInvoice\Builders\Concerns\Dumpable',
     ];
 
-    arch()
+    arch('main')
         ->expect('Agriweather\EzPayInvoice')
         ->not->toUse(['die', 'dd', 'dump'])
         ->ignoring($ignore);

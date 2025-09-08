@@ -20,6 +20,7 @@
     "homepage": "https://github.com/Agriweather/laravel-ezpay-invoice",
     "require": {
         "php": ">=8.1",
+        "guzzlehttp/guzzle": "^7.5",
         "illuminate/conditionable": ">=9.0",
         "illuminate/http": ">=9.0",
         "illuminate/support": ">=9.0",
@@ -45,7 +46,7 @@
     "scripts": {
         "lint": "pint --parallel",
         "test:lint": "pint --parallel --test",
-        "test:unit": "php vendor/bin/pest --compact",
+        "test:unit": "php vendor/bin/pest",
         "test": [
             "@test:lint",
             "@test:unit"

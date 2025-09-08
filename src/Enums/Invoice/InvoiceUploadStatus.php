@@ -2,7 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Enums\Invoice;
 
-enum InvoiceUploadStatus: string
+enum InvoiceUploadStatus: int
 {
     /** 未上傳 */
     case NOT_UPLOADED = 0;
