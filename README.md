@@ -608,6 +608,23 @@ $result = EzPayInvoice::codeValidation()
 $result->isValid() // 捐證碼是否有效：true
 ```
 
+## 除錯與測試
+
+在開發過程中，可以使用 `dd()` 方法來查看實際的請求和回傳的 JSON 資料：
+
+```php
+$result = EzPayInvoice::invoice()
+    ->create()
+    ->withOrder('Order001')
+    ->dd() // 查看實際的請求 JSON 資料
+    ...
+    ->issue();
+
+dd($result->toArray()); // 查看實際的回傳 JSON 資料
+```
+
+如果遇到錯誤，在提交 issue 時請附上以上的請求和回傳資料。
+
 ## API 參考文件
 
 [ezPay 電子發票 API 文件下載專區](https://inv.ezpay.com.tw/Invoice_index/download)
