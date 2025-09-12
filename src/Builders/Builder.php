@@ -67,6 +67,8 @@ abstract class Builder
     {
         $requestData = $this->toRequestData();
 
+        $this->httpTransporter->setTimeout($this->factory->config('timeout'));
+
         $response = $this->httpTransporter->send(
             $requestData['url'],
             $requestData['formData']
