@@ -4,7 +4,6 @@ namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
 use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
-use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Enums\Invoice\DisplayFlag;
 use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\QueryOptions;
@@ -18,8 +17,6 @@ use InvalidArgumentException;
 class QueryBuilder extends Builder
 {
     protected QueryOptions $options;
-
-    protected FormRedirectTransporter $formRedirectTransporter;
 
     protected function boot(): void
     {
@@ -143,12 +140,7 @@ class QueryBuilder extends Builder
      */
     public function redirectToEzPay(): Response
     {
-        $requestData = $this->toRedirectRequestData();
-
-        return $this->formRedirectTransporter->send(
-            $requestData['url'],
-            $requestData['formData']
-        );
+        return $this->sendFormRedirectRequest();
     }
 
     /**
@@ -158,7 +150,7 @@ class QueryBuilder extends Builder
     {
         $this->options->displayFlag = DisplayFlag::WEB_DISPLAY;
 
-        return parent::toRequestData();
+        return parent::toRedirectRequestData();
     }
 
     /**
@@ -171,12 +163,5 @@ class QueryBuilder extends Builder
         $this->options->displayFlag = DisplayFlag::RETURN_URL;
 
         return (new UrlQueryResult($this->sendRequest()))->url();
-    }
-
-    public function setFormRedirectTransporter(FormRedirectTransporter $formRedirectTransporter): self
-    {
-        $this->formRedirectTransporter = $formRedirectTransporter;
-
-        return $this;
     }
 }

@@ -3,12 +3,14 @@
 namespace Agriweather\EzPayInvoice\Builders;
 
 use Agriweather\EzPayInvoice\Attributes\Resource;
+use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 use Agriweather\EzPayInvoice\Factory;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Results\Result;
+use Illuminate\Http\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
@@ -19,9 +21,17 @@ abstract class Builder
     use Conditionable;
     use Tappable;
 
+    /**
+     * API 端點
+     */
     protected string $endpoint = '';
 
+    /**
+     * 已經設定完成、且可準備送出的的選項
+     */
     private ?Options $configuredOptions = null;
+
+    protected ?FormRedirectTransporter $formRedirectTransporter = null;
 
     public function __construct(
         protected Factory $factory,
@@ -89,6 +99,9 @@ abstract class Builder
         ];
     }
 
+    /**
+     * 解析並設定完成可準備送出的的選項
+     */
     protected function getConfiguredOptions(): Options
     {
         if ($this->configuredOptions) {
@@ -104,6 +117,34 @@ abstract class Builder
         $this->configuredOptions = $options;
 
         return $options;
+    }
+
+    /**
+     * 發送跳轉到 ezPay 平台的請求
+     */
+    public function sendFormRedirectRequest(): Response
+    {
+        $requestData = $this->toRedirectRequestData();
+
+        return $this->formRedirectTransporter->send(
+            $requestData['url'],
+            $requestData['formData']
+        );
+    }
+
+    /**
+     * 發送跳轉到 ezPay 平台的請求表單資料
+     */
+    public function toRedirectRequestData(): array
+    {
+        return $this->toRequestData();
+    }
+
+    public function setFormRedirectTransporter(FormRedirectTransporter $formRedirectTransporter): self
+    {
+        $this->formRedirectTransporter = $formRedirectTransporter;
+
+        return $this;
     }
 
     protected function record(): ?Result
