@@ -7,12 +7,12 @@
 
 **Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。由 [Lucas Yang](https://github.com/ycs77) 建立，並由 [阿龜微氣候天眼通](https://github.com/Agriweather) 團隊維護。
 
-套件功能：
+### 套件功能
 
-- 電子發票 API
-- 電子發票 API (境外電商版)
-- 字軌管理 API
-- 手機條碼與捐證碼驗證 API
+- 🧾 電子發票 API
+- 🌏 電子發票 API (境外電商版)
+- 🅰️ 字軌管理 API
+- 📱 手機條碼與捐證碼驗證 API
 
 ## 目錄
 
@@ -977,9 +977,9 @@ dd($result->toArray()); // 查看實際的回傳 JSON 資料
 
 [ico-version]: https://img.shields.io/packagist/v/agriweather/laravel-ezpay-invoice?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
-[ico-github-action]: https://img.shields.io/github/actions/workflow/status/Agriweather/laravel-ezpay-invoice/tests.yml?branch=main&label=tests&style=flat-square
+[ico-github-action]: https://img.shields.io/github/actions/workflow/status/Agriweather/laravel-ezpay-invoice/tests.yml?branch=1.x&label=tests&style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/agriweather/laravel-ezpay-invoice?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/agriweather/laravel-ezpay-invoice
-[link-github-action]: https://github.com/Agriweather/laravel-ezpay-invoice/actions/workflows/tests.yml?query=branch%3Amain
+[link-github-action]: https://github.com/Agriweather/laravel-ezpay-invoice/actions/workflows/tests.yml?query=branch%3A1.x
 [link-downloads]: https://packagist.org/packages/agriweather/laravel-ezpay-invoice
