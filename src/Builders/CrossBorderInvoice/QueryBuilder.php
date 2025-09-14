@@ -2,16 +2,19 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Contracts\FormRedirectTransporter;
 use Agriweather\EzPayInvoice\Enums\Invoice\DisplayFlag;
 use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\QueryOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\QueryResult;
 use Agriweather\EzPayInvoice\Results\Invoice\UrlQueryResult;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
+#[Resource(CrossBorderInvoice::class, 'query')]
 class QueryBuilder extends Builder
 {
     protected QueryOptions $options;
@@ -128,7 +131,7 @@ class QueryBuilder extends Builder
     {
         $result = new QueryResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result);
+        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
 
         return $result;
     }

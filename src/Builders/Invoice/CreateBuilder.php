@@ -2,6 +2,7 @@
 
 namespace Agriweather\EzPayInvoice\Builders\Invoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
 use Agriweather\EzPayInvoice\Enums\Invoice\CustomsClearance;
@@ -11,10 +12,12 @@ use Agriweather\EzPayInvoice\Enums\Invoice\InvoicePrintFlag;
 use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
 use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Options\Invoice\CreateOptions;
+use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
 use DateTime;
 use InvalidArgumentException;
 
+#[Resource(Invoice::class, 'create')]
 class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
@@ -383,7 +386,7 @@ class CreateBuilder extends Builder
     {
         $result = new CreateResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result);
+        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
 
         return $result;
     }

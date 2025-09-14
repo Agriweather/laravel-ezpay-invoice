@@ -21,6 +21,8 @@ beforeEach(function () {
     $this->factory = mock(Factory::class);
     $this->factory->expects('baseUrl')->andReturn('https://example.com/api/');
     $this->factory->shouldReceive('config')->andReturn('1234567890');
+    $this->factory->expects('record');
+    $this->factory->expects('recording')->andReturnFalse();
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->expects('setHashKey');

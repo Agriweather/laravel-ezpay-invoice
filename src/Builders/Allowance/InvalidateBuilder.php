@@ -2,10 +2,13 @@
 
 namespace Agriweather\EzPayInvoice\Builders\Allowance;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Options\Allowance\InvalidateOptions;
+use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
 
+#[Resource(Allowance::class, 'voidable')]
 class InvalidateBuilder extends Builder
 {
     protected InvalidateOptions $options;

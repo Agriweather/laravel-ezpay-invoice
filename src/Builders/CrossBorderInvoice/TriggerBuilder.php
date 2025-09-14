@@ -2,10 +2,13 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\TriggerOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\TriggerResult;
 
+#[Resource(CrossBorderInvoice::class, 'pending')]
 class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;
@@ -83,7 +86,7 @@ class TriggerBuilder extends Builder
     {
         $result = new TriggerResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result);
+        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
 
         return $result;
     }

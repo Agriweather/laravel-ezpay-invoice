@@ -2,12 +2,15 @@
 
 namespace Agriweather\EzPayInvoice\Builders\AlphanumericCode;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Options\AlphanumericCode\CreateOptions;
+use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;
 
+#[Resource(AlphanumericCode::class, 'create')]
 class CreateBuilder extends Builder
 {
     protected CreateOptions $options;

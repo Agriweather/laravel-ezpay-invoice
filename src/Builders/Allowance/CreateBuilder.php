@@ -2,13 +2,16 @@
 
 namespace Agriweather\EzPayInvoice\Builders\Allowance;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
 use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
+use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
 use InvalidArgumentException;
 
+#[Resource(Allowance::class, 'create')]
 class CreateBuilder extends Builder
 {
     protected CreateOptions $options;

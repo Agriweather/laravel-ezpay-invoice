@@ -2,11 +2,14 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CodeValidation;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Options\CodeValidation\CodeValidationOptions;
+use Agriweather\EzPayInvoice\Resources\CodeValidation;
 use Agriweather\EzPayInvoice\Results\CodeValidation\CodeValidationResult;
 use InvalidArgumentException;
 
+#[Resource(CodeValidation::class)]
 class CodeValidationBuilder extends Builder
 {
     protected CodeValidationOptions $options;

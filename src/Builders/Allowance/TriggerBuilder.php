@@ -2,11 +2,14 @@
 
 namespace Agriweather\EzPayInvoice\Builders\Allowance;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Options\Allowance\TriggerOptions;
+use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\TriggerResult;
 
+#[Resource(Allowance::class, 'pending')]
 class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;

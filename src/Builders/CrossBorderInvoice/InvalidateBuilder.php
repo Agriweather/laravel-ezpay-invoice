@@ -2,10 +2,13 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\InvalidateOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\InvalidateResult;
 
+#[Resource(CrossBorderInvoice::class, 'voidable')]
 class InvalidateBuilder extends Builder
 {
     protected InvalidateOptions $options;

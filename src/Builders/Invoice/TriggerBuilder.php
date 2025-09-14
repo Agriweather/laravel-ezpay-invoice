@@ -2,10 +2,13 @@
 
 namespace Agriweather\EzPayInvoice\Builders\Invoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Options\Invoice\TriggerOptions;
+use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Invoice\TriggerResult;
 
+#[Resource(Invoice::class, 'pending')]
 class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;
@@ -83,7 +86,7 @@ class TriggerBuilder extends Builder
     {
         $result = new TriggerResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result);
+        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
 
         return $result;
     }

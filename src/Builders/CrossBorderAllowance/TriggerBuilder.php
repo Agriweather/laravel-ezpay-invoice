@@ -2,11 +2,14 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderAllowance;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\TriggerOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderAllowance;
 use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\TriggerResult;
 
+#[Resource(CrossBorderAllowance::class, 'pending')]
 class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;

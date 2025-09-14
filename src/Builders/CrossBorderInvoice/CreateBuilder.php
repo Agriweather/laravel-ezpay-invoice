@@ -2,14 +2,17 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderInvoice;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Invoice\CurrencyType;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderInvoice\CreateOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\CreateResult;
 use DateTime;
 use InvalidArgumentException;
 
+#[Resource(CrossBorderInvoice::class, 'create')]
 class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
@@ -214,7 +217,7 @@ class CreateBuilder extends Builder
     {
         $result = new CreateResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result);
+        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
 
         return $result;
     }

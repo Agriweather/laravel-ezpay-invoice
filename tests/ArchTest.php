@@ -14,12 +14,14 @@ if (function_exists('arch')) {
     arch('builders')
         ->expect('Agriweather\EzPayInvoice\Builders')
         ->toOnlyUse([
+            'Agriweather\EzPayInvoice\Attributes',
             'Agriweather\EzPayInvoice\Contracts',
             'Agriweather\EzPayInvoice\Crypto\Crypto',
             'Agriweather\EzPayInvoice\Enums',
             'Agriweather\EzPayInvoice\Exceptions',
             'Agriweather\EzPayInvoice\Factory',
             'Agriweather\EzPayInvoice\Options',
+            'Agriweather\EzPayInvoice\Resources',
             'Agriweather\EzPayInvoice\Results',
             'Illuminate\Http\Response',
             'Illuminate\Support\Traits\Conditionable',

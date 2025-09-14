@@ -2,12 +2,15 @@
 
 namespace Agriweather\EzPayInvoice\Builders\CrossBorderAllowance;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\CreateOptions;
+use Agriweather\EzPayInvoice\Resources\CrossBorderAllowance;
 use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
 use InvalidArgumentException;
 
+#[Resource(CrossBorderAllowance::class, 'create')]
 class CreateBuilder extends Builder
 {
     protected CreateOptions $options;

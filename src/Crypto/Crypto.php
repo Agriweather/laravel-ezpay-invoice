@@ -103,9 +103,9 @@ class Crypto
      *
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
-    public function verifyCheckCode(Result $result): void
+    public function verifyCheckCode(Result $result, bool $enabled = true): void
     {
-        if ($result instanceof CheckCodeVerifiable) {
+        if ($result instanceof CheckCodeVerifiable && $enabled) {
             $checkCodeData = [
                 'MerchantID' => $result->merchantID(),
                 'MerchantOrderNo' => $result->orderNo(),

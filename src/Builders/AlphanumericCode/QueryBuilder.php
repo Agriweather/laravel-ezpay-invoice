@@ -2,13 +2,16 @@
 
 namespace Agriweather\EzPayInvoice\Builders\AlphanumericCode;
 
+use Agriweather\EzPayInvoice\Attributes\Resource;
 use Agriweather\EzPayInvoice\Builders\Builder;
 use Agriweather\EzPayInvoice\Enums\AlphanumericCode\AlphanumericCodeStatus;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
 use Agriweather\EzPayInvoice\Options\AlphanumericCode\QueryOptions;
+use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\UpdateResult;
 
+#[Resource(AlphanumericCode::class, 'query')]
 class QueryBuilder extends Builder
 {
     protected QueryOptions $options;

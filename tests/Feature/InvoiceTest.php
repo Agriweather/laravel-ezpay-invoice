@@ -2,9 +2,12 @@
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCategory;
 use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Invoice\CreateOptions;
 use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
 use Agriweather\EzPayInvoice\Results\Invoice\InvalidateResult;
 use Agriweather\EzPayInvoice\Results\Invoice\QueryResult;
@@ -80,6 +83,58 @@ test('發票開立 → 可以成功開立 B2C 發票', function () {
 
     Http::assertSent(function (Request $request) {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/invoice_issue';
+    });
+
+    expect($result)->toBeInstanceOf(CreateResult::class)
+        ->and($result->checkCode())->toBe('123456789')
+        ->and($result->orderNo())->toBe('Order001')
+        ->and($result->invoiceNumber())->toBe('GG72002017')
+        ->and($result->totalAmount())->toBe(1050)
+        ->and($result->randomNumber())->toBe('1234');
+});
+
+test('發票開立 → 測試斷言開立 B2C 發票', function () {
+    EzPayInvoice::fake([
+        CreateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票開立成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'InvoiceNumber' => 'GG72002017',
+                'TotalAmt' => 1050,
+                'InvoiceTransNo' => '25072515224376654',
+                'RandomNum' => '1234',
+                'CreateTime' => '2025-01-01 00:00:00',
+                'BarCode' => '11408GG720020179356',
+                'QRcodeL' => 'GG7200201711407259356000003e80000041a0000000087612689JeS9LvMqldHvkH5bIDsJXw==:**********:1:1:1:測試商品:1:1000',
+                'QRcodeR' => '**',
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::invoice()
+        ->create()
+        ->withOrder('Order001')
+        ->forConsumer('John Doe')
+        ->withEmail('customer@example.com')
+        ->withAddress('台北市信義區信義路五段7號')
+        ->withItem('測試商品', quantity: 1, unit: '個', price: 1000, amount: 1000)
+        ->withTax(TaxType::TAXABLE, 5)
+        ->withAmount(1000, 50, 1050)
+        ->issue();
+
+    EzPayInvoice::assertSent(Invoice::class, 'create', function (CreateOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->category === InvoiceCategory::B2C
+            && $options->buyerName === 'John Doe'
+            && $options->buyerEmail === 'customer@example.com'
+            && $options->buyerAddress === '台北市信義區信義路五段7號'
+            && $options->hasItem('測試商品', quantity: 1, unit: '個', price: 1000, amount: 1000)
+            && $options->taxType === TaxType::TAXABLE
+            && $options->taxRate === 5.0
+            && $options->totalAmount === 1050;
     });
 
     expect($result)->toBeInstanceOf(CreateResult::class)
