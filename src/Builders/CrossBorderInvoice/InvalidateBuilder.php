@@ -56,6 +56,7 @@ class InvalidateBuilder extends Builder
     /**
      * 作廢發票
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function invalidate(): InvalidateResult

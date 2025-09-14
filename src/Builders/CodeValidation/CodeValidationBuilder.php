@@ -71,6 +71,7 @@ class CodeValidationBuilder extends Builder
     /**
      * 送出驗證
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\DecryptException
      */

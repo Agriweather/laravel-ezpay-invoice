@@ -210,6 +210,7 @@ class CreateBuilder extends Builder
     /**
      * 開立發票
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
@@ -229,6 +230,7 @@ class CreateBuilder extends Builder
      *
      * 於確認要開立時，再手動觸發。
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
@@ -244,6 +246,7 @@ class CreateBuilder extends Builder
      *
      * @param  string|\DateTime  $createDate  預約開立時間，格式為 `YYYY-MM-DD`，例如 `2025-03-01`
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */

@@ -1,12 +1,14 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Enums\Invoice\DisplayFlag;
 use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
 use Agriweather\EzPayInvoice\Options\Invoice\QueryOptions;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Invoice\QueryResult;
+use Agriweather\EzPayInvoice\Results\Invoice\UrlQueryResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Response;
@@ -413,4 +415,28 @@ test('發票查詢 → 模擬透過訂單編號及發票金額查詢發票', fun
         ->and($invoiceResult->totalAmount())->toBe(1050)
         ->and($invoiceResult->buyerName())->toBe('John Doe')
         ->and($invoiceResult->buyerEmail())->toBe('customer@example.com');
+});
+
+test('發票查詢 → 模擬取得 ezPay 平台查詢發票的網址', function () {
+    EzPayInvoice::fake([
+        UrlQueryResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'Result' => 'https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx',
+        ]),
+    ]);
+
+    $ezpaySearchUrl = EzPayInvoice::invoice()
+        ->query()
+        ->withOrder('Order001')
+        ->withTotalAmount(1050)
+        ->getEzPaySearchUrl();
+
+    EzPayInvoice::assertSent(Invoice::class, 'query', function (QueryOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->totalAmount === 1050
+            && $options->displayFlag === DisplayFlag::RETURN_URL;
+    });
+
+    expect($ezpaySearchUrl)->toBe('https://cinv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx');
 });

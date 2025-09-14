@@ -121,6 +121,7 @@ class QueryBuilder extends Builder
      *
      * @return QueryResult[]
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function get(): array
@@ -139,6 +140,7 @@ class QueryBuilder extends Builder
     /**
      * 暫停字軌
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function pause(): UpdateResult
@@ -153,6 +155,7 @@ class QueryBuilder extends Builder
     /**
      * 啟用字軌
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function enable(): UpdateResult
@@ -167,6 +170,7 @@ class QueryBuilder extends Builder
     /**
      * 停用字軌
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function disable(): UpdateResult

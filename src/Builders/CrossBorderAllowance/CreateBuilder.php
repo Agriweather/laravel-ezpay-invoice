@@ -143,6 +143,7 @@ class CreateBuilder extends Builder
     /**
      * 開立折讓
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function issue(): CreateResult
@@ -155,6 +156,7 @@ class CreateBuilder extends Builder
      *
      * 待買受人確認折讓後，再向 ezPay 平台發動確認折讓。
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function issuePendingConfirmation(): CreateResult

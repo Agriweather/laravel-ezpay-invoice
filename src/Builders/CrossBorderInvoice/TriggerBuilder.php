@@ -79,6 +79,7 @@ class TriggerBuilder extends Builder
     /**
      * 觸發開立發票
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */

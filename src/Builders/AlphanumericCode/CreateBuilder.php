@@ -94,6 +94,7 @@ class CreateBuilder extends Builder
     /**
      * 新增字軌
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function save(): CreateResult

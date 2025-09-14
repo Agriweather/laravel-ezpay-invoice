@@ -69,6 +69,7 @@ class TriggerBuilder extends Builder
     /**
      * 觸發確認折讓
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function confirm(): TriggerResult
@@ -81,6 +82,7 @@ class TriggerBuilder extends Builder
     /**
      * 觸發取消折讓
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function cancel(): TriggerResult

@@ -48,6 +48,7 @@ abstract class Builder
     /**
      * 發送 API 請求到 ezPay 發票平台
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     protected function sendRequest(): array
@@ -147,6 +148,9 @@ abstract class Builder
         return $this;
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     protected function record(): ?Result
     {
         $attributes = (new \ReflectionClass($this))->getAttributes(Resource::class);

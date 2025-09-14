@@ -13,8 +13,8 @@ use Agriweather\EzPayInvoice\Resources\CrossBorder;
 use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Result;
 use Agriweather\EzPayInvoice\Testing\TestRequest;
-use Exception;
 use PHPUnit\Framework\Assert as PHPUnit;
+use RuntimeException;
 
 class Factory
 {
@@ -130,7 +130,7 @@ class Factory
     /**
      * 紀錄請求選項，並回傳假回傳資料
      *
-     * @throws \Exception 當沒有可用的假回傳資料時
+     * @throws \RuntimeException
      */
     public function record(string $resource, ?string $action, Options $options): ?Result
     {
@@ -146,7 +146,7 @@ class Factory
         $result = array_shift($this->results);
 
         if (is_null($result)) {
-            throw new Exception('No more fake results available.');
+            throw new RuntimeException('No more fake results available.');
         }
 
         return $result;

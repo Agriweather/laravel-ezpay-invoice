@@ -121,6 +121,7 @@ class QueryBuilder extends Builder
     /**
      * 查詢發票資訊
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      * @throws \Agriweather\EzPayInvoice\Exceptions\InvalidCheckCodeException
      */
@@ -156,6 +157,7 @@ class QueryBuilder extends Builder
     /**
      * 回傳 ezPay 平台顯示發票查詢頁面的 URL
      *
+     * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
     public function getEzPaySearchUrl(): string

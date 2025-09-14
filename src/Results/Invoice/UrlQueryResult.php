@@ -10,6 +10,7 @@ final class UrlQueryResult extends Result
 
     public function __construct(array $data)
     {
+        $this->data = $data;
         $this->url = $data['Result'];
         $this->result = ['Url' => $this->url];
     }
