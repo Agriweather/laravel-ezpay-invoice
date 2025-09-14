@@ -127,7 +127,7 @@ class CreateOptions extends Options
                 'CarrierType' => isset($this->carrierType)
                     ? (string) $this->carrierType->value
                     : null,
-                'CarrierNum' => $this->carrierNumber,
+                'CarrierNum' => $this->carrierNumber ? rawurlencode(trim($this->carrierNumber)) : null,
                 'LoveCode' => $this->loveCode,
                 'PrintFlag' => (string) $this->printFlag->value,
                 'KioskPrintFlag' => $this->enableKioskPrint ? '1' : null,

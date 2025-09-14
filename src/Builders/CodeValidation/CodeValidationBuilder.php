@@ -90,7 +90,9 @@ class CodeValidationBuilder extends Builder
 
         $data = $this->sendRequest();
 
-        $data['Result'] = $this->crypto->decryptByAES($data['Result']);
+        if (! $this->factory->recording()) {
+            $data['Result'] = $this->crypto->decryptByAES($data['Result']);
+        }
 
         return new CodeValidationResult($data);
     }

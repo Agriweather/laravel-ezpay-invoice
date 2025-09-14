@@ -86,7 +86,9 @@ class TriggerBuilder extends Builder
     {
         $result = new TriggerResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
+        if (! $this->factory->recording()) {
+            $this->crypto->verifyCheckCode($result);
+        }
 
         return $result;
     }

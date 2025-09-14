@@ -217,7 +217,9 @@ class CreateBuilder extends Builder
     {
         $result = new CreateResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
+        if (! $this->factory->recording()) {
+            $this->crypto->verifyCheckCode($result);
+        }
 
         return $result;
     }

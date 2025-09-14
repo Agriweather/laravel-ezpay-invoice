@@ -1,8 +1,14 @@
 <?php
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
+use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
+use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
+use Agriweather\EzPayInvoice\Options\Allowance\InvalidateOptions;
+use Agriweather\EzPayInvoice\Options\Allowance\TriggerOptions;
 use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
 use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
 use Agriweather\EzPayInvoice\Results\Allowance\TriggerResult;
@@ -306,6 +312,227 @@ test('折讓作廢 → 可以作廢已開立的折讓', function () {
 
     Http::assertSent(function (Request $request) {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api/allowanceInvalid';
+    });
+
+    expect($result)->toBeInstanceOf(InvalidateResult::class)
+        ->and($result->allowanceNo())->toBe('A250726001830959');
+});
+
+test('折讓開立 → 測試斷言成功開立折讓', function () {
+    EzPayInvoice::fake([
+        CreateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票折讓開立成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'AllowanceNo' => 'A250725235346456',
+                'InvoiceNumber' => 'GG72002018',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'AllowanceAmt' => 630,
+                'RemainAmt' => 420,
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->create()
+        ->withInvoice('GG72002018')
+        ->withOrder('Order001')
+        ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+        ->withTotalAmount(630)
+        ->withNotification('customer@example.com')
+        ->issue();
+
+    EzPayInvoice::assertSent(Allowance::class, 'create', function (CreateOptions $options) {
+        return $options->invoiceNo === 'GG72002018'
+            && $options->orderNo === 'Order001'
+            && $options->hasItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+            && $options->totalAmount === 630
+            && $options->buyerEmail === 'customer@example.com'
+            && $options->status === CreateStatus::IMMEDIATE;
+    });
+
+    expect($result)->toBeInstanceOf(CreateResult::class)
+        ->and($result->checkCode())->toBe('123456789')
+        ->and($result->allowanceNo())->toBe('A250725235346456')
+        ->and($result->orderNo())->toBe('Order001')
+        ->and($result->invoiceNumber())->toBe('GG72002018')
+        ->and($result->allowanceAmount())->toBe(630)
+        ->and($result->remainingAmount())->toBe(1050 - 630);
+});
+
+test('折讓開立 → 測試斷言開立多品項折讓', function () {
+    EzPayInvoice::fake([
+        CreateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票折讓開立成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'AllowanceNo' => 'A250725235346456',
+                'InvoiceNumber' => 'GG72002018',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'AllowanceAmt' => 157,
+                'RemainAmt' => 0,
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->create()
+        ->withInvoice('GG72002018')
+        ->withOrder('Order001')
+        ->withItem('商品A', quantity: 1, unit: '個', price: 100, amount: 100, taxAmount: 5)
+        ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, taxAmount: 2)
+        ->withTotalAmount(157)
+        ->withNotification('customer@example.com')
+        ->issue();
+
+    EzPayInvoice::assertSent(Allowance::class, 'create', function (CreateOptions $options) {
+        return $options->invoiceNo === 'GG72002018'
+            && $options->orderNo === 'Order001'
+            && $options->hasItem('商品A', quantity: 1, unit: '個', price: 100, amount: 100, taxAmount: 5)
+            && $options->hasItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, taxAmount: 2)
+            && $options->totalAmount === 157
+            && $options->buyerEmail === 'customer@example.com'
+            && $options->status === CreateStatus::IMMEDIATE;
+    });
+
+    expect($result)->toBeInstanceOf(CreateResult::class);
+});
+
+test('折讓開立 → 測試斷言開立非立即確認的折讓', function () {
+    EzPayInvoice::fake([
+        CreateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票折讓開立成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'AllowanceNo' => 'A250726001830959',
+                'InvoiceNumber' => 'GG72002018',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'AllowanceAmt' => 420,
+                'RemainAmt' => 0,
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->create()
+        ->withInvoice('GG72002018')
+        ->withOrder('Order001')
+        ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+        ->withTotalAmount(630)
+        ->issuePendingConfirmation();
+
+    EzPayInvoice::assertSent(Allowance::class, 'create', function (CreateOptions $options) {
+        return $options->invoiceNo === 'GG72002018'
+            && $options->orderNo === 'Order001'
+            && $options->hasItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
+            && $options->totalAmount === 630
+            && $options->status === CreateStatus::PENDING;
+    });
+
+    expect($result)->toBeInstanceOf(CreateResult::class);
+});
+
+test('折讓觸發 → 測試斷言確認折讓', function () {
+    EzPayInvoice::fake([
+        TriggerResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票折讓觸發成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'AllowanceNo' => 'A250726001830959',
+                'InvoiceNumber' => 'GG72002018',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'AllowanceAmt' => '420',
+                'RemainAmt' => '0',
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->pending()
+        ->withAllowance('A250726001830959')
+        ->withOrder('Order001')
+        ->withTotalAmount(420)
+        ->confirm();
+
+    EzPayInvoice::assertSent(Allowance::class, 'pending', function (TriggerOptions $options) {
+        return $options->status === TriggerStatus::YES
+            && $options->allowanceNo === 'A250726001830959'
+            && $options->orderNo === 'Order001'
+            && $options->totalAmount === 420;
+    });
+
+    expect($result)->toBeInstanceOf(TriggerResult::class)
+        ->and($result->allowanceAmount())->toBe(420)
+        ->and($result->remainingAmount())->toBe(0);
+});
+
+test('折讓觸發 → 測試斷言取消折讓', function () {
+    EzPayInvoice::fake([
+        TriggerResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票折讓刪除成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'AllowanceNo' => 'A250726001830959',
+                'InvoiceNumber' => 'GG72002018',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'AllowanceAmt' => '0',
+                'RemainAmt' => '0',
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->pending()
+        ->withAllowance('A250726001830959')
+        ->withOrder('Order001')
+        ->withTotalAmount(420)
+        ->cancel();
+
+    EzPayInvoice::assertSent(Allowance::class, 'pending', function (TriggerOptions $options) {
+        return $options->status === TriggerStatus::NO
+            && $options->allowanceNo === 'A250726001830959'
+            && $options->orderNo === 'Order001'
+            && $options->totalAmount === 420;
+    });
+
+    expect($result)->toBeInstanceOf(TriggerResult::class)
+        ->and($result->allowanceAmount())->toBe(0)
+        ->and($result->remainingAmount())->toBe(0);
+});
+
+test('折讓作廢 → 測試斷言作廢已開立的折讓', function () {
+    EzPayInvoice::fake([
+        InvalidateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '作廢折讓成功',
+            'Result' => [
+                'MerchantID' => '111335678',
+                'AllowanceNo' => 'A250726001830959',
+                'CreateTime' => '2025-01-01 00:00:00',
+                'CheckCode' => '123456789',
+            ],
+        ]),
+    ]);
+
+    $result = EzPayInvoice::allowance()
+        ->voidable()
+        ->withAllowance('A250726001830959')
+        ->because('作廢原因')
+        ->invalidate();
+
+    EzPayInvoice::assertSent(Allowance::class, 'voidable', function (InvalidateOptions $options) {
+        return $options->allowanceNo === 'A250726001830959'
+            && $options->invalidReason === '作廢原因';
     });
 
     expect($result)->toBeInstanceOf(InvalidateResult::class)

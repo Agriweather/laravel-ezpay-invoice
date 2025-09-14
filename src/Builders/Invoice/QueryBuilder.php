@@ -131,7 +131,9 @@ class QueryBuilder extends Builder
     {
         $result = new QueryResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
+        if (! $this->factory->recording()) {
+            $this->crypto->verifyCheckCode($result);
+        }
 
         return $result;
     }

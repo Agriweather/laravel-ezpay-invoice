@@ -132,7 +132,7 @@ class CreateBuilder extends Builder
     public function withCarrier(CarrierType $carrierType, string $carrierNumber): self
     {
         $this->options->carrierType = $carrierType;
-        $this->options->carrierNumber = rawurlencode(trim($carrierNumber));
+        $this->options->carrierNumber = $carrierNumber;
 
         return $this;
     }
@@ -386,7 +386,9 @@ class CreateBuilder extends Builder
     {
         $result = new CreateResult($this->sendRequest());
 
-        $this->crypto->verifyCheckCode($result, ! $this->factory->recording());
+        if (! $this->factory->recording()) {
+            $this->crypto->verifyCheckCode($result);
+        }
 
         return $result;
     }

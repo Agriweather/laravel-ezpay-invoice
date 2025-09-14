@@ -2,7 +2,9 @@
 
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Options\CodeValidation\CodeValidationOptions;
 use Agriweather\EzPayInvoice\Options\Options;
+use Agriweather\EzPayInvoice\Resources\CodeValidation;
 use Agriweather\EzPayInvoice\Results\CodeValidation\CodeValidationResult;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
@@ -167,6 +169,122 @@ test('捐贈碼驗證 → 可以驗證無效的捐贈碼', function () {
 
     Http::assertSent(function (Request $request) {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_inv_application/checkLoveCode';
+    });
+
+    expect($result)->toBeInstanceOf(CodeValidationResult::class)
+        ->and($result->loveCode())->toBe('123')
+        ->and($result->isValid())->toBeFalse();
+});
+
+test('手機條碼驗證 → 測試斷言驗證有效的手機條碼', function () {
+    EzPayInvoice::fake([
+        CodeValidationResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'APIID' => 'barCodeCheck',
+            'Version' => '1.0',
+            'MerchantID' => '111335678',
+            'Result' => [
+                'CellphoneBarcode' => '/ABC.123',
+                'IsExist' => 'Y',
+            ],
+            'CheckCode' => '123456789',
+        ]),
+    ]);
+
+    $result = EzPayInvoice::codeValidation()
+        ->withBarcode('/ABC.123')
+        ->check();
+
+    EzPayInvoice::assertSent(CodeValidation::class, function (CodeValidationOptions $options) {
+        return $options->barcode === '/ABC.123';
+    });
+
+    expect($result)->toBeInstanceOf(CodeValidationResult::class)
+        ->and($result->barcode())->toBe('/ABC.123')
+        ->and($result->isValid())->toBeTrue();
+});
+
+test('手機條碼驗證 → 測試斷言驗證無效的手機條碼', function () {
+    EzPayInvoice::fake([
+        CodeValidationResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'APIID' => 'barCodeCheck',
+            'Version' => '1.0',
+            'MerchantID' => '111335678',
+            'Result' => [
+                'CellphoneBarcode' => '/ABC.123',
+                'IsExist' => 'N',
+            ],
+            'CheckCode' => '123456789',
+        ]),
+    ]);
+
+    $result = EzPayInvoice::codeValidation()
+        ->withBarcode('/ABC.123')
+        ->check();
+
+    EzPayInvoice::assertSent(CodeValidation::class, function (CodeValidationOptions $options) {
+        return $options->barcode === '/ABC.123';
+    });
+
+    expect($result)->toBeInstanceOf(CodeValidationResult::class)
+        ->and($result->barcode())->toBe('/ABC.123')
+        ->and($result->isValid())->toBeFalse();
+});
+
+test('捐贈碼驗證 → 測試斷言驗證有效的捐贈碼', function () {
+    EzPayInvoice::fake([
+        CodeValidationResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'APIID' => 'LoveCodeCheck',
+            'Version' => '1.0',
+            'MerchantID' => '111335678',
+            'Result' => [
+                'Lovecode' => '123',
+                'IsExist' => 'Y',
+            ],
+            'CheckCode' => '123456789',
+        ]),
+    ]);
+
+    $result = EzPayInvoice::codeValidation()
+        ->withLoveCode('123')
+        ->check();
+
+    EzPayInvoice::assertSent(CodeValidation::class, function (CodeValidationOptions $options) {
+        return $options->lovecode === '123';
+    });
+
+    expect($result)->toBeInstanceOf(CodeValidationResult::class)
+        ->and($result->loveCode())->toBe('123')
+        ->and($result->isValid())->toBeTrue();
+});
+
+test('捐贈碼驗證 → 測試斷言驗證無效的捐贈碼', function () {
+    EzPayInvoice::fake([
+        CodeValidationResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'APIID' => 'LoveCodeCheck',
+            'Version' => '1.0',
+            'MerchantID' => '111335678',
+            'Result' => [
+                'Lovecode' => '123',
+                'IsExist' => 'N',
+            ],
+            'CheckCode' => '123456789',
+        ]),
+    ]);
+
+    $result = EzPayInvoice::codeValidation()
+        ->withLoveCode('123')
+        ->check();
+
+    EzPayInvoice::assertSent(CodeValidation::class, function (CodeValidationOptions $options) {
+        return $options->lovecode === '123';
     });
 
     expect($result)->toBeInstanceOf(CodeValidationResult::class)
