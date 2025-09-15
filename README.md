@@ -5,7 +5,7 @@
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。由 [Lucas Yang](https://github.com/ycs77) 建立，並由 [阿龜微氣候天眼通](https://github.com/Agriweather) 團隊維護。
+**Laravel ezPay Invoice** 是適用於 Laravel 的 ezPay 電子發票 API 套件。由 [Lucas Yang](https://github.com/ycs77) 創建，並由 [阿龜微氣候天眼通](https://github.com/Agriweather) 團隊維護。
 
 ### 套件功能
 
@@ -69,11 +69,11 @@ composer require agriweather/laravel-ezpay-invoice
 php artisan vendor:publish --tag=ezpay-invoice-config
 ```
 
-到 ezPay 電子發票的網站上註冊帳號 (測試時需在測試環境註冊測試帳號) 和建立商店。
+前往 ezPay 電子發票官方網站註冊帳號（測試時需在測試環境註冊測試帳號）並建立商店。
 
-在 ezPay 電子發票上開立發票需要有額度，如果剛開立沒有額度等情況，可以到 ezPay 電子發票的「發票管理」>「管理設定」>「使用狀況」中購買，包含測試環境也是。 (測試環境依然需要點擊，但不會收費)
+在 ezPay 電子發票平台開立發票需要購買額度，如果額度不足，請前往「發票管理」>「管理設定」>「使用狀況」進行購買（測試環境同樣需要點擊購買，但不會實際收費）。
 
-開啟 ezPay 電子發票的「商店管理」中找到該商店，並複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`，然後貼到 `.env` 檔案中 `EZPAY_INVOICE_MERCHANT_ID` 等參數設定：
+進入 ezPay 電子發票的「商店管理」頁面，找到對應的商店，複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`，然後將這些資訊設定到 `.env` 檔案中的 `EZPAY_INVOICE_MERCHANT_ID` 等參數：
 
 ```ini
 EZPAY_INVOICE_ENV=test
@@ -82,9 +82,9 @@ EZPAY_INVOICE_MERCHANT_HASH_KEY=your-merchant-hash-key
 EZPAY_INVOICE_MERCHANT_HASH_IV=your-merchant-hash-iv
 ```
 
-`EZPAY_INVOICE_ENV` 可以設定為 `test` 或 `production`，分別對應測試環境和正式環境。
+`EZPAY_INVOICE_ENV` 可以設定為 `test`（測試環境）或 `production`（正式環境）。
 
-現在就可以測試開立電子發票了：
+完成設定後，即可開始測試電子發票的開立：
 
 ```php
 use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
@@ -237,7 +237,7 @@ EzPayInvoice::invoice()
     ->withAmount(2200, 110, 2310)
 ```
 
-混合應稅與免稅或零稅率 的銷售額設定範例：
+「混合應稅與免稅或零稅率」的銷售額設定範例：
 
 > [!IMPORTANT]
 > 銷售額計算方式，請務必與公司財會人員進行確認。
@@ -272,7 +272,7 @@ EzPayInvoice::invoice()
     ->withComment('發票備註'); // 發票備註，字數限 200 字，如有難字則再縮短
 ```
 
-套件同時也提供了條件式的語法，可以在開立發票時根據需要選擇性地添加參數：
+套件同時提供條件式語法，可以在開立發票時根據需要選擇性地添加參數：
 
 ```php
 use Agriweather\EzPayInvoice\Builders\Invoice\CreateBuilder;
@@ -306,14 +306,14 @@ $result->totalAmount() // 含稅銷售額：1050
 
 ```php
 // 等待觸發開立發票
-// 當選擇此開立發票方式時，發票資料僅暫存於本平台，若確認要開立，則需手動呼叫 觸發電子發票 API 來開立發票。
+// 當選擇此開立發票方式時，發票資料僅暫存於平台，需手動呼叫「觸發電子發票 API」來完成開立。
 $result = EzPayInvoice::invoice()
     ->create()
     ...
     ->deferIssue();
 
 // 預約自動開立發票
-// 當選擇此開立發票方式時，發票會於設定時間執行開立發票，若確認要提前開立，則需手動呼叫 觸發電子發票 API 來提前開立發票。
+// 當選擇此開立發票方式時，發票會在設定時間自動開立，如需提前開立，可手動呼叫「觸發電子發票 API」。
 $result = EzPayInvoice::invoice()
     ->create()
     ...
@@ -327,7 +327,7 @@ $result->totalAmount() // 含稅銷售額：1050
 
 ### 觸發開立電子發票
 
-如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以透過呼叫觸發 API 來提前開立發票：
+若使用了 **等待觸發開立發票** (`deferIssue()`) 方式，需呼叫觸發電子發票 API 來完成開立。若使用 **預約自動開立發票** (`scheduleAt()`) 方式，則可透過呼叫觸發 API 來提前開立發票：
 
 ```php
 $result = EzPayInvoice::invoice()
@@ -340,7 +340,7 @@ $result = EzPayInvoice::invoice()
 
 ### 查詢電子發票
 
-透過發票號碼和隨機碼查詢電子發票：
+使用發票號碼和隨機碼查詢電子發票：
 
 ```php
 $invoiceResult = EzPayInvoice::invoice()
@@ -350,7 +350,7 @@ $invoiceResult = EzPayInvoice::invoice()
     ->get();
 ```
 
-或者也可以透過訂單編號及發票金額查詢電子發票：
+或者也可使用訂單編號及發票金額查詢電子發票：
 
 ```php
 $invoiceResult = EzPayInvoice::invoice()
@@ -498,7 +498,7 @@ EzPayInvoice::allowance()
 
 ## 電子發票 API (境外電商版)
 
-境外電商版的電子發票 API 主要差異在於部分欄位不同，不支援載具和捐贈碼。且多了外幣、匯率等欄位，因此可以在金額中輸入最多兩位小數。
+境外電商版的電子發票 API 主要差異在於部分欄位不同，不支援載具和捐贈碼，但增加了外幣、匯率等欄位，因此可在金額中輸入最多兩位小數。
 
 ### 境外電商開立電子發票
 
@@ -625,7 +625,7 @@ $result->totalAmount() // 含稅銷售額：105.5
 
 ```php
 // 等待觸發開立發票
-// 當選擇此開立發票方式時，發票資料僅暫存於本平台，若確認要開立，則需手動呼叫 觸發電子發票 API 來開立發票。
+// 當選擇此開立發票方式時，發票資料僅暫存於平台，需手動呼叫「觸發電子發票 API」來完成開立。
 $result = EzPayInvoice::crossBorder()
     ->invoice()
     ->create()
@@ -633,7 +633,7 @@ $result = EzPayInvoice::crossBorder()
     ->deferIssue();
 
 // 預約自動開立發票
-// 當選擇此開立發票方式時，發票會於設定時間執行開立發票，若確認要提前開立，則需手動呼叫 觸發電子發票 API 來提前開立發票。
+// 當選擇此開立發票方式時，發票會在設定時間自動開立，如需提前開立，可手動呼叫「觸發電子發票 API」。
 $result = EzPayInvoice::crossBorder()
     ->invoice()
     ->create()
@@ -648,7 +648,7 @@ $result->totalAmount() // 含稅銷售額：105.5
 
 ### 境外電商觸發開立電子發票
 
-如果使用了 **等待觸發開立發票** (`deferIssue()`) 的方式，需要呼叫觸發電子發票 API 來完成開立發票。如果是 **預約自動開立發票** (`scheduleAt()`) 則是可以透過呼叫觸發 API 來提前開立發票：
+若使用了 **等待觸發開立發票** (`deferIssue()`) 方式，需呼叫觸發電子發票 API 來完成開立。若使用 **預約自動開立發票** (`scheduleAt()`) 方式，則可透過呼叫觸發 API 來提前開立發票：
 
 ```php
 $result = EzPayInvoice::crossBorder()
@@ -662,7 +662,7 @@ $result = EzPayInvoice::crossBorder()
 
 ### 境外電商查詢電子發票
 
-透過發票號碼和隨機碼查詢電子發票：
+使用發票號碼和隨機碼查詢電子發票：
 
 ```php
 $invoiceResult = EzPayInvoice::crossBorder()
@@ -673,7 +673,7 @@ $invoiceResult = EzPayInvoice::crossBorder()
     ->get();
 ```
 
-或者也可以透過訂單編號及發票金額查詢電子發票：
+或者也可使用訂單編號及發票金額查詢電子發票：
 
 ```php
 $invoiceResult = EzPayInvoice::crossBorder()
@@ -818,7 +818,7 @@ EzPayInvoice::crossBorder()
 
 ### 準備帳號代號和金鑰
 
-字軌管理和開立電子發票需要不同的帳號代號和金鑰。首先到 ezPay 電子發票的網站上的「會員管理」頁面，找到並複製會員編號、會員API串接金鑰的 `HashKey` 和 `HashIV`，然後貼到 `.env` 檔案中的 `EZPAY_INVOICE_COMPANY_ID` 等參數：
+字軌管理和開立電子發票需要不同的帳號代號和金鑰。首先前往 ezPay 電子發票平台的「會員管理」頁面，找到並複製會員編號、會員 API 串接金鑰的 `HashKey` 和 `HashIV`，然後將這些資訊設定到 `.env` 檔案中的 `EZPAY_INVOICE_COMPANY_ID` 等參數：
 
 ```ini
 EZPAY_INVOICE_COMPANY_ID=your-company-id
@@ -828,7 +828,7 @@ EZPAY_INVOICE_COMPANY_HASH_IV=your-company-hash-iv
 
 ### 申請新字軌
 
-使用新增字軌 API 來申請新字軌：
+使用新增字軌 API 申請新字軌：
 
 ```php
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
@@ -899,7 +899,7 @@ $result = EzPayInvoice::alphanumericCode()
 
 ### 停用字軌
 
-可以停用字軌，但需要注意的是，停用後就無法再啟用該字軌。需要傳入字軌管理編號和發票年度：
+可以停用字軌，但請注意，停用後將無法再啟用該字軌。需要傳入字軌管理編號和發票年度：
 
 ```php
 EzPayInvoice::alphanumericCode()
@@ -954,7 +954,7 @@ $result = EzPayInvoice::invoice()
 dd($result->toArray()); // 查看實際的回傳 JSON 資料
 ```
 
-如果遇到錯誤，在提交 issue 時請附上以上的請求和回傳資料。
+如遇到錯誤，在提交 issue 時請附上以上的請求和回傳資料。
 
 ## API 參考文件
 
