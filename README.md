@@ -44,7 +44,8 @@
 - [手機條碼與捐證碼驗證 API](#手機條碼與捐證碼驗證-api)
   - [驗證手機條碼](#驗證手機條碼)
   - [驗證捐證碼](#驗證捐證碼)
-- [除錯與測試](#除錯與測試)
+- [單元測試](#單元測試)
+- [除錯支援](#除錯支援)
 - [API 參考文件](#api-參考文件)
 - [貢獻專案](#貢獻專案)
 - [License](#license)
@@ -939,22 +940,72 @@ $result = EzPayInvoice::codeValidation()
 $result->isValid() // 捐證碼是否有效：true
 ```
 
-## 除錯與測試
+## 單元測試
 
-在開發過程中，可以使用 `dd()` 方法來查看實際的請求和回傳的 JSON 資料：
+在單元測試中，可以使用 `EzPayInvoice::fake()` 模擬 API 回應：
+
+```php
+<?php
+
+use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceCategory;
+use Agriweather\EzPayInvoice\Enums\Invoice\TaxType;
+use Agriweather\EzPayInvoice\Facades\EzPayInvoice;
+use Agriweather\EzPayInvoice\Resources\Invoice;
+use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
+
+test('can create invoice', function () {
+    // 模擬發票開立 API 回應
+    EzPayInvoice::fake([
+        CreateResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '發票開立成功',
+            'Result' => [
+                'CheckCode' => '123456789',
+                'MerchantID' => '111335678',
+                'MerchantOrderNo' => 'Order001',
+                'InvoiceNumber' => 'GG72002017',
+                'TotalAmt' => 1050,
+                'InvoiceTransNo' => '25072515224376654',
+                'RandomNum' => '1234',
+                'CreateTime' => '2025-01-01 00:00:00',
+            ],
+        ]),
+    ]);
+
+    $response = $this->get('/invoice/create');
+
+    // 斷言發送參數
+    EzPayInvoice::assertSent(Invoice::class, 'create', function (CreateOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->category === InvoiceCategory::B2C
+            && $options->buyerName === 'John Doe'
+            && $options->buyerEmail === 'customer@example.com'
+            && $options->hasItem('測試商品', quantity: 1, unit: '個', price: 1000, amount: 1000)
+            && $options->taxType === TaxType::TAXABLE
+            && $options->taxRate === 5.0
+            && $options->totalAmount === 1050;
+    });
+});
+```
+
+## 除錯支援
+
+當發生錯誤時，請協助提供請求與回應的除錯資料，以便更快速地定位問題：
 
 ```php
 $result = EzPayInvoice::invoice()
     ->create()
     ->withOrder('Order001')
-    ->dd() // 查看實際的請求 JSON 資料
+    ->dd() // 查看請求參數資料
     ...
     ->issue();
 
-dd($result->toArray()); // 查看實際的回傳 JSON 資料
+dd($result->toArray()); // 查看回應資料
 ```
 
-如遇到錯誤，在提交 issue 時請附上以上的請求和回傳資料。
+- 使用 `->dd()` 方法可檢視發送至 API 的請求資料
+- 透過 `$result->toArray()` 可檢視 API 的回應資料內容
+- 當發生錯誤時，請在提交 issue 時一併提供請求與回應的除錯資料
 
 ## API 參考文件
 
