@@ -12,6 +12,7 @@ use Agriweather\EzPayInvoice\Results\Invoice\QueryResult;
 use Agriweather\EzPayInvoice\Results\Invoice\UrlQueryResult;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
+use TypeError;
 
 #[Resource(Invoice::class, 'query')]
 class QueryBuilder extends Builder
@@ -127,11 +128,13 @@ class QueryBuilder extends Builder
      */
     public function get(): QueryResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $result = new QueryResult($this->sendRequest());
 
-        if (! $this->factory->recording()) {
-            $this->crypto->verifyCheckCode($result);
-        }
+        $this->crypto->verifyCheckCode($result);
 
         return $result;
     }
@@ -163,6 +166,20 @@ class QueryBuilder extends Builder
     public function getEzPaySearchUrl(): string
     {
         $this->options->displayFlag = DisplayFlag::RETURN_URL;
+
+        if ($result = $this->record()) {
+            if ($result instanceof UrlQueryResult) {
+                return $result->url();
+            }
+
+            throw new TypeError(implode([
+                'Return value must be of type ',
+                UrlQueryResult::class,
+                ', ',
+                get_class($result),
+                ' returned',
+            ]));
+        }
 
         return (new UrlQueryResult($this->sendRequest()))->url();
     }

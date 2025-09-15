@@ -8,7 +8,7 @@ use Agriweather\EzPayInvoice\Enums\AlphanumericCode\AlphanumericCodeStatus;
 use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceTerm;
 use Agriweather\EzPayInvoice\Options\AlphanumericCode\QueryOptions;
 use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
-use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResults;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\UpdateResult;
 
 #[Resource(AlphanumericCode::class, 'query')]
@@ -119,22 +119,18 @@ class QueryBuilder extends Builder
     /**
      * 查詢字軌
      *
-     * @return QueryResult[]
-     *
      * @throws \RuntimeException
      * @throws \Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException
      */
-    public function get(): array
+    public function get(): QueryResults
     {
         $this->endpoint = '/Api_number_management/searchNumber';
 
-        $data = $this->sendRequest();
+        if ($result = $this->record()) {
+            return $result;
+        }
 
-        return array_map(function ($result) {
-            return new QueryResult([
-                'Result' => $result,
-            ]);
-        }, $data['Result']);
+        return new QueryResults($this->sendRequest());
     }
 
     /**
@@ -148,6 +144,10 @@ class QueryBuilder extends Builder
         $this->endpoint = '/Api_number_management/manageNumber';
 
         $this->withPaused();
+
+        if ($result = $this->record()) {
+            return $result;
+        }
 
         return new UpdateResult($this->sendRequest());
     }
@@ -164,6 +164,10 @@ class QueryBuilder extends Builder
 
         $this->withEnabled();
 
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         return new UpdateResult($this->sendRequest());
     }
 
@@ -178,6 +182,10 @@ class QueryBuilder extends Builder
         $this->endpoint = '/Api_number_management/manageNumber';
 
         $this->withDisabled();
+
+        if ($result = $this->record()) {
+            return $result;
+        }
 
         return new UpdateResult($this->sendRequest());
     }

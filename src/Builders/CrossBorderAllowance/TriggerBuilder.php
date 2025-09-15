@@ -76,6 +76,10 @@ class TriggerBuilder extends Builder
     {
         $this->options->status = TriggerStatus::YES;
 
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         return new TriggerResult($this->sendRequest());
     }
 
@@ -88,6 +92,10 @@ class TriggerBuilder extends Builder
     public function cancel(): TriggerResult
     {
         $this->options->status = TriggerStatus::NO;
+
+        if ($result = $this->record()) {
+            return $result;
+        }
 
         return new TriggerResult($this->sendRequest());
     }

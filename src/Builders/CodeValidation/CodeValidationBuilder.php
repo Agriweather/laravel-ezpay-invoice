@@ -89,11 +89,13 @@ class CodeValidationBuilder extends Builder
             $this->endpoint = '/Api_inv_application/checkLoveCode';
         }
 
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $data = $this->sendRequest();
 
-        if (! $this->factory->recording()) {
-            $data['Result'] = $this->crypto->decryptByAES($data['Result']);
-        }
+        $data['Result'] = $this->crypto->decryptByAES($data['Result']);
 
         return new CodeValidationResult($data);
     }

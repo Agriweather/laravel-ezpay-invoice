@@ -148,6 +148,10 @@ class CreateBuilder extends Builder
      */
     public function issue(): CreateResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         return new CreateResult($this->sendRequest());
     }
 

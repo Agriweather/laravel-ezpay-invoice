@@ -159,7 +159,7 @@ class Factory
      */
     public function assertSent(string $resource, string|callable|null $action, ?callable $callback = null): void
     {
-        $resourceName = "[{$resource}" . (is_string($action) ? "::{$action}" : '') . ']';
+        $resourceName = "[{$resource}".(is_string($action) ? "::{$action}" : '').']';
 
         PHPUnit::assertTrue(
             $this->sent($resource, $action, $callback) !== [],
@@ -174,7 +174,7 @@ class Factory
      */
     public function assertNotSent(string $resource, string|callable|null $action, ?callable $callback = null): void
     {
-        $resourceName = "[{$resource}" . (is_string($action) ? "::{$action}" : '') . ']';
+        $resourceName = "[{$resource}".(is_string($action) ? "::{$action}" : '').']';
 
         PHPUnit::assertTrue(
             $this->sent($resource, $action, $callback) === [],

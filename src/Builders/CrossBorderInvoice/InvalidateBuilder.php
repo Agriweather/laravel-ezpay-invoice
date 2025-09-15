@@ -61,6 +61,10 @@ class InvalidateBuilder extends Builder
      */
     public function invalidate(): InvalidateResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         return new InvalidateResult($this->sendRequest());
     }
 }

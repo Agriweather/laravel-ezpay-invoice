@@ -13,6 +13,7 @@ use Agriweather\EzPayInvoice\Results\Result;
 use Illuminate\Http\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+use ReflectionClass;
 
 abstract class Builder
 {
@@ -54,11 +55,6 @@ abstract class Builder
     protected function sendRequest(): array
     {
         $requestData = $this->toRequestData();
-
-        // 如果有設定 fake 的回應結果，則直接回傳
-        if ($result = $this->record()) {
-            return $result->toArray();
-        }
 
         $this->httpTransporter->setTimeout($this->factory->config('timeout'));
 
@@ -123,7 +119,7 @@ abstract class Builder
     /**
      * 發送跳轉到 ezPay 平台的請求
      */
-    public function sendFormRedirectRequest(): Response
+    protected function sendFormRedirectRequest(): Response
     {
         $requestData = $this->toRedirectRequestData();
 
@@ -149,11 +145,13 @@ abstract class Builder
     }
 
     /**
+     * 紀錄請求選項，並回傳模擬資料
+     *
      * @throws \RuntimeException
      */
     protected function record(): ?Result
     {
-        $attributes = (new \ReflectionClass($this))->getAttributes(Resource::class);
+        $attributes = (new ReflectionClass($this))->getAttributes(Resource::class);
 
         if (count($attributes) === 0) {
             return null;

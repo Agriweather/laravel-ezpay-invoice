@@ -385,11 +385,13 @@ class CreateBuilder extends Builder
      */
     public function issue(): CreateResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $result = new CreateResult($this->sendRequest());
 
-        if (! $this->factory->recording()) {
-            $this->crypto->verifyCheckCode($result);
-        }
+        $this->crypto->verifyCheckCode($result);
 
         return $result;
     }

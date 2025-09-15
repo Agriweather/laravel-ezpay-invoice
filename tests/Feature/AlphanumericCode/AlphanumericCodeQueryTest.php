@@ -9,6 +9,7 @@ use Agriweather\EzPayInvoice\Options\AlphanumericCode\QueryOptions;
 use Agriweather\EzPayInvoice\Options\Options;
 use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult;
+use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResults;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -62,7 +63,8 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
         return $request->url() == 'https://cinv.ezpay.com.tw/Api_number_management/searchNumber';
     });
 
-    expect($alphanumericCodeResults)->toBeArray()->toHaveCount(1)
+    expect($alphanumericCodeResults)->toBeInstanceOf(QueryResults::class)
+        ->and($alphanumericCodeResults->results())->toBeArray()->toHaveCount(1)
         ->and($alphanumericCodeResults[0])->toBeInstanceOf(QueryResult::class)
         ->and($alphanumericCodeResults[0]->managementNo())->toBe('0t0ghr0fyv')
         ->and($alphanumericCodeResults[0]->year())->toBe(113)
@@ -77,7 +79,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
 
 test('字軌管理 → 模擬查詢字軌資訊', function () {
     EzPayInvoice::fake([
-        QueryResult::make([
+        QueryResults::make([
             'Status' => 'SUCCESS',
             'Message' => '查詢字軌成功',
             'Result' => [
@@ -109,6 +111,6 @@ test('字軌管理 → 模擬查詢字軌資訊', function () {
             && $options->term === InvoiceTerm::JUL_AUG;
     });
 
-    expect($alphanumericCodeResults)->toBeArray()->toHaveCount(1)
+    expect($alphanumericCodeResults)->toBeInstanceOf(QueryResults::class)
         ->and($alphanumericCodeResults[0])->toBeInstanceOf(QueryResult::class);
 });

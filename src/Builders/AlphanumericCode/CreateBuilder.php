@@ -99,6 +99,10 @@ class CreateBuilder extends Builder
      */
     public function save(): CreateResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         return new CreateResult($this->sendRequest());
     }
 }
