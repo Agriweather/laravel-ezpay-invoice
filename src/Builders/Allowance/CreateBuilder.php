@@ -12,7 +12,7 @@ use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
 use InvalidArgumentException;
 
 #[Resource(Allowance::class, 'create')]
-class CreateBuilder extends Builder
+final class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
 

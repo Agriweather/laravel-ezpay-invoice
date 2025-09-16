@@ -12,7 +12,7 @@ use Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResults;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\UpdateResult;
 
 #[Resource(AlphanumericCode::class, 'query')]
-class QueryBuilder extends Builder
+final class QueryBuilder extends Builder
 {
     protected QueryOptions $options;
 

@@ -10,7 +10,7 @@ use Agriweather\EzPayInvoice\Factory;
 /**
  * @mixin \Agriweather\EzPayInvoice\Builders\CodeValidation\CodeValidationBuilder
  */
-class CodeValidation
+final class CodeValidation
 {
     use Concerns\PrepareBuilder;
 

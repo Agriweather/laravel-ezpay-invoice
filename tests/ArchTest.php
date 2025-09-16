@@ -2,40 +2,32 @@
 
 // Architecture testing is available in PestPHP v2.0+
 if (function_exists('arch')) {
-    $ignore = [
-        'Agriweather\EzPayInvoice\Builders\Concerns\Dumpable',
-    ];
-
     arch('main')
         ->expect('Agriweather\EzPayInvoice')
         ->not->toUse(['die', 'dd', 'dump'])
-        ->ignoring($ignore);
+        ->ignoring('Agriweather\EzPayInvoice\Builders\Concerns\Dumpable');
 
+    arch('attributes')
+        ->expect('Agriweather\EzPayInvoice\Attributes')
+        ->toUseNothing();
+
+    $buildersIgnored = [
+        'Agriweather\EzPayInvoice\Builders\Builder',
+        'Agriweather\EzPayInvoice\Builders\Concerns',
+    ];
+
+    // 注意：`ignoring()` 方法目前只會對上一行定義的期望有效
+    // 因此需要對每個期望都呼叫一次 `ignoring()` 方法
     arch('builders')
         ->expect('Agriweather\EzPayInvoice\Builders')
-        ->toOnlyUse([
-            'Agriweather\EzPayInvoice\Attributes',
-            'Agriweather\EzPayInvoice\Contracts',
-            'Agriweather\EzPayInvoice\Crypto\Crypto',
-            'Agriweather\EzPayInvoice\Enums',
-            'Agriweather\EzPayInvoice\Exceptions',
-            'Agriweather\EzPayInvoice\Factory',
-            'Agriweather\EzPayInvoice\Options',
-            'Agriweather\EzPayInvoice\Resources',
-            'Agriweather\EzPayInvoice\Results',
-            'Illuminate\Http\Response',
-            'Illuminate\Support\Traits\Conditionable',
-            'Illuminate\Support\Traits\Tappable',
-        ])
-        ->ignoring($ignore);
+        ->toBeFinal()
+        ->ignoring($buildersIgnored)
+        ->toHaveAttribute('Agriweather\EzPayInvoice\Attributes\Resource')
+        ->ignoring($buildersIgnored);
 
     arch('contracts')
         ->expect('Agriweather\EzPayInvoice\Contracts')
-        ->toBeInterfaces()
-        ->toOnlyUse([
-            'Illuminate\Http\Client\Response',
-            'Illuminate\Http\Response',
-        ]);
+        ->toBeInterfaces();
 
     arch('enums')
         ->expect('Agriweather\EzPayInvoice\Enums')
@@ -53,18 +45,19 @@ if (function_exists('arch')) {
 
     arch('options')
         ->expect('Agriweather\EzPayInvoice\Options')
-        ->toOnlyUse([
-            'Agriweather\EzPayInvoice\Enums',
-            'Carbon\Carbon',
-            'Illuminate\Contracts\Support\Arrayable',
-        ]);
+        ->toBeFinal()
+        ->ignoring('Agriweather\EzPayInvoice\Options\Options');
+
+    arch('resources')
+        ->expect('Agriweather\EzPayInvoice\Resources')
+        ->toBeFinal()
+        ->ignoring('Agriweather\EzPayInvoice\Resources\Concerns');
 
     arch('results')
         ->expect('Agriweather\EzPayInvoice\Results')
-        ->toOnlyUse([
-            'Agriweather\EzPayInvoice\Enums',
-            'Agriweather\EzPayInvoice\Contracts',
-            'Carbon\Carbon',
-            'Illuminate\Contracts\Support\Arrayable',
+        ->toBeFinal()
+        ->ignoring([
+            'Agriweather\EzPayInvoice\Results\Concerns',
+            'Agriweather\EzPayInvoice\Results\Result',
         ]);
 }

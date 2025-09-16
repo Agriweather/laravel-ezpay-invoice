@@ -11,7 +11,7 @@ use Agriweather\EzPayInvoice\Resources\AlphanumericCode;
 use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;
 
 #[Resource(AlphanumericCode::class, 'create')]
-class CreateBuilder extends Builder
+final class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
 

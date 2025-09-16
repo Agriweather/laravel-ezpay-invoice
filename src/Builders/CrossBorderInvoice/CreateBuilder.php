@@ -13,7 +13,7 @@ use DateTime;
 use InvalidArgumentException;
 
 #[Resource(CrossBorderInvoice::class, 'create')]
-class CreateBuilder extends Builder
+final class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
 

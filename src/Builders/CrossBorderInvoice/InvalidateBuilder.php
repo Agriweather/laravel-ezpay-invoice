@@ -9,7 +9,7 @@ use Agriweather\EzPayInvoice\Resources\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Results\CrossBorderInvoice\InvalidateResult;
 
 #[Resource(CrossBorderInvoice::class, 'voidable')]
-class InvalidateBuilder extends Builder
+final class InvalidateBuilder extends Builder
 {
     protected InvalidateOptions $options;
 

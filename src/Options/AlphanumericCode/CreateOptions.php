@@ -7,7 +7,7 @@ use Agriweather\EzPayInvoice\Enums\Invoice\InvoiceType;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class CreateOptions extends Options
+final class CreateOptions extends Options
 {
     public string $companyId = '';
 

@@ -8,7 +8,7 @@ use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Factory;
 
-class AlphanumericCode
+final class AlphanumericCode
 {
     use Concerns\PrepareBuilder;
 

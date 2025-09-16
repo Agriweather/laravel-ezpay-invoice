@@ -6,7 +6,7 @@ use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class CreateOptions extends Options
+final class CreateOptions extends Options
 {
     public string $merchantId = '';
 

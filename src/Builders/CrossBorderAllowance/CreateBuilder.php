@@ -11,7 +11,7 @@ use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
 use InvalidArgumentException;
 
 #[Resource(CrossBorderAllowance::class, 'create')]
-class CreateBuilder extends Builder
+final class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
 

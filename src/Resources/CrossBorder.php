@@ -7,7 +7,7 @@ use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Factory;
 
-class CrossBorder
+final class CrossBorder
 {
     public function __construct(
         protected Factory $factory,

@@ -5,7 +5,7 @@ namespace Agriweather\EzPayInvoice\Options\CrossBorderInvoice;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class TriggerOptions extends Options
+final class TriggerOptions extends Options
 {
     public string $merchantId = '';
 

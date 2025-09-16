@@ -9,7 +9,7 @@ use Agriweather\EzPayInvoice\Resources\Invoice;
 use Agriweather\EzPayInvoice\Results\Invoice\TriggerResult;
 
 #[Resource(Invoice::class, 'pending')]
-class TriggerBuilder extends Builder
+final class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;
 

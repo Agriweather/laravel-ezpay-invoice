@@ -15,7 +15,7 @@ use InvalidArgumentException;
 use TypeError;
 
 #[Resource(Invoice::class, 'query')]
-class QueryBuilder extends Builder
+final class QueryBuilder extends Builder
 {
     protected QueryOptions $options;
 

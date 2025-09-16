@@ -9,7 +9,7 @@ use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
 
 #[Resource(Allowance::class, 'voidable')]
-class InvalidateBuilder extends Builder
+final class InvalidateBuilder extends Builder
 {
     protected InvalidateOptions $options;
 

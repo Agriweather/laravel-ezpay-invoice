@@ -10,7 +10,7 @@ use Agriweather\EzPayInvoice\Results\CodeValidation\CodeValidationResult;
 use InvalidArgumentException;
 
 #[Resource(CodeValidation::class)]
-class CodeValidationBuilder extends Builder
+final class CodeValidationBuilder extends Builder
 {
     protected CodeValidationOptions $options;
 

@@ -9,7 +9,7 @@ use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Factory;
 
-class CrossBorderAllowance
+final class CrossBorderAllowance
 {
     use Concerns\PrepareBuilder;
 

@@ -6,7 +6,7 @@ use Agriweather\EzPayInvoice\Enums\Allowance\TriggerStatus;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class TriggerOptions extends Options
+final class TriggerOptions extends Options
 {
     public string $merchantId = '';
 

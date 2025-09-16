@@ -11,7 +11,7 @@ use Agriweather\EzPayInvoice\Contracts\HttpTransporter;
 use Agriweather\EzPayInvoice\Crypto\Crypto;
 use Agriweather\EzPayInvoice\Factory;
 
-class CrossBorderInvoice
+final class CrossBorderInvoice
 {
     use Concerns\PrepareBuilder;
 

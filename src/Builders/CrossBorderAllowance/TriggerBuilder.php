@@ -10,7 +10,7 @@ use Agriweather\EzPayInvoice\Resources\CrossBorderAllowance;
 use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\TriggerResult;
 
 #[Resource(CrossBorderAllowance::class, 'pending')]
-class TriggerBuilder extends Builder
+final class TriggerBuilder extends Builder
 {
     protected TriggerOptions $options;
 

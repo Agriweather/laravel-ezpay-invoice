@@ -7,7 +7,7 @@ use Agriweather\EzPayInvoice\Enums\Invoice\SearchType;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class QueryOptions extends Options
+final class QueryOptions extends Options
 {
     public string $merchantId = '';
 

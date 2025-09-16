@@ -5,7 +5,7 @@ namespace Agriweather\EzPayInvoice\Options\CodeValidation;
 use Agriweather\EzPayInvoice\Options\Options;
 use Carbon\Carbon;
 
-class CodeValidationOptions extends Options
+final class CodeValidationOptions extends Options
 {
     public string $merchantId = '';
 
