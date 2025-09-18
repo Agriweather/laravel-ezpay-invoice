@@ -419,6 +419,30 @@ $items = $invoiceResult->items() // 商品項目陣列
 // ]
 ```
 
+除了透過 API 查詢電子發票外，也可以直接跳轉到 ezPay 平台的查詢發票頁面：
+
+```php
+Route::get('/invoice/search', function () {
+    return EzPayInvoice::invoice()
+        ->query()
+        ->withInvoice('GG72002017')
+        ->withRandomNumber('1234')
+        ->redirectToEzPay();
+});
+```
+
+或者是單純取得 ezPay 平台的查詢發票網址：
+
+```php
+$url = EzPayInvoice::invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->getEzPaySearchUrl();
+
+// 'https://inv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx'
+```
+
 ### 作廢電子發票
 
 作廢電子發票需要傳入發票號碼和作廢原因：
@@ -452,7 +476,7 @@ $result->allowanceAmount() // 折讓金額：630
 $result->remainingAmount() // 折讓後剩餘發票金額：420
 ```
 
-### 延遲確認折讓
+### 開立並延遲確認折讓
 
 開立延遲確認的折讓，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
 
@@ -731,6 +755,32 @@ $items = $invoiceResult->items() // 商品項目陣列
 // ]
 ```
 
+除了透過 API 查詢電子發票外，也可以直接跳轉到 ezPay 平台的查詢發票頁面：
+
+```php
+Route::get('/invoice/search', function () {
+    return EzPayInvoice::crossBorder()
+        ->invoice()
+        ->query()
+        ->withInvoice('GG72002017')
+        ->withRandomNumber('1234')
+        ->redirectToEzPay();
+});
+```
+
+或者是單純取得 ezPay 平台的查詢發票網址：
+
+```php
+$url = EzPayInvoice::crossBorder()
+    ->invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->getEzPaySearchUrl();
+
+// 'https://inv.ezpay.com.tw/Invoice_index/search_platform?PostData=xxxxxx'
+```
+
 ### 境外電商作廢電子發票
 
 作廢電子發票需要傳入發票號碼和作廢原因：
@@ -766,7 +816,7 @@ $result->allowanceAmount() // 折讓金額：435
 $result->remainingAmount() // 折讓後剩餘發票金額：105.5
 ```
 
-### 境外電商延遲確認折讓
+### 境外電商開立並延遲確認折讓
 
 開立延遲確認的折讓，待買受人確認折讓後，再向 ezPay 平台發動確認折讓：
 
