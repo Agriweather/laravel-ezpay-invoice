@@ -5,6 +5,7 @@ namespace Agriweather\EzPayInvoice\Results;
 use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 
+/** @phpstan-consistent-constructor */
 abstract class Result implements Arrayable, JsonSerializable
 {
     protected array $result;
@@ -21,7 +22,6 @@ abstract class Result implements Arrayable, JsonSerializable
 
     public static function make(array $data): static
     {
-        /** @phpstan-ignore-next-line */
         return new static($data);
     }
 

@@ -100,7 +100,6 @@ final class CreateBuilder extends Builder
     public function save(): CreateResult
     {
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

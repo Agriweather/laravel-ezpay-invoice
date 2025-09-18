@@ -62,7 +62,6 @@ final class InvalidateBuilder extends Builder
     public function invalidate(): InvalidateResult
     {
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

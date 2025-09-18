@@ -129,7 +129,6 @@ final class QueryBuilder extends Builder
     public function get(): QueryResult
     {
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

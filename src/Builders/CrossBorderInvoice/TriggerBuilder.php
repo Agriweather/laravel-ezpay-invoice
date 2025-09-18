@@ -86,7 +86,6 @@ final class TriggerBuilder extends Builder
     public function trigger(): TriggerResult
     {
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

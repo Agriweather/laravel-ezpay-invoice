@@ -212,7 +212,6 @@ final class CreateBuilder extends Builder
     public function issue(): CreateResult
     {
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

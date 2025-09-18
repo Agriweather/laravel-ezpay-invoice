@@ -77,7 +77,6 @@ final class TriggerBuilder extends Builder
         $this->options->status = TriggerStatus::YES;
 
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -95,7 +94,6 @@ final class TriggerBuilder extends Builder
         $this->options->status = TriggerStatus::NO;
 
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 

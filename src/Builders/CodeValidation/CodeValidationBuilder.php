@@ -91,7 +91,6 @@ final class CodeValidationBuilder extends Builder
         }
 
         if ($result = $this->record()) {
-            /** @phpstan-ignore-next-line */
             return $result;
         }
 
