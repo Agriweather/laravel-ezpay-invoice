@@ -22,7 +22,7 @@ final class TriggerOptions extends Options
     {
         return [
             'MerchantID_' => $this->merchantId,
-            'PostData_' => array_filter([
+            'PostData_' => [
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -30,7 +30,7 @@ final class TriggerOptions extends Options
                 'AllowanceNo' => $this->allowanceNo,
                 'MerchantOrderNo' => $this->orderNo,
                 'TotalAmt' => (string) round($this->totalAmount, 2),
-            ], fn ($value) => ! is_null($value)),
+            ],
         ];
     }
 }

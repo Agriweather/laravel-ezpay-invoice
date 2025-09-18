@@ -17,7 +17,7 @@ use TypeError;
 #[Resource(Invoice::class, 'query')]
 final class QueryBuilder extends Builder
 {
-    protected QueryOptions $options;
+    private QueryOptions $options;
 
     protected function boot(): void
     {
@@ -129,6 +129,7 @@ final class QueryBuilder extends Builder
     public function get(): QueryResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -172,11 +173,11 @@ final class QueryBuilder extends Builder
                 return $result->url();
             }
 
-            throw new TypeError(implode([
+            throw new TypeError(implode('', [
                 'Return value must be of type ',
                 UrlQueryResult::class,
                 ', ',
-                get_class($result),
+                $result::class,
                 ' returned',
             ]));
         }

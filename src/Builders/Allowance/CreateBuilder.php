@@ -9,12 +9,11 @@ use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
 use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
 use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
-use InvalidArgumentException;
 
 #[Resource(Allowance::class, 'create')]
 final class CreateBuilder extends Builder
 {
-    protected CreateOptions $options;
+    private CreateOptions $options;
 
     protected function boot(): void
     {
@@ -102,10 +101,6 @@ final class CreateBuilder extends Builder
     public function withItems(array $items): self
     {
         foreach ($items as $item) {
-            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'], $item['taxAmount'])) {
-                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格、小計和稅額。');
-            }
-
             $this->withItem(
                 name: $item['name'],
                 quantity: $item['quantity'],
@@ -124,11 +119,11 @@ final class CreateBuilder extends Builder
      *
      * 當折讓的發票課稅別為混合應稅與免稅或零稅率時，需依應稅、零稅率、免稅個別開立折讓單。
      *
-     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\TaxType  $taxType  稅別
+     * @param  \Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType  $taxType  稅別
      */
-    public function withTaxTypeForMixed(ItemTaxType $itemTaxType): self
+    public function withTaxTypeForMixed(ItemTaxType $taxType): self
     {
-        $this->options->taxTypeForMixed = $itemTaxType;
+        $this->options->taxTypeForMixed = $taxType;
 
         return $this;
     }
@@ -166,6 +161,7 @@ final class CreateBuilder extends Builder
     public function issue(): CreateResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

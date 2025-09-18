@@ -6,23 +6,14 @@ use RuntimeException;
 
 class EzPayInvoiceException extends RuntimeException
 {
-    protected string $apiUrl;
-
-    protected array $formData;
-
-    protected string $apiStatus;
-
-    protected string $apiMessage;
-
-    public function __construct(string $apiUrl, array $formData, string $status, string $message)
-    {
-        $this->apiUrl = $apiUrl;
-        $this->formData = $formData;
-        $this->apiStatus = $status;
-        $this->apiMessage = $message;
-
+    public function __construct(
+        protected string $apiUrl,
+        protected array $formData,
+        protected string $apiStatus,
+        protected string $apiMessage,
+    ) {
         parent::__construct(sprintf(
-            'ezPay 發票平台 API 回應錯誤 (Code: %s)：「%s」', $status, $message
+            'ezPay 發票平台 API 回應錯誤 (Code: %s)：「%s」', $this->apiStatus, $this->apiMessage
         ));
     }
 

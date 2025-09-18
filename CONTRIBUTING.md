@@ -37,6 +37,14 @@ composer install
 composer lint
 ```
 
+## Rector
+
+執行 Rector：
+
+```bash
+composer refacto
+```
+
 ## 測試
 
 執行測試：

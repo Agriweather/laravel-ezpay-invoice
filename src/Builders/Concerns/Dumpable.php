@@ -9,10 +9,8 @@ trait Dumpable
 {
     /**
      * Die and dump the current options.
-     *
-     * @return never
      */
-    public function dd()
+    public function dd(): never
     {
         dd($this->options()->toArray());
     }

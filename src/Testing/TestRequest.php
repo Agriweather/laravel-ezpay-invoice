@@ -7,9 +7,9 @@ use Agriweather\EzPayInvoice\Options\Options;
 final class TestRequest
 {
     public function __construct(
-        private string $resource,
-        private ?string $action,
-        private Options $options
+        private readonly string $resource,
+        private readonly ?string $action,
+        private readonly Options $options
     ) {
         //
     }

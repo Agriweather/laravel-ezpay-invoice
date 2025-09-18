@@ -12,7 +12,7 @@ use InvalidArgumentException;
 #[Resource(CodeValidation::class)]
 final class CodeValidationBuilder extends Builder
 {
-    protected CodeValidationOptions $options;
+    private CodeValidationOptions $options;
 
     protected function boot(): void
     {
@@ -79,7 +79,8 @@ final class CodeValidationBuilder extends Builder
     {
         if (! $this->options->barcode && ! $this->options->lovecode) {
             throw new InvalidArgumentException('需要提供手機條碼或捐贈碼');
-        } elseif ($this->options->barcode && $this->options->lovecode) {
+        }
+        if ($this->options->barcode && $this->options->lovecode) {
             throw new InvalidArgumentException('不能同時提供手機條碼和捐贈碼');
         }
 
@@ -90,6 +91,7 @@ final class CodeValidationBuilder extends Builder
         }
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

@@ -12,7 +12,7 @@ use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\TriggerResult;
 #[Resource(CrossBorderAllowance::class, 'pending')]
 final class TriggerBuilder extends Builder
 {
-    protected TriggerOptions $options;
+    private TriggerOptions $options;
 
     protected function boot(): void
     {
@@ -77,6 +77,7 @@ final class TriggerBuilder extends Builder
         $this->options->status = TriggerStatus::YES;
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -94,6 +95,7 @@ final class TriggerBuilder extends Builder
         $this->options->status = TriggerStatus::NO;
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

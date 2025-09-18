@@ -197,9 +197,7 @@ class Factory
 
         $callback = $callback ?: fn (): bool => true;
 
-        return array_filter($requestOptions, function (TestRequest $request) use ($callback): bool {
-            return $callback($request->options());
-        });
+        return array_filter($requestOptions, fn (TestRequest $request) => $callback($request->options()));
     }
 
     /**

@@ -14,7 +14,7 @@ use Agriweather\EzPayInvoice\Results\AlphanumericCode\UpdateResult;
 #[Resource(AlphanumericCode::class, 'query')]
 final class QueryBuilder extends Builder
 {
-    protected QueryOptions $options;
+    private QueryOptions $options;
 
     protected function boot(): void
     {
@@ -127,6 +127,7 @@ final class QueryBuilder extends Builder
         $this->endpoint = '/Api_number_management/searchNumber';
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -146,6 +147,7 @@ final class QueryBuilder extends Builder
         $this->withPaused();
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -165,6 +167,7 @@ final class QueryBuilder extends Builder
         $this->withEnabled();
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
@@ -184,6 +187,7 @@ final class QueryBuilder extends Builder
         $this->withDisabled();
 
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

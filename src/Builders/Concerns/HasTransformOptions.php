@@ -7,7 +7,7 @@ trait HasTransformOptions
     /**
      * @var callable|null
      */
-    protected $transformOptionsCallback = null;
+    protected $transformOptionsCallback;
 
     /**
      * @param  callable  $callback

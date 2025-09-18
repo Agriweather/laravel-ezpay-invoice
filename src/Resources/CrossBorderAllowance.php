@@ -14,9 +14,9 @@ final class CrossBorderAllowance
     use Concerns\PrepareBuilder;
 
     public function __construct(
-        protected Factory $factory,
-        protected Crypto $crypto,
-        protected HttpTransporter $httpTransporter
+        private readonly Factory $factory,
+        private readonly Crypto $crypto,
+        private readonly HttpTransporter $httpTransporter
     ) {
         //
     }

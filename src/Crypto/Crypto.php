@@ -35,9 +35,7 @@ class Crypto
             throw new EncryptException('加密錯誤');
         }
 
-        $encryptedPostData = trim(bin2hex($value));
-
-        return $encryptedPostData;
+        return trim(bin2hex($value));
     }
 
     /**
@@ -72,9 +70,8 @@ class Crypto
     {
         $len = strlen($string);
         $pad = $blocksize - ($len % $blocksize);
-        $string .= str_repeat(chr($pad), $pad);
 
-        return $string;
+        return $string.str_repeat(chr($pad), $pad);
     }
 
     protected function removePadding(string $string): string

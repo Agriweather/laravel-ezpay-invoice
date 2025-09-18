@@ -6,7 +6,7 @@ use Agriweather\EzPayInvoice\Results\Result;
 
 final class UrlQueryResult extends Result
 {
-    private string $url;
+    private readonly string $url;
 
     public function __construct(array $data)
     {

@@ -11,7 +11,7 @@ use Agriweather\EzPayInvoice\Results\Invoice\TriggerResult;
 #[Resource(Invoice::class, 'pending')]
 final class TriggerBuilder extends Builder
 {
-    protected TriggerOptions $options;
+    private TriggerOptions $options;
 
     protected function boot(): void
     {
@@ -86,6 +86,7 @@ final class TriggerBuilder extends Builder
     public function trigger(): TriggerResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

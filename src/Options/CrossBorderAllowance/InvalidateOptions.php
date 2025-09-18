@@ -17,13 +17,13 @@ final class InvalidateOptions extends Options
     {
         return [
             'MerchantID_' => $this->merchantId,
-            'PostData_' => array_filter([
+            'PostData_' => [
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
                 'AllowanceNo' => $this->allowanceNo,
                 'InvalidReason' => $this->invalidReason,
-            ], fn ($value) => ! is_null($value)),
+            ],
         ];
     }
 }

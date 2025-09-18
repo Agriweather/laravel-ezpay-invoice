@@ -23,13 +23,13 @@ final class CreateOptions extends Options
     /** @var string[] */
     public array $itemUnits = [];
 
-    /** @var int|float[] */
+    /** @var (int|float)[] */
     public array $itemPrices = [];
 
-    /** @var int|float[] */
+    /** @var (int|float)[] */
     public array $itemAmounts = [];
 
-    /** @var int|float[] */
+    /** @var (int|float)[] */
     public array $itemTaxAmounts = [];
 
     public int|float $totalAmount = 0;
@@ -75,15 +75,9 @@ final class CreateOptions extends Options
                 'ItemName' => implode('|', $this->itemNames),
                 'ItemCount' => implode('|', $this->itemQuantities),
                 'ItemUnit' => implode('|', $this->itemUnits),
-                'ItemPrice' => implode('|', array_map(function (int|float $price) {
-                    return (string) round($price, 2);
-                }, $this->itemPrices)),
-                'ItemAmt' => implode('|', array_map(function (int|float $amount) {
-                    return (string) round($amount, 2);
-                }, $this->itemAmounts)),
-                'ItemTaxAmt' => implode('|', array_map(function (int|float $taxAmount) {
-                    return (string) round($taxAmount, 2);
-                }, $this->itemTaxAmounts)),
+                'ItemPrice' => implode('|', array_map(fn (int|float $price) => (string) round($price, 2), $this->itemPrices)),
+                'ItemAmt' => implode('|', array_map(fn (int|float $amount) => (string) round($amount, 2), $this->itemAmounts)),
+                'ItemTaxAmt' => implode('|', array_map(fn (int|float $taxAmount) => (string) round($taxAmount, 2), $this->itemTaxAmounts)),
                 'TotalAmt' => (string) round($this->totalAmount, 2),
                 'BuyerEmail' => $this->buyerEmail,
                 'Status' => (string) $this->status->value,

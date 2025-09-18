@@ -31,7 +31,9 @@
         "mockery/mockery": "^1.4",
         "orchestra/testbench": ">=7.0",
         "pestphp/pest": "^1.23 || ^2.36 || ^3.8.2 || ^4.0",
-        "pestphp/pest-plugin-laravel": "^1.0 || ^2.0 || ^3.0 || ^4.0"
+        "pestphp/pest-plugin-laravel": "^1.0 || ^2.0 || ^3.0 || ^4.0",
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -44,11 +46,16 @@
         }
     },
     "scripts": {
-        "lint": "pint --parallel",
-        "test:lint": "pint --parallel --test",
+        "refacto": "php vendor/bin/rector",
+        "lint": "php vendor/bin/pint --parallel",
+        "test:refacto": "php vendor/bin/rector --dry-run",
+        "test:lint": "php vendor/bin/pint --parallel --test",
+        "test:analyse": "php vendor/bin/phpstan analyse --ansi",
         "test:unit": "php vendor/bin/pest",
         "test": [
+            "@test:refacto",
             "@test:lint",
+            "@test:analyse",
             "@test:unit"
         ],
         "post-autoload-dump": [

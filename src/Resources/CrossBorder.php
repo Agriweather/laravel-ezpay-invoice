@@ -10,10 +10,10 @@ use Agriweather\EzPayInvoice\Factory;
 final class CrossBorder
 {
     public function __construct(
-        protected Factory $factory,
-        protected Crypto $crypto,
-        protected HttpTransporter $httpTransporter,
-        protected FormRedirectTransporter $formRedirectTransporter
+        private readonly Factory $factory,
+        private readonly Crypto $crypto,
+        private readonly HttpTransporter $httpTransporter,
+        private readonly FormRedirectTransporter $formRedirectTransporter
     ) {
         //
     }

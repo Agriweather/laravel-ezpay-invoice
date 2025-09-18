@@ -107,7 +107,7 @@ final class QueryResult extends Result implements CheckCodeVerifiable
 
         $items = is_array($this->result['ItemDetail'])
             ? $this->result['ItemDetail']
-            : json_decode($this->result['ItemDetail'], true, 512, JSON_THROW_ON_ERROR);
+            : json_decode((string) $this->result['ItemDetail'], true, 512, JSON_THROW_ON_ERROR);
 
         return array_map(fn (array $item) => [
             'number' => $item['ItemNum'] ? (int) $item['ItemNum'] : 0,

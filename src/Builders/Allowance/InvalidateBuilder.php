@@ -11,7 +11,7 @@ use Agriweather\EzPayInvoice\Results\Allowance\InvalidateResult;
 #[Resource(Allowance::class, 'voidable')]
 final class InvalidateBuilder extends Builder
 {
-    protected InvalidateOptions $options;
+    private InvalidateOptions $options;
 
     protected function boot(): void
     {
@@ -62,6 +62,7 @@ final class InvalidateBuilder extends Builder
     public function invalidate(): InvalidateResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

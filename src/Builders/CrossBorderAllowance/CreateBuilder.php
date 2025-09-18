@@ -8,12 +8,11 @@ use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\CreateOptions;
 use Agriweather\EzPayInvoice\Resources\CrossBorderAllowance;
 use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
-use InvalidArgumentException;
 
 #[Resource(CrossBorderAllowance::class, 'create')]
 final class CreateBuilder extends Builder
 {
-    protected CreateOptions $options;
+    private CreateOptions $options;
 
     protected function boot(): void
     {
@@ -100,10 +99,6 @@ final class CreateBuilder extends Builder
     public function withItems(array $items): self
     {
         foreach ($items as $item) {
-            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'])) {
-                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格和小計。');
-            }
-
             $this->withItem(
                 name: $item['name'],
                 quantity: $item['quantity'],
@@ -149,6 +144,7 @@ final class CreateBuilder extends Builder
     public function issue(): CreateResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

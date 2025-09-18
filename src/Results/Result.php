@@ -6,13 +6,11 @@ use Illuminate\Contracts\Support\Arrayable;
 
 abstract class Result implements Arrayable
 {
-    protected array $data;
-
     protected array $result;
 
-    public function __construct(array $data)
-    {
-        $this->data = $data;
+    public function __construct(
+        protected array $data
+    ) {
         $this->data['Result'] = is_array($this->data['Result'] ?? null)
             ? $this->data['Result']
             : json_decode($this->data['Result'] ?? '[]', true);
@@ -22,6 +20,7 @@ abstract class Result implements Arrayable
 
     public static function make(array $data): static
     {
+        /** @phpstan-ignore-next-line */
         return new static($data);
     }
 

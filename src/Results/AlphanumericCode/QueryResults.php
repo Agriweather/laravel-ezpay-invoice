@@ -10,7 +10,7 @@ final class QueryResults extends Result implements ArrayAccess
     /**
      * @var \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult[]
      */
-    protected array $results;
+    private array $results;
 
     public function __construct(array $data)
     {
@@ -20,9 +20,7 @@ final class QueryResults extends Result implements ArrayAccess
             : json_decode($this->data['Result'] ?? '[]', true);
 
         $this->results = array_map(function ($result) {
-            return new QueryResult([
-                'Result' => $result,
-            ]);
+            return new QueryResult(['Result' => $result]);
         }, $this->data['Result'] ?? []);
 
         $this->result = [];

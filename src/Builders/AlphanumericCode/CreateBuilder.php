@@ -13,7 +13,7 @@ use Agriweather\EzPayInvoice\Results\AlphanumericCode\CreateResult;
 #[Resource(AlphanumericCode::class, 'create')]
 final class CreateBuilder extends Builder
 {
-    protected CreateOptions $options;
+    private CreateOptions $options;
 
     protected function boot(): void
     {
@@ -100,6 +100,7 @@ final class CreateBuilder extends Builder
     public function save(): CreateResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 

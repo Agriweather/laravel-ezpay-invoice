@@ -27,7 +27,7 @@ final class CreateOptions extends Options
     {
         return [
             'CompanyID_' => $this->companyId,
-            'PostData_' => array_filter([
+            'PostData_' => [
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
                 'TimeStamp' => Carbon::now()->timestamp,
@@ -37,7 +37,7 @@ final class CreateOptions extends Options
                 'StartNumber' => $this->startNumber,
                 'EndNumber' => $this->endNumber,
                 'Type' => (string) $this->type->value,
-            ], fn ($value) => ! is_null($value)),
+            ],
         ];
     }
 }

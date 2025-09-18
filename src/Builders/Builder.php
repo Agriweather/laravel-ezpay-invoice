@@ -137,7 +137,7 @@ abstract class Builder
         return $this->toRequestData();
     }
 
-    public function setFormRedirectTransporter(FormRedirectTransporter $formRedirectTransporter): self
+    public function setFormRedirectTransporter(FormRedirectTransporter $formRedirectTransporter): static
     {
         $this->formRedirectTransporter = $formRedirectTransporter;
 

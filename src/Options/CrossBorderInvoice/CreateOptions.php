@@ -38,10 +38,10 @@ final class CreateOptions extends Options
     /** @var string[] */
     public array $itemUnits = [];
 
-    /** @var int|float[] */
+    /** @var (int|float)[] */
     public array $itemPrices = [];
 
-    /** @var int|float[] */
+    /** @var (int|float)[] */
     public array $itemAmounts = [];
 
     public ?string $comment = null;
@@ -96,12 +96,8 @@ final class CreateOptions extends Options
                 'ItemName' => implode('|', $this->itemNames),
                 'ItemCount' => implode('|', $this->itemQuantities),
                 'ItemUnit' => implode('|', $this->itemUnits),
-                'ItemPrice' => implode('|', array_map(function (int|float $price) {
-                    return (string) round($price, 2);
-                }, $this->itemPrices)),
-                'ItemAmt' => implode('|', array_map(function (int|float $amount) {
-                    return (string) round($amount, 2);
-                }, $this->itemAmounts)),
+                'ItemPrice' => implode('|', array_map(fn (int|float $price) => (string) round($price, 2), $this->itemPrices)),
+                'ItemAmt' => implode('|', array_map(fn (int|float $amount) => (string) round($amount, 2), $this->itemAmounts)),
                 'Comment' => $this->comment,
                 'Currency' => $this->currency->value,
                 'OriginalCurrencyAmount' => (string) round($this->originalCurrencyAmount, 2),

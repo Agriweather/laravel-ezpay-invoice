@@ -85,7 +85,7 @@ final class CreateOptions extends Options
     /**
      * 檢查是否存在商品項目。
      */
-    public function hasItem(string $name, int $quantity, string $unit, int $price, int $amount, ?TaxType $taxType = null): bool
+    public function hasItem(string $name, int $quantity, string $unit, int $price, int $amount, ?ItemTaxType $taxType = null): bool
     {
         if (in_array($name, $this->itemNames)) {
             $index = array_search($name, $this->itemNames);

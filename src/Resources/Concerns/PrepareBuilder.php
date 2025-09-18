@@ -17,7 +17,7 @@ trait PrepareBuilder
     protected function prepareBuilder($builder)
     {
         if ($this->transformOptionsCallback) {
-            $builder = $builder->transformOptions($this->transformOptionsCallback);
+            return $builder->transformOptions($this->transformOptionsCallback);
         }
 
         return $builder;

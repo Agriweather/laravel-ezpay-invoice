@@ -21,17 +21,13 @@ class EzPayInvoiceServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/ezpay_invoice.php', 'ezpay_invoice');
 
-        $this->app->singleton(Crypto::class, function () {
-            return new Crypto;
-        });
+        $this->app->singleton(Crypto::class, fn () => new Crypto);
 
         $this->app->singleton(HttpTransporterContract::class, function ($app) {
             return new HttpTransporter($app->make(HttpClient::class));
         });
 
-        $this->app->singleton(FormRedirectTransporterContract::class, function () {
-            return new FormRedirectTransporter;
-        });
+        $this->app->singleton(FormRedirectTransporterContract::class, fn () => new FormRedirectTransporter);
 
         $this->app->singleton(Factory::class, function ($app) {
             return new Factory(

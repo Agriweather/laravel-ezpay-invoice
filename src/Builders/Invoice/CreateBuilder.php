@@ -20,7 +20,7 @@ use InvalidArgumentException;
 #[Resource(Invoice::class, 'create')]
 final class CreateBuilder extends Builder
 {
-    protected CreateOptions $options;
+    private CreateOptions $options;
 
     protected function boot(): void
     {
@@ -341,16 +341,12 @@ final class CreateBuilder extends Builder
      *     unit: string,
      *     price: int,
      *     amount: int,
-     *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\TaxType
+     *     taxType: ?\Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType
      * }>  $items  商品項目陣列
      */
     public function withItems(array $items): self
     {
         foreach ($items as $item) {
-            if (! isset($item['name'], $item['quantity'], $item['unit'], $item['price'], $item['amount'])) {
-                throw new InvalidArgumentException('每個商品項目必須包含名稱、數量、單位、價格和小計。');
-            }
-
             $this->withItem(
                 name: $item['name'],
                 quantity: $item['quantity'],
@@ -386,6 +382,7 @@ final class CreateBuilder extends Builder
     public function issue(): CreateResult
     {
         if ($result = $this->record()) {
+            /** @phpstan-ignore-next-line */
             return $result;
         }
 
