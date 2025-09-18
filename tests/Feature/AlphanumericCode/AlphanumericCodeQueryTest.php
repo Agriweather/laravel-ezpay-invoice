@@ -64,7 +64,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
     });
 
     expect($alphanumericCodeResults)->toBeInstanceOf(QueryResults::class)
-        ->and($alphanumericCodeResults->results())->toBeArray()->toHaveCount(1)
+        ->and($alphanumericCodeResults)->toHaveCount(1)
         ->and($alphanumericCodeResults[0])->toBeInstanceOf(QueryResult::class)
         ->and($alphanumericCodeResults[0]->managementNo())->toBe('0t0ghr0fyv')
         ->and($alphanumericCodeResults[0]->year())->toBe(113)
@@ -75,6 +75,10 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
         ->and($alphanumericCodeResults[0]->type())->toBe(InvoiceType::GENERAL)
         ->and($alphanumericCodeResults[0]->lastNumber())->toBe(100)
         ->and($alphanumericCodeResults[0]->status())->toBe(AlphanumericCodeStatus::ENABLED);
+
+    foreach ($alphanumericCodeResults as $result) {
+        expect($result)->toBeInstanceOf(QueryResult::class);
+    }
 });
 
 test('字軌管理 → 模擬查詢字軌資訊', function () {

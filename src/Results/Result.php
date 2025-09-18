@@ -3,8 +3,9 @@
 namespace Agriweather\EzPayInvoice\Results;
 
 use Illuminate\Contracts\Support\Arrayable;
+use JsonSerializable;
 
-abstract class Result implements Arrayable
+abstract class Result implements Arrayable, JsonSerializable
 {
     protected array $result;
 
@@ -32,5 +33,10 @@ abstract class Result implements Arrayable
     public function toArray(): array
     {
         return $this->data;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 }

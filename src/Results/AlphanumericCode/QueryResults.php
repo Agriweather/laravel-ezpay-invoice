@@ -4,8 +4,15 @@ namespace Agriweather\EzPayInvoice\Results\AlphanumericCode;
 
 use Agriweather\EzPayInvoice\Results\Result;
 use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 
-final class QueryResults extends Result implements ArrayAccess
+/**
+ * @implements \ArrayAccess<int, \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult>
+ * @implements \IteratorAggregate<int, \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult>
+ */
+final class QueryResults extends Result implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult[]
@@ -26,9 +33,17 @@ final class QueryResults extends Result implements ArrayAccess
         $this->result = [];
     }
 
+    /**
+     * @return \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult[]
+     */
     public function results(): array
     {
         return $this->results;
+    }
+
+    public function count(): int
+    {
+        return count($this->results);
     }
 
     public function offsetExists(mixed $offset): bool
@@ -49,5 +64,13 @@ final class QueryResults extends Result implements ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         // 禁止外部設定
+    }
+
+    /**
+     * @return \ArrayIterator<int, \Agriweather\EzPayInvoice\Results\AlphanumericCode\QueryResult>
+     */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->results);
     }
 }
