@@ -3,7 +3,7 @@
 use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
 
 test('可以拋出 EzPayInvoiceException', function () {
-    $apiUrl = 'https://api.ezpay.com.tw/invoice';
+    $apiUrl = 'https://cinv.ezpay.com.tw/Api/invoice_issue';
     $formData = ['PostData_' => ''];
     $status = 'KEY10013';
     $message = '資料不可空白MerchantOrderNo';

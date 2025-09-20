@@ -27,6 +27,8 @@ class EzPayInvoiceException extends RuntimeException
         return [
             'url' => $this->apiUrl,
             'formdata' => $this->formData,
+            'status' => $this->apiStatus,
+            'message' => $this->apiMessage,
         ];
     }
 
