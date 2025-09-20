@@ -24,7 +24,7 @@
   - [查詢電子發票](#查詢電子發票)
   - [作廢電子發票](#作廢電子發票)
   - [開立折讓](#開立折讓)
-  - [延遲確認折讓](#延遲確認折讓)
+  - [開立並延遲確認折讓](#開立並延遲確認折讓)
   - [作廢折讓](#作廢折讓)
 - [電子發票 API (境外電商版)](#電子發票-api-境外電商版)
   - [境外電商開立電子發票](#境外電商開立電子發票)
@@ -32,7 +32,7 @@
   - [境外電商查詢電子發票](#境外電商查詢電子發票)
   - [境外電商作廢電子發票](#境外電商作廢電子發票)
   - [境外電商開立折讓](#境外電商開立折讓)
-  - [境外電商延遲確認折讓](#境外電商延遲確認折讓)
+  - [境外電商開立並延遲確認折讓](#境外電商開立並延遲確認折讓)
   - [境外電商作廢折讓](#境外電商作廢折讓)
 - [字軌管理 API](#字軌管理-api)
   - [準備帳號代號和金鑰](#準備帳號代號和金鑰)
@@ -44,6 +44,7 @@
 - [手機條碼與捐證碼驗證 API](#手機條碼與捐證碼驗證-api)
   - [驗證手機條碼](#驗證手機條碼)
   - [驗證捐證碼](#驗證捐證碼)
+- [錯誤處理](#錯誤處理)
 - [單元測試](#單元測試)
 - [除錯支援](#除錯支援)
 - [API 參考文件](#api-參考文件)
@@ -431,6 +432,27 @@ Route::get('/invoice/search', function () {
 });
 ```
 
+或者是取得表單資料，並自行撰寫前端表單進行跳轉：
+
+> [!TIP]
+> HTML 表單可以參考 [src/Transporters/FormRedirectTransporter.php](src/Transporters/FormRedirectTransporter.php)
+
+```php
+$requestData = EzPayInvoice::invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->toRedirectRequestData();
+
+// [
+//     'url' => 'https://cinv.ezpay.com.tw/Api/invoice_issue',
+//     'formData' => [
+//         'MerchantID_' => 'your-merchant-id',
+//         'PostData' => 'xxxxxx',
+//     ],
+// ]
+```
+
 或者是單純取得 ezPay 平台的查詢發票網址：
 
 ```php
@@ -768,6 +790,27 @@ Route::get('/invoice/search', function () {
 });
 ```
 
+或者是取得表單資料，並自行撰寫前端表單進行跳轉：
+
+> [!TIP]
+> HTML 表單可以參考 [src/Transporters/FormRedirectTransporter.php](src/Transporters/FormRedirectTransporter.php)
+
+```php
+$requestData = EzPayInvoice::invoice()
+    ->query()
+    ->withInvoice('GG72002017')
+    ->withRandomNumber('1234')
+    ->toRedirectRequestData();
+
+// [
+//     'url' => 'https://cinv.ezpay.com.tw/Api/invoice_issue',
+//     'formData' => [
+//         'MerchantID_' => 'your-merchant-id',
+//         'PostData' => 'xxxxxx',
+//     ],
+// ]
+```
+
 或者是單純取得 ezPay 平台的查詢發票網址：
 
 ```php
@@ -988,6 +1031,32 @@ $result = EzPayInvoice::codeValidation()
     ->check();
 
 $result->isValid() // 捐證碼是否有效：true
+```
+
+## 錯誤處理
+
+當 ezPay API 回傳失敗的回應時，會拋出 `EzPayInvoiceException` 例外，可以取得 ezPay 的錯誤代碼和錯誤訊息進行進一步處理：
+
+```php
+use Agriweather\EzPayInvoice\Exceptions\EzPayInvoiceException;
+
+try {
+    $result = EzPayInvoice::invoice()
+        ->create()
+        ...
+        ->issue();
+} catch (EzPayInvoiceException $e) {
+    $status = $e->getApiStatus(); // 'KEY10013'
+    $message = $e->getApiMessage(); // '資料不可空白MerchantOrderNo'
+
+    // 記錄錯誤日誌...
+    logger()->error($e->getMessage(), $e->context());
+
+    // 顯示錯誤訊息給使用者...
+    return response()->json([
+        'error' => $message,
+    ], 400);
+}
 ```
 
 ## 單元測試
