@@ -1061,7 +1061,7 @@ try {
 
 ## 單元測試
 
-在單元測試中，可以使用 `EzPayInvoice::fake()` 模擬 API 回應：
+在單元測試中，可以使用 `EzPayInvoice::fake()` 模擬 API 回應，這邊要模擬開立發票回應，因此使用 `CreateResult` 來建立模擬回應資料：
 
 ```php
 <?php
@@ -1075,6 +1075,7 @@ use Agriweather\EzPayInvoice\Results\Invoice\CreateResult;
 test('can create invoice', function () {
     // 模擬發票開立 API 回應
     EzPayInvoice::fake([
+        // 模擬開立發票回應
         CreateResult::make([
             'Status' => 'SUCCESS',
             'Message' => '發票開立成功',
@@ -1106,6 +1107,9 @@ test('can create invoice', function () {
     });
 });
 ```
+
+> [!WARNING]
+> 不支援模擬查詢發票的 `redirectToEzPay()` 和 `toRedirectRequestData()` 方法，因為這兩個方法是直接產生跳轉表單資料，實際上不會發送 API 請求。
 
 ## 除錯支援
 
