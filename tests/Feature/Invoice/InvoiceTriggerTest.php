@@ -39,7 +39,7 @@ test('發票觸發 → 可以觸發等待中的發票', function () {
         ->withInvoiceTransNo('25072516392250538')
         ->withOrder('Order004')
         ->withTotalAmount(210)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -48,8 +48,6 @@ test('發票觸發 → 可以觸發等待中的發票', function () {
                 'MerchantOrderNo' => 'Order004',
                 'TotalAmt' => '210',
             ]);
-
-            return $options;
         })
         ->trigger();
 

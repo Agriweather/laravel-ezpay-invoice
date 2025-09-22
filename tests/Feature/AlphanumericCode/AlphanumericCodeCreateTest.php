@@ -46,7 +46,7 @@ test('字軌管理 → 可以成功申請新字軌', function () {
         ->withCode('AA')
         ->withRange('24000100', '24000199')
         ->withType(InvoiceType::GENERAL)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -58,8 +58,6 @@ test('字軌管理 → 可以成功申請新字軌', function () {
                 'EndNumber' => '24000199',
                 'Type' => '07',
             ]);
-
-            return $options;
         })
         ->save();
 

@@ -46,7 +46,7 @@ test('境外電商發票開立 → 可以成功開立境外電商發票', functi
         ->withAmount(100.0, 5.5, 105.5)
         ->withOriginalCurrencyAmount(100.0)
         ->withExchangeRate(30.5)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -67,8 +67,6 @@ test('境外電商發票開立 → 可以成功開立境外電商發票', functi
                 'OriginalCurrencyAmount' => '100',
                 'ExchangeRate' => '30.5',
             ]);
-
-            return $options;
         })
         ->issue();
 

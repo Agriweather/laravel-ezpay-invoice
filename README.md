@@ -1112,11 +1112,15 @@ test('can create invoice', function () {
 當發生錯誤時，請協助提供請求與回應的除錯資料，以便更快速地定位問題：
 
 ```php
+use Agriweather\EzPayInvoice\Options\Options;
+
 $result = EzPayInvoice::invoice()
     ->create()
     ->withOrder('Order001')
-    ->dd() // 查看請求參數資料
     ...
+    ->onPrepareOptions(function (Options $options) {
+        dd($options->toArray()); // 查看請求參數資料
+    })
     ->issue();
 
 dd($result->toArray()); // 查看回應資料

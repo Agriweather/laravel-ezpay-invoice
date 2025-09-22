@@ -40,7 +40,7 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
         ->withItem('退貨商品', quantity: 1, unit: 'EA', price: 105.5, amount: 105.5)
         ->withTotalAmount(105.5)
         ->withNotification('customer@example.com')
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -57,8 +57,6 @@ test('境外電商折讓開立 → 可以開立境外電商折讓', function () 
                 'BuyerEmail' => 'customer@example.com',
                 'Status' => '1',
             ]);
-
-            return $options;
         })
         ->issue();
 

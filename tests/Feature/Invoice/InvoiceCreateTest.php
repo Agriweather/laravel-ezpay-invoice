@@ -51,7 +51,7 @@ test('發票開立 → 可以成功開立 B2C 發票', function () {
         ->withItem('測試商品', quantity: 1, unit: '個', price: 1000, amount: 1000)
         ->withTax(TaxType::TAXABLE, 5)
         ->withAmount(1000, 50, 1050)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -74,8 +74,6 @@ test('發票開立 → 可以成功開立 B2C 發票', function () {
                 'ItemPrice' => '1000',
                 'ItemAmt' => '1000',
             ]);
-
-            return $options;
         })
         ->issue();
 
@@ -126,7 +124,7 @@ test('發票開立 → 可以成功開立 B2B 發票', function () {
         ->withItem('商品B', quantity: 1, unit: '個', price: 400, amount: 400)
         ->withTax(TaxType::TAXABLE, 5)
         ->withAmount(1000, 50, 1050)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -150,8 +148,6 @@ test('發票開立 → 可以成功開立 B2B 發票', function () {
                 'ItemPrice' => '300|400',
                 'ItemAmt' => '600|400',
             ]);
-
-            return $options;
         })
         ->issue();
 
@@ -198,7 +194,7 @@ test('發票開立 → 可以開立載具發票', function () {
         ->withItem('載具商品', quantity: 1, unit: '個', price: 500, amount: 500)
         ->withTax(TaxType::TAXABLE, 5)
         ->withAmount(500, 25, 525)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -221,8 +217,6 @@ test('發票開立 → 可以開立載具發票', function () {
                 'ItemPrice' => '500',
                 'ItemAmt' => '500',
             ]);
-
-            return $options;
         })
         ->issue();
 
@@ -263,7 +257,7 @@ test('發票開立 → 可以開立發票並等待觸發', function () {
         ->withItem('等待觸發商品', quantity: 1, unit: '個', price: 200, amount: 200)
         ->withTax(TaxType::TAXABLE, 5)
         ->withAmount(200, 10, 210)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -284,8 +278,6 @@ test('發票開立 → 可以開立發票並等待觸發', function () {
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
             ]);
-
-            return $options;
         })
         ->deferIssue();
 
@@ -328,7 +320,7 @@ test('發票開立 → 可以預約開立發票', function () {
         ->withItem('預約商品', quantity: 1, unit: '個', price: 200, amount: 200)
         ->withTax(TaxType::TAXABLE, 5)
         ->withAmount(200, 10, 210)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.5',
@@ -350,8 +342,6 @@ test('發票開立 → 可以預約開立發票', function () {
                 'ItemPrice' => '200',
                 'ItemAmt' => '200',
             ]);
-
-            return $options;
         })
         ->scheduleAt('2024-12-01');
 

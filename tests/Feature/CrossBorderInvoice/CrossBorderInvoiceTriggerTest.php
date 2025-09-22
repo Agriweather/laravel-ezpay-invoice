@@ -40,7 +40,7 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
         ->withInvoiceTransNo('25080200501024251')
         ->withOrder('CBOrder001')
         ->withTotalAmount(105.5)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -49,8 +49,6 @@ test('境外電商發票觸發 → 可以觸發等待中的發票', function () 
                 'MerchantOrderNo' => 'CBOrder001',
                 'TotalAmt' => '105.5',
             ]);
-
-            return $options;
         })
         ->trigger();
 

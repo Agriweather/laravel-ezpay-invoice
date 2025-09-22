@@ -2,11 +2,11 @@
 
 namespace Agriweather\EzPayInvoice\Resources\Concerns;
 
-use Agriweather\EzPayInvoice\Builders\Concerns\HasTransformOptions;
+use Agriweather\EzPayInvoice\Builders\Concerns\HasPrepareOptions;
 
 trait PrepareBuilder
 {
-    use HasTransformOptions;
+    use HasPrepareOptions;
 
     /**
      * @template TBuilder
@@ -16,8 +16,8 @@ trait PrepareBuilder
      */
     protected function prepareBuilder($builder)
     {
-        if ($this->transformOptionsCallback) {
-            return $builder->transformOptions($this->transformOptionsCallback);
+        if ($this->onPrepareOptionsCallback) {
+            return $builder->onPrepareOptions($this->onPrepareOptionsCallback);
         }
 
         return $builder;

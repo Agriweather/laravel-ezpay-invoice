@@ -18,7 +18,7 @@ use ReflectionClass;
 abstract class Builder
 {
     use Concerns\Dumpable;
-    use Concerns\HasTransformOptions;
+    use Concerns\HasPrepareOptions;
     use Conditionable;
     use Tappable;
 
@@ -30,7 +30,7 @@ abstract class Builder
     /**
      * 已經設定完成、且可準備送出的的選項
      */
-    private ?Options $configuredOptions = null;
+    private ?Options $preparedOptions = null;
 
     protected ?FormRedirectTransporter $formRedirectTransporter = null;
 
@@ -80,7 +80,7 @@ abstract class Builder
     public function toRequestData(): array
     {
         $url = $this->factory->baseUrl().$this->endpoint;
-        $options = $this->getConfiguredOptions();
+        $options = $this->getPreparedOptions();
         $formData = $options->toArray();
 
         // 如果有 PostData_ 則進行加密
@@ -99,19 +99,19 @@ abstract class Builder
     /**
      * 解析並設定完成可準備送出的的選項
      */
-    protected function getConfiguredOptions(): Options
+    protected function getPreparedOptions(): Options
     {
-        if ($this->configuredOptions) {
-            return $this->configuredOptions;
+        if ($this->preparedOptions) {
+            return $this->preparedOptions;
         }
 
         $options = $this->options();
 
-        if ($this->transformOptionsCallback) {
-            $options = call_user_func($this->transformOptionsCallback, $options);
+        if ($this->onPrepareOptionsCallback) {
+            call_user_func($this->onPrepareOptionsCallback, $options);
         }
 
-        $this->configuredOptions = $options;
+        $this->preparedOptions = $options;
 
         return $options;
     }
@@ -161,7 +161,7 @@ abstract class Builder
         $resource = $attributes[0]->newInstance();
 
         return $this->factory->record(
-            $resource->name, $resource->action, $this->getConfiguredOptions()
+            $resource->name, $resource->action, $this->getPreparedOptions()
         );
     }
 }

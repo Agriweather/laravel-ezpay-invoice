@@ -46,7 +46,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
         ->query()
         ->withYear(113)
         ->withTerm(InvoiceTerm::JUL_AUG)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -54,8 +54,6 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
                 'Year' => '113',
                 'Term' => '4',
             ]);
-
-            return $options;
         })
         ->get();
 

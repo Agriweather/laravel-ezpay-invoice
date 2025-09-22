@@ -33,7 +33,7 @@ test('折讓作廢 → 可以作廢已開立的折讓', function () {
         ->voidable()
         ->withAllowance('A250726001830959')
         ->because('作廢原因')
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -41,8 +41,6 @@ test('折讓作廢 → 可以作廢已開立的折讓', function () {
                 'AllowanceNo' => 'A250726001830959',
                 'InvalidReason' => '作廢原因',
             ]);
-
-            return $options;
         })
         ->invalidate();
 

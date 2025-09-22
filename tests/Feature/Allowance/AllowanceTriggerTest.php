@@ -38,7 +38,7 @@ test('折讓觸發 → 可以確認折讓', function () {
         ->withAllowance('A250726001830959')
         ->withOrder('Order001')
         ->withTotalAmount(420)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -48,8 +48,6 @@ test('折讓觸發 → 可以確認折讓', function () {
                 'MerchantOrderNo' => 'Order001',
                 'TotalAmt' => '420',
             ]);
-
-            return $options;
         })
         ->confirm();
 
@@ -87,7 +85,7 @@ test('折讓觸發 → 可以取消折讓', function () {
         ->withAllowance('A250726001830959')
         ->withOrder('Order001')
         ->withTotalAmount(420)
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -97,8 +95,6 @@ test('折讓觸發 → 可以取消折讓', function () {
                 'MerchantOrderNo' => 'Order001',
                 'TotalAmt' => '420',
             ]);
-
-            return $options;
         })
         ->cancel();
 

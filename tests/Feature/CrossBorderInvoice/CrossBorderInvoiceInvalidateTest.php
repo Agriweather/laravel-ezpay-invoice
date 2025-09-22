@@ -34,7 +34,7 @@ test('境外電商發票作廢 → 可以作廢已開立的發票', function () 
         ->voidable()
         ->withInvoice('CB00000016')
         ->because('客戶取消訂單')
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -42,8 +42,6 @@ test('境外電商發票作廢 → 可以作廢已開立的發票', function () 
                 'InvoiceNumber' => 'CB00000016',
                 'InvalidReason' => '客戶取消訂單',
             ]);
-
-            return $options;
         })
         ->invalidate();
 

@@ -33,13 +33,11 @@ test('手機條碼驗證 → 可以驗證有效的手機條碼', function () {
     ]);
 
     $result = EzPayInvoice::codeValidation()
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/ABC.123',
             ]);
-
-            return $options;
         })
         ->withBarcode('/ABC.123')
         ->check();
@@ -74,13 +72,11 @@ test('手機條碼驗證 → 可以驗證無效的手機條碼', function () {
     ]);
 
     $result = EzPayInvoice::codeValidation()
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'CellphoneBarcode' => '/ABC.123',
             ]);
-
-            return $options;
         })
         ->withBarcode('/ABC.123')
         ->check();

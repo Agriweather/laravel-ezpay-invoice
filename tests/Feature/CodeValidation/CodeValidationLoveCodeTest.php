@@ -33,13 +33,11 @@ test('捐贈碼驗證 → 可以驗證有效的捐贈碼', function () {
     ]);
 
     $result = EzPayInvoice::codeValidation()
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'LoveCode' => '123',
             ]);
-
-            return $options;
         })
         ->withLoveCode('123')
         ->check();
@@ -74,13 +72,11 @@ test('捐贈碼驗證 → 可以驗證無效的捐贈碼', function () {
     ]);
 
     $result = EzPayInvoice::codeValidation()
-        ->transformOptions(function (Options $options) {
+        ->onPrepareOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'TimeStamp' => Carbon::now()->timestamp,
                 'LoveCode' => '123',
             ]);
-
-            return $options;
         })
         ->withLoveCode('123')
         ->check();

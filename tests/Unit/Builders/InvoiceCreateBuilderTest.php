@@ -66,10 +66,8 @@ test('可以僅使用必須的參數', function () {
         ->withTax(TaxType::TAXABLE, 5)
         ->withItem('商品名稱', quantity: 2, unit: '個', price: 100, amount: 200)
         ->withAmount(200, 5, 205)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -126,10 +124,8 @@ test('可以使用全部的參數', function () {
         ->withMixedTaxAmount(70, 80, 90)
         ->withAmount(200, 5, 205)
         ->withComment('這是一個測試發票')
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -158,10 +154,8 @@ test('可以設定應稅稅率', function () {
 
     (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::TAXABLE, 5)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -190,10 +184,8 @@ test('可以設定零稅率', function () {
 
     (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::ZERO_RATE)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -222,10 +214,8 @@ test('可以設定免稅', function () {
 
     (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->withTax(TaxType::TAX_FREE)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -262,10 +252,8 @@ test('可以設定混合稅率，和各種混合稅率的銷售額', function ()
         ->withItem('商品名稱3', quantity: 1, unit: '個', price: 90, amount: 90, taxType: ItemTaxType::TAX_FREE)
         ->withMixedTaxAmount(200, 80, 90)
         ->withAmount(370, 19, 389)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
@@ -299,10 +287,8 @@ test('可以批次設定多個商品', function () {
             ['name' => '商品名稱3', 'quantity' => 1, 'unit' => '個', 'price' => 90, 'amount' => 90],
         ])
         ->withAmount(370, 0, 370)
-        ->transformOptions(function (Options $options) use ($expectedPostData) {
+        ->onPrepareOptions(function (Options $options) use ($expectedPostData) {
             expect($options->toArray()['PostData_'])->toBe($expectedPostData);
-
-            return $options;
         })
         ->issue();
 });
