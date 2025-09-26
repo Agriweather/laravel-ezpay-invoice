@@ -16,8 +16,8 @@ trait PrepareBuilder
      */
     protected function prepareBuilder($builder)
     {
-        if ($this->onPrepareOptionsCallback) {
-            return $builder->onPrepareOptions($this->onPrepareOptionsCallback);
+        if ($this->onPreparedOptionsCallback) {
+            return $builder->onPreparedOptions($this->onPreparedOptionsCallback);
         }
 
         return $builder;

@@ -46,7 +46,7 @@ test('字軌管理 → 可以查詢字軌資訊', function () {
         ->query()
         ->withYear(113)
         ->withTerm(InvoiceTerm::JUL_AUG)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

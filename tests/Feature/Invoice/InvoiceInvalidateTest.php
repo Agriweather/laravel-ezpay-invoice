@@ -33,7 +33,7 @@ test('發票作廢 → 可以作廢已開立的發票', function () {
         ->voidable()
         ->withInvoice('GG72002017')
         ->because('客戶取消訂單')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

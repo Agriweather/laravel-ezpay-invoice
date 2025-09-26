@@ -77,7 +77,7 @@ test('發票查詢 → 可以透過發票號碼及隨機碼查詢發票', functi
         ->query()
         ->withInvoice('GG72002017')
         ->withRandomNumber('1234')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -164,7 +164,7 @@ test('發票查詢 → 可以透過訂單編號及發票金額查詢發票', fun
         ->query()
         ->withOrder('Order001')
         ->withTotalAmount(1050)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -214,7 +214,7 @@ test('發票查詢 → 可以取得請求查詢發票的 formData 資料', funct
         ->query()
         ->withOrder('Order001')
         ->withTotalAmount(1050)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',

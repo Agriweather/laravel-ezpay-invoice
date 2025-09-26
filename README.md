@@ -1147,7 +1147,7 @@ $result = EzPayInvoice::invoice()
     ->create()
     ->withOrder('Order001')
     ...
-    ->onPrepareOptions(function (Options $options) {
+    ->onPreparedOptions(function (Options $options) {
         dd($options->toArray()); // 查看請求參數資料
     })
     ->issue();

@@ -40,7 +40,7 @@ test('折讓開立 → 可以成功開立折讓', function () {
         ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
         ->withTotalAmount(630)
         ->withNotification('customer@example.com')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -101,7 +101,7 @@ test('折讓開立 → 可以開立多品項折讓', function () {
         ->withItem('商品B', quantity: 1, unit: '個', price: 50, amount: 50, taxAmount: 2)
         ->withTotalAmount(157)
         ->withNotification('customer@example.com')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -154,7 +154,7 @@ test('折讓開立 → 可以開立非立即確認的折讓', function () {
         ->withOrder('Order001')
         ->withItem('退貨商品', quantity: 2, unit: '個', price: 300, amount: 600, taxAmount: 30)
         ->withTotalAmount(630)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',

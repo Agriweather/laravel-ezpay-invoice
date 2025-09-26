@@ -39,7 +39,7 @@ test('境外電商折讓觸發 → 可以確認境外電商折讓', function () 
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
         ->withTotalAmount(105.5)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',
@@ -87,7 +87,7 @@ test('境外電商折讓觸發 → 可以取消境外電商折讓', function () 
         ->withAllowance('A250802013300379')
         ->withOrder('CBOrder001')
         ->withTotalAmount(105.5)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.3',

@@ -6,11 +6,11 @@ use Closure;
 
 trait HasPrepareOptions
 {
-    protected ?Closure $onPrepareOptionsCallback = null;
+    protected ?Closure $onPreparedOptionsCallback = null;
 
-    public function onPrepareOptions(Closure $callback): static
+    public function onPreparedOptions(Closure $callback): static
     {
-        $this->onPrepareOptionsCallback = $callback;
+        $this->onPreparedOptionsCallback = $callback;
 
         return $this;
     }

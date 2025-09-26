@@ -41,7 +41,7 @@ test('字軌管理 → 可以暫停字軌', function () {
         ->query()
         ->withNo('0t0ghr0fyv')
         ->withYear(113)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -90,7 +90,7 @@ test('字軌管理 → 可以啟用字軌', function () {
         ->query()
         ->withNo('0t0ghr0fyv')
         ->withYear(113)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
@@ -139,7 +139,7 @@ test('字軌管理 → 可以停用字軌', function () {
         ->query()
         ->withNo('0t0ghr0fyv')
         ->withYear(113)
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

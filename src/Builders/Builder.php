@@ -107,8 +107,8 @@ abstract class Builder
 
         $options = $this->options();
 
-        if ($this->onPrepareOptionsCallback) {
-            call_user_func($this->onPrepareOptionsCallback, $options);
+        if ($this->onPreparedOptionsCallback) {
+            call_user_func($this->onPreparedOptionsCallback, $options);
         }
 
         $this->preparedOptions = $options;

@@ -64,7 +64,7 @@ test('境外電商發票查詢 → 可以查詢境外電商發票', function () 
         ->query()
         ->withInvoice('CB00000020')
         ->withRandomNumber('1234')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',

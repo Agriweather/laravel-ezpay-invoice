@@ -34,7 +34,7 @@ test('境外電商折讓作廢 → 可以作廢已開立的境外電商折讓', 
         ->voidable()
         ->withAllowance('A250802013300379')
         ->because('作廢原因')
-        ->onPrepareOptions(function (Options $options) {
+        ->onPreparedOptions(function (Options $options) {
             expect($options->toArray()['PostData_'])->toBe([
                 'RespondType' => 'JSON',
                 'Version' => '1.0',
