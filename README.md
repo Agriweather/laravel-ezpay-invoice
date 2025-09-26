@@ -128,7 +128,7 @@ $result = EzPayInvoice::invoice()
     ->issue();
 ```
 
-開立 B2C 電子發票時，可以選擇使用不同的載具：
+開立 B2C 電子發票時，可以選擇使用不同的載具，如果設定了載具，會自動設定不索取紙本發票：
 
 ```php
 use Agriweather\EzPayInvoice\Enums\Invoice\CarrierType;
@@ -144,11 +144,6 @@ EzPayInvoice::invoice()
     // ezPay 電子發票載具
     ->withCarrier(CarrierType::EZPAY_CARRIER, '1234567890')
     ->withEmail('customer@example.com') // 當選擇 ezPay 電子發票載具時，需提供電子信箱
-
-    // 索取紙本發票
-    ->withPrint()
-    // 不索取紙本發票
-    ->withoutPrint()
 ```
 
 或者是可以提供捐贈碼，但不能與載具一起使用：
@@ -177,6 +172,8 @@ $result = EzPayInvoice::invoice()
     ->withAmount(1000, 50, 1050) // 未稅銷售額、稅額、含稅銷售額
     ->issue();
 ```
+
+如果開立了 B2B 電子發票，會自動設定索取紙本發票。
 
 設定電子發票稅別和稅率：
 

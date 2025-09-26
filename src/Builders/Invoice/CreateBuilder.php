@@ -134,6 +134,9 @@ final class CreateBuilder extends Builder
         $this->options->carrierType = $carrierType;
         $this->options->carrierNumber = $carrierNumber;
 
+        // 載具或捐贈碼存在時，不能索取紙本發票
+        $this->options->printFlag = InvoicePrintFlag::NO;
+
         return $this;
     }
 
@@ -150,37 +153,8 @@ final class CreateBuilder extends Builder
     {
         $this->options->loveCode = $loveCode;
 
-        return $this;
-    }
-
-    /**
-     * 索取紙本發票
-     *
-     * 當開立發票給公司 (`forBusiness()`) 時，預設固定為 `true`，因此不需設定。
-     *
-     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才需設定此參數。
-     *
-     * @param  bool  $print  是否索取紙本發票
-     */
-    public function withPrint(bool $print = true): self
-    {
-        $this->options->printFlag = $print
-            ? InvoicePrintFlag::YES
-            : InvoicePrintFlag::NO;
-
-        return $this;
-    }
-
-    /**
-     * 不索取紙本發票
-     *
-     * 當開立發票給公司 (`forBusiness()`) 時，預設固定為 `true`，因此不需設定。
-     *
-     * 當開立發票給消費者 (`forConsumer()`)，且提供載具資訊或捐贈碼時，才需設定此參數。
-     */
-    public function withoutPrint(): self
-    {
-        $this->withPrint(false);
+        // 載具或捐贈碼存在時，不能索取紙本發票
+        $this->options->printFlag = InvoicePrintFlag::NO;
 
         return $this;
     }

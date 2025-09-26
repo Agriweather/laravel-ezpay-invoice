@@ -88,7 +88,7 @@ test('可以使用全部的參數', function () {
         'CarrierType' => '0',
         'CarrierNum' => '%2FABC.123',
         'LoveCode' => '12345678',
-        'PrintFlag' => 'Y',
+        'PrintFlag' => 'N',
         'KioskPrintFlag' => '1',
         'TaxType' => '9',
         'TaxRate' => '5',
@@ -116,7 +116,6 @@ test('可以使用全部的參數', function () {
         ->withEmail('business@company.com')
         ->withCarrier(CarrierType::MOBILE, '/ABC.123')
         ->withLoveCode('12345678')
-        ->withPrint()
         ->withKioskPrint()
         ->withTax(TaxType::MIXED, 5)
         ->withCustomsClearance(CustomsClearance::CUSTOMS)
