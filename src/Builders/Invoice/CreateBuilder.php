@@ -272,9 +272,18 @@ final class CreateBuilder extends Builder
      * @param  int  $price  商品單價
      * @param  int  $amount  商品小計
      * @param  \Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType|null  $taxType  商品稅別
+     *
+     * @throws \InvalidArgumentException
      */
     public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, ?ItemTaxType $taxType = null): self
     {
+        if (str_contains($name, '|')) {
+            throw new InvalidArgumentException('商品名稱不可包含 | 字元');
+        }
+        if (str_contains($unit, '|')) {
+            throw new InvalidArgumentException('商品單位不可包含 | 字元');
+        }
+
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;

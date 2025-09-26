@@ -9,6 +9,7 @@ use Agriweather\EzPayInvoice\Enums\Invoice\ItemTaxType;
 use Agriweather\EzPayInvoice\Options\Allowance\CreateOptions;
 use Agriweather\EzPayInvoice\Resources\Allowance;
 use Agriweather\EzPayInvoice\Results\Allowance\CreateResult;
+use InvalidArgumentException;
 
 #[Resource(Allowance::class, 'create')]
 final class CreateBuilder extends Builder
@@ -64,9 +65,18 @@ final class CreateBuilder extends Builder
      * @param  int  $price  折讓商品單價
      * @param  int  $amount  折讓商品小計
      * @param  int  $taxAmount  折讓商品稅額
+     *
+     * @throws \InvalidArgumentException
      */
     public function withItem(string $name, int $quantity, string $unit, int $price, int $amount, int $taxAmount): self
     {
+        if (str_contains($name, '|')) {
+            throw new InvalidArgumentException('商品名稱不可包含 | 字元');
+        }
+        if (str_contains($unit, '|')) {
+            throw new InvalidArgumentException('商品單位不可包含 | 字元');
+        }
+
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;

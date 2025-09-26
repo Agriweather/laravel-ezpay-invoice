@@ -8,6 +8,7 @@ use Agriweather\EzPayInvoice\Enums\Allowance\CreateStatus;
 use Agriweather\EzPayInvoice\Options\CrossBorderAllowance\CreateOptions;
 use Agriweather\EzPayInvoice\Resources\CrossBorderAllowance;
 use Agriweather\EzPayInvoice\Results\CrossBorderAllowance\CreateResult;
+use InvalidArgumentException;
 
 #[Resource(CrossBorderAllowance::class, 'create')]
 final class CreateBuilder extends Builder
@@ -62,9 +63,18 @@ final class CreateBuilder extends Builder
      * @param  string  $unit  折讓商品單位
      * @param  int|float  $price  折讓商品單價
      * @param  int|float  $amount  折讓商品小計
+     *
+     * @throws \InvalidArgumentException
      */
     public function withItem(string $name, int $quantity, string $unit, int|float $price, int|float $amount): self
     {
+        if (str_contains($name, '|')) {
+            throw new InvalidArgumentException('商品名稱不可包含 | 字元');
+        }
+        if (str_contains($unit, '|')) {
+            throw new InvalidArgumentException('商品單位不可包含 | 字元');
+        }
+
         $this->options->itemNames[] = $name;
         $this->options->itemQuantities[] = $quantity;
         $this->options->itemUnits[] = $unit;
