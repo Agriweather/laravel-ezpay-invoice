@@ -1076,6 +1076,10 @@ test('can create invoice', function () {
     // 模擬發票開立 API 回應
     EzPayInvoice::fake([
         // 模擬開立發票回應
+        // 需要使用實際呼叫的 Result 類別來建立模擬回應
+        //
+        // 因為下面使用 EzPayInvoice::invoice()->create()->issue() 來開立發票
+        // 因此模擬的回應類別需要使用 CreateResult 類別
         CreateResult::make([
             'Status' => 'SUCCESS',
             'Message' => '發票開立成功',
@@ -1092,9 +1096,30 @@ test('can create invoice', function () {
         ]),
     ]);
 
-    $response = $this->get('/invoice/create');
+    // 測試發送開立發票請求
+    $response = $this->post('/invoice/create', [
+        'category' => 'B2C',
+        'name' => 'John Doe',
+        'email' => 'customer@example.com',
+        'items' => [
+            [
+                'name' => '測試商品',
+                'quantity' => 1,
+                'unit' => '個',
+                'price' => 1000,
+                'amount' => 1000,
+            ],
+        ],
+        'total_amount' => 1050,
+    ]);
 
     // 斷言發送參數
+    //
+    // 因為上面是呼叫 EzPayInvoice::invoice()->create()
+    //
+    // 因此斷言的資源類別和方法名稱分別是：
+    // - Invoice::class 是 invoice() 方法回傳的資源類別
+    // - 'create' 是呼叫的方法名稱
     EzPayInvoice::assertSent(Invoice::class, 'create', function (CreateOptions $options) {
         return $options->orderNo === 'Order001'
             && $options->category === InvoiceCategory::B2C
@@ -1130,7 +1155,7 @@ $result = EzPayInvoice::invoice()
 dd($result->toArray()); // 查看回應資料
 ```
 
-- 使用 `->dd()` 方法可檢視發送至 API 的請求資料
+- 使用 `$options->toArray()` 方法可檢視發送至 API 的請求資料
 - 透過 `$result->toArray()` 可檢視 API 的回應資料內容
 - 當發生錯誤時，請在提交 issue 時一併提供請求與回應的除錯資料
 
