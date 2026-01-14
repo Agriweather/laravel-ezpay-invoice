@@ -25,10 +25,13 @@ class HttpTransporter implements HttpTransporterContract
 
     public function send(string $url, array $data): ClientResponse
     {
-        return $this->client
+        /** @var ClientResponse */
+        $response = $this->client
             ->asForm()
             ->withUserAgent('ezPay')
             ->timeout($this->timeout)
             ->post($url, $data);
+
+        return $response;
     }
 }
