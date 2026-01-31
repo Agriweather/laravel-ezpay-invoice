@@ -12,8 +12,6 @@ use Agriweather\EzPayInvoice\Factory;
  */
 final class CodeValidation
 {
-    use Concerns\PrepareBuilder;
-
     public function __construct(
         private readonly Factory $factory,
         private readonly Crypto $crypto,
@@ -24,9 +22,9 @@ final class CodeValidation
 
     public function codeValidation(): CodeValidationBuilder
     {
-        return $this->prepareBuilder(new CodeValidationBuilder(
+        return new CodeValidationBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 
     public function __call(string $method, array $parameters)

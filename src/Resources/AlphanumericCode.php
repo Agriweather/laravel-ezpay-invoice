@@ -10,8 +10,6 @@ use Agriweather\EzPayInvoice\Factory;
 
 final class AlphanumericCode
 {
-    use Concerns\PrepareBuilder;
-
     public function __construct(
         private readonly Factory $factory,
         private readonly Crypto $crypto,
@@ -22,15 +20,15 @@ final class AlphanumericCode
 
     public function create(): CreateBuilder
     {
-        return $this->prepareBuilder(new CreateBuilder(
+        return new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 
     public function query(): QueryBuilder
     {
-        return $this->prepareBuilder(new QueryBuilder(
+        return new QueryBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 }

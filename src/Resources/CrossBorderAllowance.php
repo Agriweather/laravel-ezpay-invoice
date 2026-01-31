@@ -11,8 +11,6 @@ use Agriweather\EzPayInvoice\Factory;
 
 final class CrossBorderAllowance
 {
-    use Concerns\PrepareBuilder;
-
     public function __construct(
         private readonly Factory $factory,
         private readonly Crypto $crypto,
@@ -23,22 +21,22 @@ final class CrossBorderAllowance
 
     public function create(): CreateBuilder
     {
-        return $this->prepareBuilder(new CreateBuilder(
+        return new CreateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 
     public function pending(): TriggerBuilder
     {
-        return $this->prepareBuilder(new TriggerBuilder(
+        return new TriggerBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 
     public function voidable(): InvalidateBuilder
     {
-        return $this->prepareBuilder(new InvalidateBuilder(
+        return new InvalidateBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ));
+        );
     }
 }
