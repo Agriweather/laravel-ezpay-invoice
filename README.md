@@ -1167,6 +1167,10 @@ dd($result->toArray()); // 查看回應資料
 - 字軌管理API v1.0.0 (2018/10/08)
 - 手機條碼與捐證碼驗證技術串接手冊 v1.0.0 (2021/03/03)
 
+## 相關專案
+
+- [ycs77/laravel-newebpay](https://github.com/ycs77/laravel-newebpay)：Laravel 的藍新金流整合套件
+
 ## 貢獻專案
 
 歡迎參與貢獻專案，請參考 [貢獻指南](CONTRIBUTING.md) 文件。
